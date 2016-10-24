@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:cy="http://schemas.android.com/apk/res-auto"
+    android:background="#F2F2F2"
+    tools:context=".ui.login.PhoneLoginActivity">
+
+    <!-- 页头界面 -->
+    <RelativeLayout
+        android:id="@+id/activity_phone_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/title_index"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_below="@id/activity_phone_header"
+        android:id="@+id/PhoneLoginActivity_phone_weixin"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 手机号 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/gray" />
+
+                <TextView
+                    android:id="@+id/txtPhone"
+                    android:background="@mipmap/ic_launcher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                     />
+
+                <com.huotu.android.library.libedittext.EditText
+                    android:id="@+id/edtPhone"
+                    cy:style="transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/txtPhone"
+                    android:layout_weight="1"
+                    android:hint="手机号码"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/imgPhoneLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@+id/edtPhone"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray" />
+            </RelativeLayout>
+            <!-- 手机号end -->
+
+            <!-- 验证码 -->
+            <RelativeLayout
+                android:id="@+id/layCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" >
+
+                <TextView
+                    android:id="@+id/txtCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@mipmap/ic_launcher" />
+
+                <com.huotu.android.library.libedittext.EditText
+                    android:id="@+id/edtCode"
+                    cy:style="transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/txtCode"
+                    android:hint="登陆密码"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLength="20"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@+id/edtCode"
+                    android:background="@color/gray" />
+
+
+            </RelativeLayout>
+            <!-- 验证码end -->
+
+            <TextView
+                android:layout_gravity="end"
+                android:id="@+id/tvNoCode"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:visibility="gone"
+                android:textColor="@color/gray"
+                android:text="无法获得验证码？"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:text="立即登录"
+                android:textSize="20sp"
+                android:background="#FF3D00"
+                android:textColor="@color/theme_color"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+
+
+    </LinearLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
