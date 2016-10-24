@@ -1,0 +1,35 @@
+apply plugin: 'com.android.application'
+
+android {
+    //Android6.0找不到org.apache.http.Header 的解决方法
+    useLibrary 'org.apache.http.legacy'
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+    defaultConfig {
+        applicationId "com.bameng"
+        minSdkVersion 9
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
+    compile 'com.facebook.fresco:fresco:0.13.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.handmark.library:pulltorefresh:1.1'
+    compile 'com.huotu.android.library:libedittext:1.6'
+}
