@@ -1,149 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/loginL"
     xmlns:cy="http://schemas.android.com/apk/res-auto"
-    android:background="#F2F2F2"
-    tools:context=".ui.login.PhoneLoginActivity">
-
-    <!-- 页头界面 -->
+    android:background="@color/white"
+    >
     <RelativeLayout
-        android:id="@+id/activity_phone_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/title_index"/>
+        android:id="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <include
+            layout="@layout/title_index"/>
+
     </RelativeLayout>
 
-
-    <RelativeLayout
-        android:layout_below="@id/activity_phone_header"
-        android:id="@+id/PhoneLoginActivity_phone_weixin"
+    <LinearLayout
+        android:layout_below="@+id/titleLayoutL"
+        android:id="@+id/loginLay"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/ll1"
-            android:orientation="vertical"
-            android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!-- 手机号 -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white" >
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/gray" />
-
-                <TextView
-                    android:id="@+id/txtPhone"
-                    android:background="@mipmap/ic_launcher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                     />
-
-                <com.huotu.android.library.libedittext.EditText
-                    android:id="@+id/edtPhone"
-                    cy:style="transparent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/txtPhone"
-                    android:layout_weight="1"
-                    android:hint="手机号码"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:textColor="@color/black" />
-
-                <ImageView
-                    android:id="@+id/imgPhoneLine"
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_below="@+id/edtPhone"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/gray" />
-            </RelativeLayout>
-            <!-- 手机号end -->
-
-            <!-- 验证码 -->
-            <RelativeLayout
-                android:id="@+id/layCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white" >
-
-                <TextView
-                    android:id="@+id/txtCode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@mipmap/ic_launcher" />
-
-                <com.huotu.android.library.libedittext.EditText
-                    android:id="@+id/edtCode"
-                    cy:style="transparent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/txtCode"
-                    android:hint="登陆密码"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:maxLength="20"
-                    android:textColor="@color/black" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_below="@+id/edtCode"
-                    android:background="@color/gray" />
-
-
-            </RelativeLayout>
-            <!-- 验证码end -->
-
-            <TextView
-                android:layout_gravity="end"
-                android:id="@+id/tvNoCode"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:visibility="gone"
-                android:textColor="@color/gray"
-                android:text="无法获得验证码？"
+            android:layout_height="1px"
+            android:background="@color/dimgray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/imgUser1"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/btnLogin"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:text="立即登录"
-                android:textSize="20sp"
-                android:background="#FF3D00"
-                android:textColor="@color/theme_color"
-                android:gravity="center"
-                android:padding="8dp"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/icon_username"/>
+            <com.huotu.android.library.libedittext.EditText
+                android:layout_margin="10dp"
+                android:id="@+id/edtUserName"
+                cy:style="transparent"
+                android:focusable="true"
+                android:layout_gravity="center_vertical"
+                android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_username2"
+                android:imeOptions="actionNext"
+                android:inputType="textUri"
+                android:maxLength="20"
+                 />
+        </LinearLayout>
+        <TextView
 
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/dimgray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/icon_psw"/>
+            <com.huotu.android.library.libedittext.EditText
+                android:id="@+id/edtPwd"
+                android:layout_margin="10dp"
+                cy:style="transparent"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_pwd2"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLength="12"
+                android:text=""
+                 />
 
+        </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/dimgray"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tv_forgetpsd"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/img_forgetpsd"
+            android:text="忘记密码"
+            android:gravity="end"
+            />
+            <ImageView
+                android:id="@+id/img_forgetpsd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/ic_forgetpsw"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+
+                />
+        </RelativeLayout>
 
 
     </LinearLayout>
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_margin="20dp"
+        android:layout_below="@+id/loginLay"
+        android:background="@drawable/btn_login"
+        android:text="登录"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
 
-    </RelativeLayout>
 
 
 </RelativeLayout>

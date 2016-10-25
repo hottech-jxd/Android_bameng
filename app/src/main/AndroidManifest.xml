@@ -18,8 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.account.MDouCountActivity"></activity>
-        <activity android:name=".ui.HomeActivity"></activity>
+        <activity android:name=".ui.account.MDouCountActivity" />
+        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.account.MyAccountActivity" />
+        <activity android:name=".ui.account.SettingActivity" />
+        <activity android:name=".ui.account.ChangePswActivity" />
+        <activity android:name=".ui.account.UserInfoActivity"></activity>
     </application>
 
 </manifest>

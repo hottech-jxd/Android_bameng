@@ -11,6 +11,7 @@
             android:id="@+id/titleLeftImage"
             android:layout_width="@dimen/title_image_width"
             android:layout_height="@dimen/title_image_height"
+            android:onClick="onGoBackButton"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
              />

@@ -29,7 +29,7 @@
     <!--详细页标题颜色-->
     <color name="click_txt_title">#eb4f38</color>
     <!--标题底色-->
-    <color name="title_bg">#F8F8F8</color>
+    <color name="line_gray">#c8c8c8</color>
     <!-- 象牙色 -->
     <color name="lightyellow">#ffffe0</color>
     <!-- 亮黄色 -->

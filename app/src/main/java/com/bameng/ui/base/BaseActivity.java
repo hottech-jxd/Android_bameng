@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.bameng.BaseApplication;
+import com.bameng.R;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
 
@@ -22,6 +23,7 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
     public BaseApplication application;
     protected Handler mHandler = null;
     protected static final String NULL_NETWORK = "无网络或当前网络不可用!";
+    protected boolean goback=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,4 +154,12 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
 
 
     public abstract boolean handleMessage(Message msg);
+
+    public void onGoBackButton(View v){
+        if (goback){
+        if(v.getId() == R.id.titleLeftImage){
+            finish();
+        }}
+
+    }
 }

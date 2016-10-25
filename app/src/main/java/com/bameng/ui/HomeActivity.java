@@ -110,7 +110,10 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        goback=false;
         titleText.setText(getString(R.string.app_name));
+        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
         application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         initTab();
 

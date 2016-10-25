@@ -3,8 +3,11 @@ package com.bameng.ui.login;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
-import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.bameng.R;
 import com.bameng.ui.HomeActivity;
 import com.bameng.ui.base.BaseActivity;
@@ -19,13 +22,23 @@ import butterknife.OnClick;
  * 手机注册并登录
  */
 public class PhoneLoginActivity extends BaseActivity {
-    @Bind(R.id.edtPhone)
+
+    @Bind(R.id.titleText)
+    TextView titleText;
+
+    @Bind(R.id.titleLayoutL)
+    RelativeLayout titleLayoutL;
+
+    @Bind(R.id.titleLeftImage)
+    ImageView titleLeftImage;
+
+    @Bind(R.id.edtUserName)
     EditText edtPhone;
 
-    @Bind(R.id.edtCode)
+    @Bind(R.id.edtPwd)
     EditText edtCode;
 
-    @Bind(R.id.btnLogin)
+    @Bind(R.id.btn_login)
     Button btnLogin;
     public Resources resources;
 
@@ -42,6 +55,9 @@ public class PhoneLoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        goback=false;
+        titleText.setText("登录");
+
 
     }
 
@@ -52,7 +68,7 @@ public class PhoneLoginActivity extends BaseActivity {
     /***
      * 手机登录
      */
-    @OnClick(R.id.btnLogin)
+    @OnClick(R.id.btn_login)
     protected void onBtnLoginClick(){
         ActivityUtils.getInstance().skipActivity(PhoneLoginActivity.this, HomeActivity.class);
         String phone = edtPhone.getText().toString().trim();
