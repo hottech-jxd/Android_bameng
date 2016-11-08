@@ -1,6 +1,5 @@
 package com.bameng.utils;
 
-import android.content.Context;
 import android.widget.Toast;
 
 import com.bameng.BaseApplication;

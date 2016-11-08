@@ -1,29 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
-    android:fitsSystemWindows="true"
-    android:minHeight="?attr/actionBarSize"
+    android:orientation="vertical"
     tools:context="com.bameng.ui.account.MyAccountActivity">
+
     <RelativeLayout
         android:id="@+id/titleLayoutL"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <include
-            layout="@layout/title_index"/>
+
+        <include layout="@layout/title_index" />
 
     </RelativeLayout>
-    <RelativeLayout
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/layMbean"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/titleLayoutL"
-        android:background="@color/chocolate">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@mipmap/ic_mybean"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="盟豆"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/txt_mbean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:background="@mipmap/icon_go"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/layjifen"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@mipmap/icon_jifen"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="可用积分"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/txt_jifen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_margin="10dp"
+            android:background="@mipmap/icon_go"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/laydjsmd"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@mipmap/icon_djsmd"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="待结算盟豆"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/txt_countbean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_margin="10dp"
+            android:background="@mipmap/icon_go"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_checkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="提现"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_cancel"
+        android:layout_margin="20dp"
+        />
 
 
-    </RelativeLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

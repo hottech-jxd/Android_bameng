@@ -15,7 +15,7 @@ public class FragManager {
 
 
     public enum FragType{
-        HOME, NEWS, BUSINESS, PROFILE
+        HOME, NEWS, BUSINESS, PROFILE,ALLYHOME,RICHES
     }
     private int viewId;
     private FragmentManager fragManager;
@@ -61,21 +61,21 @@ public class FragManager {
                 case PROFILE:
                     frag = new UserFragment();
                     break;
-//                case POPULAR:
-//                    frag = new PopularityFrag();
-//                    break;
-//                case NEWEST_PRODUCT:
-//                    frag = new NewestProductFrag();
-//                    break;
-//                case PROGRESS:
-//                    frag = new ProgressFrag();
-//                    break;
-//                case TOTAL:
-//                    frag = new TotalRequiredFrag();
-//                    break;
-                default:
-                    frag = new HomeFragment();
+                case ALLYHOME:
+                    frag = new AllyHomeFrag();
                     break;
+                case RICHES:
+                    frag = new RichesFrag();
+                    break;
+//                case STORE:
+//                    frag = new StoreFrag();
+//                    break;
+//                case ALLY:
+//                    frag = new AllyFrag();
+//                    break;
+//                default:
+//                    frag = new HomeFragment();
+//                    break;
             }
 
             ft.add(viewId, frag, fragTag);

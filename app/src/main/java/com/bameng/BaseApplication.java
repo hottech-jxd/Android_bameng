@@ -15,7 +15,13 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
+import com.bameng.model.BaseData;
+import com.bameng.model.LocalAddressModel;
+import com.bameng.model.UserData;
+import com.bameng.model.VersionData;
+import com.bameng.utils.AssetsUtils;
 import com.bameng.utils.CrashHandler;
+import com.bameng.utils.JSONUtil;
 import com.bameng.utils.PreferenceHelper;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -34,12 +40,14 @@ public class BaseApplication extends Application {
     //经度
     public double Longitude;
     public FragManager mFragManager;
+
+    public LocalAddressModel localAddress;
     //是否有网络连接
     public boolean isConn = false;
     //城市
     public String city;
     public LocationClient mLocationClient;
-    public MyLocationListener mMyLocationListener;
+    public MyLocationListener mMyLocationListener;//地址从这开始
     //底部菜单是否隐藏 true显示， false隐藏
     //public boolean isMenuHide = false;
     /**
@@ -47,7 +55,6 @@ public class BaseApplication extends Application {
      * true 左划
      * false 返回
      */
-    public boolean isLeftImg = true;
 
     public static BaseApplication single;
 
@@ -199,17 +206,58 @@ public class BaseApplication extends Application {
 
     }
 
-    //判断是否登录
-    public boolean isLogin() {
-        String token = PreferenceHelper.readString(getApplicationContext(), Constants.MEMBER_INFO, Constants.MEMBER_TOKEN);
-        if (null != token && !"".equals(token)) {
-            return true;
-        } else {
-            return false;
-        }
+    /***
+     * 加载地址信息
+     */
+    public void loadAddress() {
+        if (null != localAddress) return;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AssetsUtils assetsUtils = new AssetsUtils(getBaseContext());
+                String json = assetsUtils.readAddress("addressData.json");
+                JSONUtil<LocalAddressModel> jsonUtil = new JSONUtil<>();
+                LocalAddressModel localAddress = new LocalAddressModel();
+                localAddress = jsonUtil.toBean(json, localAddress);
+                single.localAddress = localAddress;
+            }
+        }).start();
     }
 
 
+    //加载基础信息
+    public void loadBaseData(BaseData baseData) {
+        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "about", baseData.getAboutUrl());
+        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "Agreement", baseData.getAgreementUrl());
+        PreferenceHelper.writeInt(getApplicationContext(), "Base_info", "userStatus", baseData.getUserStatus());
+    }
+    //加载版本信息
+    public void loadUpdate(VersionData update) {
+        PreferenceHelper.writeString(getApplicationContext(), "update_info", "serverVersion", update.getServerVersion());
+        PreferenceHelper.writeString(getApplicationContext(), "update_info", "updateTip", update.getUpdateTip());
+        PreferenceHelper.writeString(getApplicationContext(), "update_info", "updateUrl", update.getUpdateUrl());
+        PreferenceHelper.writeInt(getApplicationContext(), "update_info", "updateType", update.getUpdateType());
+    }
+
+    public void writeUserToken(String token) {
+        PreferenceHelper.writeString(getApplicationContext(), "token", "token", token);
+    }
+    public String readToken(){
+        return PreferenceHelper.readString(getApplicationContext(),"token" ,"token","");
+    }
+    //加载个人信息
+    public void writeUserInfo(UserData user) {
+        String json = JSONUtil.getGson().toJson(user);
+        PreferenceHelper.writeString(getApplicationContext(), Constants.LOGIN_USER_INFO, "user", json);
+    }
+
+    public UserData readUserInfo(){
+        String json = PreferenceHelper.readString( getApplicationContext(), Constants.LOGIN_USER_INFO , "user", null);
+        if(json==null) return null;
+        return JSONUtil.getGson().fromJson(json, UserData.class);
+
+    }
 
     public void clearAllCookies(){
         CookieManager.getInstance().removeAllCookie();

@@ -1,38 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_user_info"
+    android:id="@+id/activity_setting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.bameng.ui.account.UserInfoActivity">
+
+    <RelativeLayout
+        android:id="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <include layout="@layout/title_index" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
     <LinearLayout
         android:id="@+id/layImg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp" >
+        android:padding="10dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="头像"
-             />
+            android:text="头像" />
 
-            <ImageView
-                android:id="@+id/img"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@mipmap/ic_launcher" />
-
+        <ImageView
+            android:id="@+id/img_user"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/ic_user" />
 
 
         <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/layname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="昵称" />
+
+        <TextView
+            android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="xiaomiao" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
             android:layout_marginLeft="10dp"
-            android:background="@mipmap/ic_forgetpsw" />
+            android:background="@mipmap/icon_go" />
     </LinearLayout>
-</RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/layphone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="手机" />
+
+        <TextView
+            android:id="@+id/txt_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xiaomiao" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="18sp"
+            android:text="实名认证" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+    <LinearLayout
+        android:id="@+id/layrealname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="姓名" />
+
+        <TextView
+            android:id="@+id/txt_realname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xiaomiao" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+    <LinearLayout
+        android:id="@+id/laysex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="性别" />
+
+        <TextView
+            android:id="@+id/txt_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xiaomiao" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+        </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+    <LinearLayout
+        android:id="@+id/laynationality"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="地区" />
+
+        <TextView
+            android:id="@+id/txt_nationality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xiaomiao" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+
+</LinearLayout>

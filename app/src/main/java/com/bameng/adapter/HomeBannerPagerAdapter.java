@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.bameng.R;
 import com.bameng.config.Constants;
 import com.bameng.model.AdlistModel;
+import com.bameng.model.SlideListModel;
 import com.bameng.utils.DensityUtils;
 import com.bameng.widgets.custom.FrescoControllerListener;
 import com.bameng.widgets.custom.FrescoDraweeController;
@@ -24,14 +25,14 @@ import java.util.List;
  */
 public class HomeBannerPagerAdapter extends PagerAdapter {
 
-    private List<AdlistModel> datas;
+    private List<SlideListModel> datas;
 
     private
     Handler mHandler;
 
     private Context mContext;
 
-    public HomeBannerPagerAdapter(List<AdlistModel> datas, Context mContext, Handler mHandler) {
+    public HomeBannerPagerAdapter(List<SlideListModel> datas, Context mContext, Handler mHandler) {
 
         this.datas = datas;
         this.mContext = mContext;
@@ -59,7 +60,7 @@ public class HomeBannerPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
 
-        String String = datas.get(position).getItemImgUrl();
+        String String = datas.get(position).getPicUrl();
         View view = View.inflate(mContext, R.layout.banner_view, null);
         //ImageView image = (ImageView) view.findViewById(R.id.image);
         SimpleDraweeView image = (SimpleDraweeView)view.findViewById(R.id.image);

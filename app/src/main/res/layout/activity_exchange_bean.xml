@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/act_title_height"
+        >
+        <include layout="@layout/title_index"></include>
+    </RelativeLayout>
+    <TextView
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="盟豆"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="111111"
+        android:textSize="23sp"
+        android:textColor="@color/chocolate"
+        android:id="@+id/txt_mbean" />
+    <Button
+        android:id="@+id/btn_exchange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="我要兑换"
+        android:layout_margin="20dp"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_cancel"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="累计兑换(盟豆) 1000"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="兑换说明:"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="1.盟豆大于100时才可申请兑现"/>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="2.盟豆兑换由盟主来操作"/>
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/tv_record"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="兑换记录"/>
+
+</LinearLayout>

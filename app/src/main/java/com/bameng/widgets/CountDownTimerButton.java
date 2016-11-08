@@ -4,8 +4,7 @@ import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.widget.TextView;
 
-import com.bameng.BaseApplication;
-import com.bameng.utils.SystemTools;
+import com.bameng.R;
 
 
 public class CountDownTimerButton extends CountDownTimer
@@ -56,7 +55,7 @@ public class CountDownTimerButton extends CountDownTimer
     {
         view.setClickable(true);
         view.setText(txt);
-        //view.setBackgroundResource(R.drawable.btn_red_sel);
+        view.setBackgroundResource(R.drawable.btn_login);
         if( finishListener!=null){
             finishListener.timeFinish();
         }

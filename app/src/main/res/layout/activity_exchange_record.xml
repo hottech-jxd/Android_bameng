@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/act_title_height"
+        >
+        <include layout="@layout/title_index"></include>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <include layout="@layout/exchange_item"></include>
+    </RelativeLayout>
+    </LinearLayout>

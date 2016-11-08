@@ -38,6 +38,12 @@
             android:textColor="@color/black"
             android:layout_margin="10dp"
             />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <include layout="@layout/mbean_item"></include>
+    </RelativeLayout>
 
 
 </LinearLayout>

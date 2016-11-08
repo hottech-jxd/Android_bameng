@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+<com.facebook.drawee.view.SimpleDraweeView
+    android:id="@+id/image"
+    android:layout_width="60dp"
+    android:layout_height="60dp" />
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/articleTitle"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:id="@+id/articleIntro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:text=""/>
+        <LinearLayout
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@mipmap/ic_look"/>
+            <TextView
+                android:id="@+id/browseAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@mipmap/ic_time"/>
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
+        </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>

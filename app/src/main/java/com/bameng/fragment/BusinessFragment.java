@@ -1,17 +1,50 @@
 package com.bameng.fragment;
 
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.bameng.R;
 import com.bameng.ui.base.BaseFragment;
+import com.bameng.ui.business.CustomerInfoActivity;
+import com.bameng.ui.business.ExchangeExamineActivity;
+import com.bameng.ui.business.MyAlliesActivity;
+import com.bameng.ui.business.MyCashCardActivity;
+import com.bameng.ui.business.OrderListActivity;
+import com.bameng.ui.business.RwordActivity;
+import com.bameng.utils.ActivityUtils;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class BusinessFragment extends BaseFragment {
 
+    @Bind(R.id.txt_order)
+    TextView txtOrder;
+    @Bind(R.id.txt_Customer)
+    TextView txtCustomer;
+    @Bind(R.id.txt_exchange)
+    TextView txtExchange;
+    @Bind(R.id.txt_cash)
+    TextView txtCash;
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 
     @Override
     public void onReshow() {
@@ -23,6 +56,29 @@ public class BusinessFragment extends BaseFragment {
 
     }
 
+    @OnClick({R.id.layOrder,R.id.layCash,R.id.layCustomer,R.id.layExchange,R.id.layReward,R.id.layMylm})void onclick(View view){
+        switch(view.getId()){
+            case R.id.layOrder:
+                ActivityUtils.getInstance().showActivity(getActivity(), OrderListActivity.class);
+                break;
+            case R.id.layCustomer:
+                ActivityUtils.getInstance().showActivity(getActivity(), CustomerInfoActivity.class);
+                break;
+            case R.id.layExchange:
+                ActivityUtils.getInstance().showActivity(getActivity(), ExchangeExamineActivity.class);
+                break;
+            case R.id.layReward:
+                ActivityUtils.getInstance().showActivity(getActivity(), RwordActivity.class);
+                break;
+            case R.id.layMylm:
+                ActivityUtils.getInstance().showActivity(getActivity(), MyAlliesActivity.class);
+                break;
+            case R.id.layCash:
+                ActivityUtils.getInstance().showActivity(getActivity(), MyCashCardActivity.class);
+                break;
+        }
+
+    }
     @Override
     public void onClick(View view) {
 

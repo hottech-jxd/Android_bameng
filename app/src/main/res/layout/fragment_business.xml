@@ -1,14 +1,206 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.bameng.fragment.BusinessFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="100dp"
-        android:text="我的业务" />
+        android:layout_height="1px"
+        android:textColor="@color/line_gray"/>
+    <LinearLayout
+        android:id="@+id/layOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-</FrameLayout>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的订单" />
+
+        <TextView
+            android:id="@+id/txt_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="111" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:textColor="@color/line_gray"/>
+    <LinearLayout
+        android:id="@+id/layCustomer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="客户信息" />
+
+        <TextView
+            android:id="@+id/txt_Customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1111" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:textColor="@color/line_gray"/>
+    <LinearLayout
+        android:id="@+id/layExchange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="兑换审核" />
+
+        <TextView
+            android:id="@+id/txt_exchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="111" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:textColor="@color/line_gray"/>
+    <LinearLayout
+        android:id="@+id/layReward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="奖励设置" />
+
+
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:textColor="@color/line_gray"/>
+    <LinearLayout
+        android:id="@+id/layMylm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的联盟" />
+
+
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:textColor="@color/line_gray"/>
+    <LinearLayout
+        android:id="@+id/layCash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的现金券" />
+
+        <TextView
+            android:id="@+id/txt_cash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="111" />
+
+
+        <ImageView
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.ui.WebViewActivity;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
@@ -64,6 +65,7 @@ public class SettingActivity extends BaseActivity {
 
     }
     @OnClick(R.id.aboutAppL) void aboutAppLClick() {
+        ActivityUtils.getInstance().showActivity(SettingActivity.this, WebViewActivity.class);
 
     }
     @OnClick(R.id.agreementL) void agreementLClick() {

@@ -1,14 +1,68 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.bameng.fragment.NewsFragment">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        >
 
-    <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/groupLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="集团资讯"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/storeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="总店资讯"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+        <TextView
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/shopLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分店资讯"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+        <TextView
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/allyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="盟友资讯"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+    </LinearLayout>
     <TextView
         android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/raidersViewPager"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="200sp"
-        android:text="资讯" />
-
-</FrameLayout>
+        android:layout_gravity="center"
+         >
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

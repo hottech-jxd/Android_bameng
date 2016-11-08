@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -20,10 +21,13 @@ import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.fragment.HomeFragment;
 import com.bameng.model.PostModel;
+import com.bameng.model.SlideListOutputModel;
 import com.bameng.receiver.MyBroadcastReceiver;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.news.AddnewsActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
@@ -34,6 +38,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +49,9 @@ public class HomeActivity extends BaseActivity {
 
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
+
+    @Bind(R.id.titleRightImage)
+    ImageView titleRightImage;
 
     @Bind(R.id.titleText)
     TextView titleText;
@@ -95,12 +103,16 @@ public class HomeActivity extends BaseActivity {
 
     public ProgressPopupWindow progress;
 
+    public Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         application = (BaseApplication) this.getApplication();
+        application.loadAddress();
+        mHandler = new Handler(this);
         application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         initView();
@@ -112,8 +124,11 @@ public class HomeActivity extends BaseActivity {
     protected void initView() {
         goback=false;
         titleText.setText(getString(R.string.app_name));
+        titleLeftImage.setVisibility(View.VISIBLE);
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+        Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
+        SystemTools.loadBackground(titleRightImage,rightDraw);
         application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         initTab();
 
@@ -142,37 +157,44 @@ public class HomeActivity extends BaseActivity {
         }
     }
     private void initTab() {
-        Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+        Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
         SystemTools.loadBackground(homeImg, oneBuyDraw);
         homeTxt.setTextColor(resources.getColor(R.color.chocolate));
         //重置其他
-        Drawable newestDraw = ContextCompat.getDrawable(this,R.mipmap.ic_launcher);
+        Drawable newestDraw = ContextCompat.getDrawable(this,R.mipmap.ic_zx);
         SystemTools.loadBackground(newsImg, newestDraw);
         newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
-        Drawable listDraw = ContextCompat.getDrawable(this,R.mipmap.ic_launcher);
+        Drawable listDraw = ContextCompat.getDrawable(this,R.mipmap.ic_yw);
         SystemTools.loadBackground(businessImg, listDraw);
         businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
-        Drawable profileDraw = ContextCompat.getDrawable(this,R.mipmap.ic_launcher);
+        Drawable profileDraw = ContextCompat.getDrawable(this,R.mipmap.ic_account);
         SystemTools.loadBackground(profileImg, profileDraw);
         profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
+    }
+    @OnClick(R.id.titleRightImage)
+    void onRightClick(){
+        ActivityUtils.getInstance().showActivity(HomeActivity.this, AddnewsActivity.class);
     }
     public void onTabClicked(View view) {
         switch (view.getId()) {
             case R.id.homePage: {
+                titleText.setText(getString(R.string.app_name));
+                titleLeftImage.setVisibility(View.VISIBLE);
+                titleRightImage.setVisibility(View.GONE);
                 if(progress!=null) progress.dismissView();
 
                 //设置选中状态
-                Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
                 homeTxt.setTextColor(resources.getColor(R.color.chocolate));
                 //重置其他
-                Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
                 newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
                 businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
                 profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
                 //切换内容
@@ -184,19 +206,22 @@ public class HomeActivity extends BaseActivity {
             }
             break;
             case R.id.newsPage: {
+                titleText.setText("资讯列表");
+                titleLeftImage.setVisibility(View.GONE);
+                titleRightImage.setVisibility(View.VISIBLE);
                 if(progress!=null) progress.dismissView();
                 //设置选中状态
-                Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
                 homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
                 //重置其他
-                Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
                 newsTxt.setTextColor(resources.getColor(R.color.chocolate));
-                Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
                 businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
                 profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
 
@@ -208,18 +233,21 @@ public class HomeActivity extends BaseActivity {
             }
             break;
             case R.id.businessPage: {
+                titleText.setText("我的业务");
+                titleLeftImage.setVisibility(View.GONE);
+                titleRightImage.setVisibility(View.GONE);
                 if(progress!=null) progress.dismissView();
                 //设置选中状态
-                Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
                 //重置其他
-                Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
                 newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
                 businessTxt.setTextColor(resources.getColor(R.color.chocolate));
-                Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
                 profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
 
@@ -231,19 +259,22 @@ public class HomeActivity extends BaseActivity {
             }
             break;
             case R.id.profilePage: {
+                titleText.setText("我的账户");
+                titleLeftImage.setVisibility(View.GONE);
+                titleRightImage.setVisibility(View.GONE);
                 if(progress!=null) progress.dismissView();
                 //设置选中状态
-                    Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                    Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                     SystemTools.loadBackground(homeImg, oneBuyDraw);
                     homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
                     //重置其他
-                    Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                    Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                     SystemTools.loadBackground(newsImg, newestDraw);
                     newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                    Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                    Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                     SystemTools.loadBackground(businessImg, listDraw);
                     businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                    Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+                    Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_account);
                     SystemTools.loadBackground(profileImg, profileDraw);
                     profileTxt.setTextColor(resources.getColor(R.color.chocolate));
                     //切换内容
@@ -260,35 +291,8 @@ public class HomeActivity extends BaseActivity {
     }
     @Override
     protected void StartApi() {
-        Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
-        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
-        map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
-        map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        Call<PostModel> call = apiService.init(map);
-        call.enqueue(new Callback<PostModel>() {
-            @Override
-            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
-                if (response.body() == null) {
-                    ToastUtils.showLongToast(response.code() + ":" + response.message());
-                    return;
-                }
 
-                if (response.body().getStatus() == 200) {
-                    ToastUtils.showLongToast("成功");
-                } else {
-                    ToastUtils.showLongToast(response.body().getStatusText());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<PostModel> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
-            }
-        });
     }
 
     @Override

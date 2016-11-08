@@ -85,7 +85,7 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
     protected void onStop() {
         super.onStop();
     }
-    protected boolean canConnect(){
+    public boolean canConnect(){
         //网络访问前先检测网络是否可用
         if(!Util.isConnect(BaseActivity.this)){
             ToastUtils.showLongToast( NULL_NETWORK);

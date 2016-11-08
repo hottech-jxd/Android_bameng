@@ -36,9 +36,9 @@
             android:text="修改密码"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/ic_forgetpsw"/>
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
@@ -61,9 +61,9 @@
             android:text="清除缓存"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/ic_forgetpsw"/>
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
@@ -87,9 +87,9 @@
             android:text="关于"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/ic_forgetpsw"/>
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
@@ -112,9 +112,9 @@
             android:text="用户使用协议"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/ic_forgetpsw"/>
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
