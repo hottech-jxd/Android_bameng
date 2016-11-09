@@ -48,6 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/layaccount"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
@@ -66,6 +67,7 @@
                 android:text="@string/home_account"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layneworder"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
@@ -84,6 +86,7 @@
                 android:text="@string/home_order"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layCustomer"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
@@ -102,6 +105,7 @@
                 android:text="@string/home_info"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layally"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
@@ -120,6 +124,7 @@
                 android:text="@string/home_union"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layExchange"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
@@ -138,6 +143,7 @@
                 android:text="@string/home_exchange"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layReward"
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"

@@ -42,4 +42,11 @@
             android:textColor="@color/black"
             android:textSize="14sp"/>
         </LinearLayout>
-    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/customViewPager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+         >
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

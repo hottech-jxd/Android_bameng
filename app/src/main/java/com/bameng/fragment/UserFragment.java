@@ -8,16 +8,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.model.PostModel;
+import com.bameng.model.UserData;
+import com.bameng.service.ApiService;
+import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.account.MyAccountActivity;
 import com.bameng.ui.account.SettingActivity;
 import com.bameng.ui.account.UserInfoActivity;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.utils.ActivityUtils;
+import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class UserFragment extends BaseFragment {
@@ -46,19 +58,70 @@ public class UserFragment extends BaseFragment {
     LinearLayout layuserinfo;
     @Bind(R.id.laycode)
     LinearLayout laycode;
+    UserData userData;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        userData = new UserData();
         initView();
         ButterKnife.bind(this, view);
     }
 
     public void initView() {
 
+        userData= application.readUserInfo();
+        img_user.setImageURI(userData.getUserHeadImg());
+        txtName.setText(userData.getNickName());
+        txtPoints.setText(userData.getLevelName());
+        txtMbean.setText(String.valueOf(userData.getMengBeans()));
+        txtNosettlembean.setText(String.valueOf(userData.getMengBeansLocked()));
+        txtIntegral.setText(String.valueOf(userData.getScore()));
+
+
+        initData();
+
     }
 
+    public void initData(){
+        Map<String, String> map = new HashMap<>();
+        map.put("version", application.getAppVersion());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("os", "android");
+        AuthParamUtils authParamUtils = new AuthParamUtils();
+        String sign = authParamUtils.getSign(map);
+        map.put("sign", sign);
+        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        String token = application.readToken();
+        Call<PostModel> call = apiService.myinfo(token, map);
+        call.enqueue(new Callback<PostModel>() {
+            @Override
+            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if (response.body() != null) {
+
+
+                    if (response.body().getStatus() == 200 && response.body().getData() != null&&response.body().getData().size()!=0) {
+
+
+                    } else if (response.body().getStatus()==70035){
+
+                        ToastUtils.showLongToast(response.body().getStatusText());
+                    }
+
+                } else {
+                    ToastUtils.showLongToast("连接服务器失败！！！");
+                }
+                return;
+
+
+            }
+
+            @Override
+            public void onFailure(Call<PostModel> call, Throwable t) {
+                ToastUtils.showLongToast("失败");
+            }
+        });
+    }
     @Override
     public void onReshow() {
 

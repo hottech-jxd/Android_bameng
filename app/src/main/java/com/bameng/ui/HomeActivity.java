@@ -125,6 +125,7 @@ public class HomeActivity extends BaseActivity {
         goback=false;
         titleText.setText(getString(R.string.app_name));
         titleLeftImage.setVisibility(View.VISIBLE);
+        titleRightImage.setVisibility(View.GONE);
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
         Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
@@ -240,6 +241,7 @@ public class HomeActivity extends BaseActivity {
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
+                homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
