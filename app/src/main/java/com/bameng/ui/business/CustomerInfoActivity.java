@@ -4,16 +4,23 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
+import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.adapter.TabPagerAdapter;
+import com.bameng.fragment.CustomDoneFrag;
+import com.bameng.fragment.CustomNoDoneFrag;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,6 +39,10 @@ public class CustomerInfoActivity extends BaseActivity {
     TextView nodoneLabel;
     @Bind(R.id.doneLabel)
     TextView doneLabel;
+    @Bind(R.id.customViewPager)
+    ViewPager customViewPager;
+    public TabPagerAdapter tabPagerAdapter;
+    private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public Resources resources;
 
     @Override
@@ -44,6 +55,46 @@ public class CustomerInfoActivity extends BaseActivity {
         resources = this.getResources();
         StartApi();
         changeIndex(currentIndex);
+        initSwitch();
+    }
+    private void initSwitch() {
+        CustomDoneFrag customDoneFrag = new CustomDoneFrag();
+        CustomNoDoneFrag customNoDoneFrag = new CustomNoDoneFrag();
+        Bundle b = new Bundle();
+        b.putInt("index", 0);
+        customNoDoneFrag.setArguments(b);
+        mFragmentList.add(customNoDoneFrag);
+        b = new Bundle();
+        b.putInt("index", 1);
+        customDoneFrag.setArguments(b);
+        mFragmentList.add(customDoneFrag);
+        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragmentList);
+        customViewPager.setAdapter(tabPagerAdapter);
+        customViewPager.setOffscreenPageLimit(2);
+        customViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int index) {
+
+
+            }
+
+            @Override
+            public void onPageScrolled(int index, float arg1, int pixes) {
+                if (pixes != 0) {
+                }
+                if (pixes == 0) {
+                    currentIndex = index;
+                    changeIndex(currentIndex);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        customViewPager.setCurrentItem(currentIndex);
+
     }
 
     @Override
@@ -81,15 +132,23 @@ public class CustomerInfoActivity extends BaseActivity {
 
     @OnClick(R.id.nodoneLabel)
     void clickDoing() {
-        // raidersViewPager.setCurrentItem(1);
-        changeIndex(0);
+        customViewPager.setCurrentItem(0);
+        changeIndex(customViewPager.getCurrentItem());
     }
 
     @OnClick(R.id.doneLabel)
     void clickDone() {
-        //raidersViewPager.setCurrentItem(2);
-        changeIndex(1);
+        customViewPager.setCurrentItem(1);
+        changeIndex(customViewPager.getCurrentItem());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
+
+
     @OnClick(R.id.titleRightImage)
     void clickRightImage(){
         ActivityUtils.getInstance().showActivity(CustomerInfoActivity.this,SubmitCustomerInfoActivity.class);

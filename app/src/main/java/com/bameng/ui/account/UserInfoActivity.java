@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.model.UserData;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
@@ -27,6 +28,7 @@ import com.bameng.utils.Util;
 import com.bameng.widgets.CropperView;
 import com.bameng.widgets.PhotoSelectView;
 import com.bameng.widgets.UserInfoView;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -42,7 +44,7 @@ public class UserInfoActivity extends BaseActivity implements PhotoSelectView.On
     @Bind(R.id.layImg)
     LinearLayout layImg;
     @Bind(R.id.img_user)
-    ImageView imgUser;
+    SimpleDraweeView imgUser;
     @Bind(R.id.layname)
     LinearLayout layname;
     @Bind(R.id.txt_name)
@@ -71,6 +73,7 @@ public class UserInfoActivity extends BaseActivity implements PhotoSelectView.On
     private PhotoSelectView pop;
     private CropperView cropperView;
     private UserInfoView userInfoView;
+    UserData userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,14 @@ public class UserInfoActivity extends BaseActivity implements PhotoSelectView.On
         titleText.setText("个人信息");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+        userData= application.readUserInfo();
+        imgUser.setImageURI(userData.getUserHeadImg());
+        txtName.setText(userData.getNickName());
+        txtRealname.setText(userData.getRealName());
+        txtPhone.setText(userData.getUserMobile());
+        //txtSex.setText(userData.get);
+        txtNationality.setText(userData.getShopProv()+"."+userData.getShopCity());
+
     }
 
     @OnClick({R.id.layname,R.id.layImg,R.id.laynationality,R.id.layphone,R.id.layrealname,R.id.laysex})

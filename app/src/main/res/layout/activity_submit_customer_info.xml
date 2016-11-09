@@ -25,8 +25,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111"/>
+            android:text="客户姓名"/>
         <com.huotu.android.library.libedittext.EditText
+            android:id="@+id/customName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -46,8 +47,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111"/>
+            android:text="客户电话"/>
         <com.huotu.android.library.libedittext.EditText
+            android:id="@+id/customMoblie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -67,8 +69,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111"/>
+            android:text="客户地址"/>
         <com.huotu.android.library.libedittext.EditText
+            android:id="@+id/customAddress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -88,18 +91,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111"/>
+            android:text="备注"/>
         <com.huotu.android.library.libedittext.EditText
+            android:id="@+id/remark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             />
     </LinearLayout>
     <Button
+        android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_cancel"
         android:layout_margin="10dp"
         android:textColor="@color/white"
-        android:text="11111"/>
+        android:text="提交"/>
     </LinearLayout>

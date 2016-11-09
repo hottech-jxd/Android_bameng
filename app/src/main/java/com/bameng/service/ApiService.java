@@ -2,6 +2,7 @@ package com.bameng.service;
 
 
 import com.bameng.model.ArticleListOutput;
+import com.bameng.model.CustomListOutput;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.PostModel;
 import com.bameng.model.SlideListOutputModel;
@@ -20,10 +21,22 @@ import retrofit2.http.POST;
  * Created by Administrator on 2016/3/15.
  */
 public interface ApiService {
+
+    @FormUrlEncoded
+    @POST("/customer/create")
+    Call<PostModel> create(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+
     @FormUrlEncoded
     @POST("/article/list")
     Call<ArticleListOutput> list(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
+    @FormUrlEncoded
+    @POST("/customer/list")
+    Call<CustomListOutput> customlist(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/user/myinfo")
+    Call<PostModel> myinfo(@Header("Authorization") String token, @FieldMap Map<String, String> params);
     @FormUrlEncoded
     @POST("/sys/init")
     Call<InitOutputsModel> init(@Header("Authorization") String token, @FieldMap Map<String, String> params);

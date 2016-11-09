@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"/>
+    <LinearLayout
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+        <TextView
+            android:id="@+id/moblie"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+        <LinearLayout
+            android:id="@+id/lay_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:background="@color/green"
+                />
+            <Button
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/line_gray"
+                android:textColor="@color/aqua"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/status"
+        android:text="1111"
+        android:textColor="@color/red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

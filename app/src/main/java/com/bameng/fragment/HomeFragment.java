@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Switch;
 
 
 import com.bameng.R;
@@ -25,7 +26,16 @@ import com.bameng.model.TopArticleIdModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.HomeActivity;
+import com.bameng.ui.account.ExchangeRecordActivity;
+import com.bameng.ui.account.MyAccountActivity;
 import com.bameng.ui.base.BaseFragment;
+import com.bameng.ui.business.AlliesDetailsActivity;
+import com.bameng.ui.business.CustomerInfoActivity;
+import com.bameng.ui.business.ExchangeExamineActivity;
+import com.bameng.ui.business.MyAlliesActivity;
+import com.bameng.ui.business.NewOrderActivity;
+import com.bameng.ui.business.RwordActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.MyListView;
@@ -39,6 +49,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -112,7 +123,32 @@ public class HomeFragment extends BaseFragment   {
         adapter = new ArticleAdapter(Articles,TopArticles, getActivity(), getActivity());
         listL.setAdapter(adapter);
     }
+    @OnClick({R.id.layaccount,R.id.layneworder,R.id.layCustomer,R.id.layally,R.id.layExchange,R.id.layReward})
+     void click(View v){
+        switch (v.getId()){
+            case R.id.layaccount:
+                ActivityUtils.getInstance().showActivity(getActivity(), MyAccountActivity.class);
+                break;
+            case R.id.layneworder:
+                ActivityUtils.getInstance().showActivity(getActivity(), NewOrderActivity.class);
+                break;
+            case R.id.layCustomer:
+                ActivityUtils.getInstance().showActivity(getActivity(), CustomerInfoActivity.class);
+                break;
+            case R.id.layally:
+                ActivityUtils.getInstance().showActivity(getActivity(), MyAlliesActivity.class);
+                break;
+            case R.id.layExchange:
+                ActivityUtils.getInstance().showActivity(getActivity(), ExchangeExamineActivity.class);
+                break;
+            case R.id.layReward:
+                ActivityUtils.getInstance().showActivity(getActivity(), RwordActivity.class);
+                break;
+            default:
+                break;
 
+        }
+    }
 
 
     private void loadData() {
