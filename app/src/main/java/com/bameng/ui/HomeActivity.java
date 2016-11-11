@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.bameng.receiver.MyBroadcastReceiver;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
@@ -295,6 +297,23 @@ public class HomeActivity extends BaseActivity {
     protected void StartApi() {
 
 
+    }
+    private long exitTime = 0l;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 2秒以内按两次推出程序
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                ToastUtils.showLongToast("再按一次退出程序");
+                exitTime = System.currentTimeMillis();
+            } else {
+                closeSelf(HomeActivity.this);
+                SystemTools.killAppDestory(HomeActivity.this);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

@@ -143,6 +143,69 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
     }
     @OnClick(R.id.btn_commit)
     void commitcode(){
+        String phone = edtPhone.getText().toString().trim();
+        if( TextUtils.isEmpty( phone ) ){
+            edtPhone.setError("请输入手机号");
+            ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(edtCode, 0);
+            return;
+        }
+        if( phone.length()<11 ){
+            edtPhone.setError("请输入合法的手机号");
+            edtPhone.setFocusable(true);
+            return;
+        }
+        if (edtCode.getText().toString().isEmpty()){
+            edtCode.setError("请输入验证码");
+            return;
+        }
+        if (edtPsd.getText().toString().isEmpty()){
+            edtPsd.setError("请输入新密码");
+            return;
+
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("version", application.getAppVersion());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("os", "android");
+        map.put("mobile",edtPhone.getText().toString());
+        map.put("verifyCode",edtCode.getText().toString());
+        map.put("password",edtPsd.getText().toString());
+        AuthParamUtils authParamUtils = new AuthParamUtils();
+        String sign = authParamUtils.getSign(map);
+        map.put("sign", sign);
+        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        Call<PostModel> call = apiService.ForgetPwd(application.readToken(),map);
+        call.enqueue(new Callback<PostModel>() {
+            @Override
+            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if (response.body() != null) {
+
+
+                    if (response.body().getStatus() == 200&&response.body()!=null) {
+
+//                        if( countDownBtn ==null ) {
+//                            countDownBtn = new CountDownTimerButton( btn_code, "%dS", "获取验证码", 60000,ForgetPasswordActivity.this , 60000);
+//                        }
+//                        countDownBtn.start();
+//                        ToastUtils.showLongToast("成功");
+                    } else {
+                        ToastUtils.showLongToast(response.body().getStatusText());
+                    }
+
+                }
+
+                return;
+
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<PostModel> call, Throwable t) {
+                ToastUtils.showLongToast("失败");
+            }
+        });
 
     }
 

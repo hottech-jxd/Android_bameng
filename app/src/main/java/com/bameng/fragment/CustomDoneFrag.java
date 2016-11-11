@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.bameng.R;
@@ -15,11 +16,14 @@ import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
+import com.bameng.ui.business.CustomerExamineActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +38,7 @@ import retrofit2.Response;
  * Created by 47483 on 2016.11.09.
  */
 
-public class CustomDoneFrag extends BaseFragment {
+public class CustomDoneFrag extends BaseFragment implements AdapterView.OnItemClickListener {
 
 
     @Bind(R.id.customDoneList)
@@ -73,6 +77,7 @@ public class CustomDoneFrag extends BaseFragment {
         Customers = new ArrayList<CustomerModel>();
         adapter = new CustomDetailsAdapter(Customers, getActivity(), getActivity());
         customDoneList.setAdapter(adapter);
+        customDoneList.setOnItemClickListener(this);
     }
 
 
@@ -139,5 +144,13 @@ public class CustomDoneFrag extends BaseFragment {
     @Override
     public int getLayoutRes() {
         return R.layout.frag_customdone;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+         Bundle bundle = new Bundle();
+        bundle.putSerializable("customerinfo", Customers.get(position-1));
+        ActivityUtils.getInstance().showActivity(getActivity(), CustomerExamineActivity.class,bundle);
+
     }
 }

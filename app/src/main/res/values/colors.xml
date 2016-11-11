@@ -30,6 +30,7 @@
     <color name="click_txt_title">#eb4f38</color>
     <!--标题底色-->
     <color name="line_gray">#c8c8c8</color>
+    <color name="pink">#ff8888</color>
     <!-- 象牙色 -->
     <color name="lightyellow">#ffffe0</color>
     <!-- 亮黄色 -->
@@ -63,8 +64,8 @@
     <!-- 桃色 -->
     <color name="gold">#ffd700</color>
     <!-- 金色 -->
-    <color name="pink">#ffc0cb</color>
-    <!-- 粉红色 -->
+    <!--<color name="pink">#ffc0cb</color>-->
+    <!--&lt;!&ndash; 粉红色 &ndash;&gt;-->
     <color name="lightpink">#ffb6c1</color>
     <!-- 亮粉红色 -->
     <color name="orange">#ffa500</color>
