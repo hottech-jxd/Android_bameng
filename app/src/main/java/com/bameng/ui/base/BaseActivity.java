@@ -17,6 +17,8 @@ import com.bameng.R;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
 
+import org.greenrobot.eventbus.EventBus;
+
 
 public abstract class BaseActivity extends FragmentActivity implements Handler.Callback {
 
@@ -79,11 +81,15 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
     @Override
     protected void onStart() {
         super.onStart();
+
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+
+        EventBus.getDefault().unregister(this);
     }
     public boolean canConnect(){
         //网络访问前先检测网络是否可用

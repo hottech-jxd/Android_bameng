@@ -1,5 +1,6 @@
 package com.bameng.ui.account;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.ui.WebViewActivity;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
+import com.bameng.utils.PreferenceHelper;
 import com.bameng.utils.SystemTools;
 
 import butterknife.Bind;
@@ -72,7 +76,8 @@ public class SettingActivity extends BaseActivity {
 
     }
     @OnClick(R.id.btn_signout) void btn_signoutClick() {
-
+        BaseApplication.single.writeUserToken("");
+        ActivityUtils.getInstance().skipActivity(this, PhoneLoginActivity.class);
     }
 
     @Override

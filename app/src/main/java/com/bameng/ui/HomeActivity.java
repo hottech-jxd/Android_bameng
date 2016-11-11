@@ -1,13 +1,17 @@
 package com.bameng.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,6 +25,7 @@ import com.bameng.R;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.fragment.HomeFragment;
+import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.PostModel;
 import com.bameng.model.SlideListOutputModel;
 import com.bameng.receiver.MyBroadcastReceiver;
@@ -31,6 +36,7 @@ import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.PreferenceHelper;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.ProgressPopupWindow;
@@ -41,11 +47,32 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.Manifest;
+import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
+import static com.baidu.location.h.j.G;
+import static com.baidu.location.h.j.an;
+import static com.bameng.service.LocationService.Longitude;
+import static com.bameng.service.LocationService.address;
+import static com.bameng.service.LocationService.city;
+import static com.bameng.service.LocationService.latitude;
+
+/***
+ * 盟主主页
+ */
+@RuntimePermissions
 public class HomeActivity extends BaseActivity {
 
     @Bind(R.id.titleLeftImage)
@@ -113,7 +140,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        application = (BaseApplication) this.getApplication();
+        //application = (BaseApplication) this.getApplication();
         application.loadAddress();
         mHandler = new Handler(this);
         application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
@@ -124,11 +151,23 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void initView() {
         goback=false;
         titleText.setText(getString(R.string.app_name));
 
-        titleLeftText.setText( application.baiduLocation==null || application.baiduLocation.getCity()==null ? "" : application.baiduLocation.getCity());
+        //titleLeftText.setText( application.baiduLocation==null || application.baiduLocation.getCity()==null ? "" : application.baiduLocation.getCity());
 
         titleLeftImage.setVisibility(View.VISIBLE);
         titleRightImage.setVisibility(View.GONE);
@@ -139,6 +178,64 @@ public class HomeActivity extends BaseActivity {
         application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         initTab();
 
+        //
+        baiduLocation();
+    }
+
+
+
+    @NeedsPermission( {Manifest.permission.READ_PHONE_STATE ,
+            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    protected void baiduLocation(){
+        application.baiduLocationService.start();
+    }
+    @OnShowRationale({Manifest.permission.READ_PHONE_STATE ,
+            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    protected void showRationaleForBaiduLocation(PermissionRequest request){
+        showRationaleDialog( R.string.permission_baiduLocation_rationale , request );
+    }
+
+    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE ,
+            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    protected void onBaiduLocationDenied(){
+        Toast.makeText(this, R.string.permission_baiduLocation_denied , Toast.LENGTH_SHORT).show();
+    }
+
+    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE ,
+            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    protected void onBaiduLocationNeverAskAgain(){
+        Toast.makeText(this, R.string.permission_baiduLocation_never_asked , Toast.LENGTH_SHORT).show();
+    }
+
+    private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
+        new AlertDialog.Builder(this)
+                .setPositiveButton(R.string.permission_allow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton(R.string.permission_dency, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        request.cancel();
+                    }
+                })
+                .setCancelable(false)
+                .setMessage(messageResId)
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+        //HomeActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Override
@@ -186,6 +283,7 @@ public class HomeActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.homePage: {
                 titleText.setText(getString(R.string.app_name));
+                titleLeftText.setVisibility(View.VISIBLE);
                 titleLeftImage.setVisibility(View.VISIBLE);
                 titleRightImage.setVisibility(View.GONE);
                 if(progress!=null) progress.dismissView();
@@ -215,6 +313,7 @@ public class HomeActivity extends BaseActivity {
             case R.id.newsPage: {
                 titleText.setText("资讯列表");
                 titleLeftImage.setVisibility(View.GONE);
+                titleLeftText.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.VISIBLE);
                 if(progress!=null) progress.dismissView();
                 //设置选中状态
@@ -241,6 +340,7 @@ public class HomeActivity extends BaseActivity {
             break;
             case R.id.businessPage: {
                 titleText.setText("我的业务");
+                titleLeftText.setVisibility(View.GONE);
                 titleLeftImage.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.GONE);
                 if(progress!=null) progress.dismissView();
@@ -268,6 +368,7 @@ public class HomeActivity extends BaseActivity {
             break;
             case R.id.profilePage: {
                 titleText.setText("我的账户");
+                titleLeftText.setVisibility(View.GONE);
                 titleLeftImage.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.GONE);
                 if(progress!=null) progress.dismissView();
@@ -290,7 +391,6 @@ public class HomeActivity extends BaseActivity {
                     //加载具体的页面
                     Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, tag);
                     mHandler.sendMessage(msg);
-
             }
             break;
             default:
@@ -342,5 +442,25 @@ public class HomeActivity extends BaseActivity {
                 break;
         }
         return false;
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN )
+    public void onEventBaiduLocation(BaiduLocationEvent event) {
+        titleLeftText.setText("");
+        if (event == null) return;
+        titleLeftText.setText(event.getModel() == null || event.getModel().getCity() == null ? "" : event.getModel().getCity());
+        //TODO 调用接口 上报位置信息
+
+        if (null != event.getModel().getCity() ) {
+            PreferenceHelper.writeString(getApplicationContext(),Constants.LOCATION_INFO, Constants.CITY, event.getModel().getCity());
+        }
+        if (null != event.getModel().getAddress() ) {
+            PreferenceHelper.writeString(getApplicationContext(),Constants.LOCATION_INFO, Constants.ADDRESS, event.getModel().getAddress());
+        }
+        PreferenceHelper.writeString(getApplicationContext(), Constants.LOCATION_INFO, Constants.LATITUDE, String.valueOf(event.getModel().getLatitude()));
+        PreferenceHelper.writeString(getApplicationContext(), Constants.LOCATION_INFO, Constants.LONGITUDE, String.valueOf(event.getModel().getLongitude()));
+
+        application.baiduLocationService.stop();
     }
 }

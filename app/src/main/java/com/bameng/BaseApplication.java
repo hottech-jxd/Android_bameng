@@ -16,6 +16,7 @@ import com.baidu.location.LocationClient;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.model.BaiduLocation;
+import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseData;
 import com.bameng.model.LocalAddressModel;
 import com.bameng.model.UserData;
@@ -26,6 +27,8 @@ import com.bameng.utils.CrashHandler;
 import com.bameng.utils.JSONUtil;
 import com.bameng.utils.PreferenceHelper;
 import com.facebook.drawee.backends.pipeline.Fresco;
+
+import org.greenrobot.eventbus.EventBus;
 
 import static com.bameng.service.LocationService.Longitude;
 import static com.bameng.service.LocationService.address;
@@ -59,7 +62,7 @@ public class BaseApplication extends Application {
     //底部菜单是否隐藏 true显示， false隐藏
     //public boolean isMenuHide = false;
     //百度定位服务
-    BaiduLocationService baiduLocationService;
+    public BaiduLocationService baiduLocationService;
 
     /**
      * 是否是左划或者返回
@@ -91,7 +94,7 @@ public class BaseApplication extends Application {
         //mLocationClient.registerLocationListener(mMyLocationListener);
         baiduLocationService= new BaiduLocationService(this);
         baiduLocationService.registerListener(mMyLocationListener);
-        baiduLocationService.start();
+        //baiduLocationService.start();
 
         // 初始化Volley实例
         //VolleyUtil.init(this);
@@ -204,26 +207,29 @@ public class BaseApplication extends Application {
                     baiduLocation.setProvince(location.getProvince());
                     baiduLocation.setStreet( location.getStreet());
                     baiduLocation.setDistrict(location.getDistrict());
+
+                    EventBus.getDefault().post( new BaiduLocationEvent(baiduLocation));
+
                 } else{
                     Log.i("BaiduLocation:", "百度定位失败 " + String.valueOf(location.getLocType()));
                 }
             }
 
             // 将定位信息写入配置文件
-            if (null != city) {
-                PreferenceHelper.writeString(getApplicationContext(),
-                        Constants.LOCATION_INFO, Constants.CITY, city);
-            }
-            if (null != address) {
-                PreferenceHelper.writeString(getApplicationContext(),
-                        Constants.LOCATION_INFO, Constants.ADDRESS, address);
-            }
-            PreferenceHelper.writeString(getApplicationContext(),
-                    Constants.LOCATION_INFO, Constants.LATITUDE,
-                    String.valueOf(latitude));
-            PreferenceHelper.writeString(getApplicationContext(),
-                    Constants.LOCATION_INFO, Constants.LONGITUDE,
-                    String.valueOf(Longitude));
+//            if (null != city) {
+//                PreferenceHelper.writeString(getApplicationContext(),
+//                        Constants.LOCATION_INFO, Constants.CITY, city);
+//            }
+//            if (null != address) {
+//                PreferenceHelper.writeString(getApplicationContext(),
+//                        Constants.LOCATION_INFO, Constants.ADDRESS, address);
+//            }
+//            PreferenceHelper.writeString(getApplicationContext(),
+//                    Constants.LOCATION_INFO, Constants.LATITUDE,
+//                    String.valueOf(latitude));
+//            PreferenceHelper.writeString(getApplicationContext(),
+//                    Constants.LOCATION_INFO, Constants.LONGITUDE,
+//                    String.valueOf(Longitude));
         }
 
     }

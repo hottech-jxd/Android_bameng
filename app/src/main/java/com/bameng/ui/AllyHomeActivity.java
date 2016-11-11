@@ -37,6 +37,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 盟友主页
+ */
 public class AllyHomeActivity extends BaseActivity {
 
     @Bind(R.id.titleLeftImage)
