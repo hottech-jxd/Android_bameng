@@ -60,7 +60,7 @@ public class HomeActivity extends BaseActivity {
 
     @Bind(R.id.fragment_container)
     FrameLayout fragmentContainer;
-    
+
     @Bind(R.id.homePage)
     RelativeLayout homePage;
 
