@@ -12,6 +12,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -26,6 +27,7 @@ import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.fragment.HomeFragment;
 import com.bameng.model.BaiduLocationEvent;
+import com.bameng.model.BaseModel;
 import com.bameng.model.PostModel;
 import com.bameng.model.SlideListOutputModel;
 import com.bameng.receiver.MyBroadcastReceiver;
@@ -64,6 +66,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import static com.baidu.location.h.j.G;
 import static com.baidu.location.h.j.an;
+import static com.baidu.location.h.j.ap;
+import static com.baidu.location.h.j.t;
 import static com.bameng.service.LocationService.Longitude;
 import static com.bameng.service.LocationService.address;
 import static com.bameng.service.LocationService.city;
@@ -451,6 +455,7 @@ public class HomeActivity extends BaseActivity {
         if (event == null) return;
         titleLeftText.setText(event.getModel() == null || event.getModel().getCity() == null ? "" : event.getModel().getCity());
         //TODO 调用接口 上报位置信息
+        String lnglat = String.valueOf( event.getModel().getLongitude() ) +","+ String.valueOf( event.getModel().getLatitude() );
 
         if (null != event.getModel().getCity() ) {
             PreferenceHelper.writeString(getApplicationContext(),Constants.LOCATION_INFO, Constants.CITY, event.getModel().getCity());
@@ -461,6 +466,43 @@ public class HomeActivity extends BaseActivity {
         PreferenceHelper.writeString(getApplicationContext(), Constants.LOCATION_INFO, Constants.LATITUDE, String.valueOf(event.getModel().getLatitude()));
         PreferenceHelper.writeString(getApplicationContext(), Constants.LOCATION_INFO, Constants.LONGITUDE, String.valueOf(event.getModel().getLongitude()));
 
+
+        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        String token = application.readToken();
+        Map<String, String> map = new HashMap<>();
+        map.put("version", application.getAppVersion());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("os", "android");
+        map.put("mylocation", event.getModel().getCity() );
+        map.put("lnglat", lnglat );
+        AuthParamUtils authParamUtils = new AuthParamUtils();
+        String sign = authParamUtils.getSign(map);
+        map.put("sign", sign);
         application.baiduLocationService.stop();
+
+        Call<BaseModel> call = apiService.myLocation( token , map);
+        call.enqueue(new Callback<BaseModel>() {
+            @Override
+            public void onResponse(Call<BaseModel> call, Response<BaseModel> response) {
+                if(response.body().getStatus() == 70035 ){
+                    ToastUtils.showLongToast( response.body().getStatusText());
+                    ActivityUtils.getInstance().skipActivity(HomeActivity.this, PhoneLoginActivity.class );
+                    return;
+                }else if( response.body().getStatus() != 200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    application.baiduLocationService.start();
+                    return;
+                }
+                //application.baiduLocationService.stop();
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel> call, Throwable t) {
+                Log.e(HomeActivity.class.getName() , t.getMessage()==null? "error" : t.getMessage());
+                application.baiduLocationService.start();
+            }
+        });
+
+
     }
 }

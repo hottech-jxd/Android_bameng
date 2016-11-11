@@ -12,6 +12,7 @@ public class ListModel {
     int BrowseAmount;
     String PublishTime;
     String ArticleUrl;
+    String PublishTimeText;
 
     public int getArticleId() {
         return ArticleId;
@@ -67,5 +68,13 @@ public class ListModel {
 
     public void setArticleUrl(String articleUrl) {
         ArticleUrl = articleUrl;
+    }
+
+    public String getPublishTimeText() {
+        return PublishTimeText;
+    }
+
+    public void setPublishTimeText(String publishTimeText) {
+        PublishTimeText = publishTimeText;
     }
 }

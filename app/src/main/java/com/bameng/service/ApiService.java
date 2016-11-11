@@ -2,6 +2,7 @@ package com.bameng.service;
 
 
 import com.bameng.model.ArticleListOutput;
+import com.bameng.model.BaseModel;
 import com.bameng.model.CustomListOutput;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.InitOutputsModel;
@@ -15,6 +16,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 
@@ -67,6 +69,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/sys/CheckUpdate")
     Call<InitOutputsModel> CheckUpdate(@FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/sys/MyLocation")
+    Call<BaseModel> myLocation(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("user/login")

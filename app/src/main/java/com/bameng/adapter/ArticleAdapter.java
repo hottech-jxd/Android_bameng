@@ -79,7 +79,7 @@ public class ArticleAdapter extends BaseAdapter {
                 holder.articleTitle.setText(Article.getArticleTitle());
                 holder.articleIntro.setText(Article.getArticleIntro());
                 holder.browseAmount.setText(String.valueOf(Article.getBrowseAmount()));
-                holder.time.setText(Article.getPublishTime());
+                holder.time.setText(Article.getPublishTimeText());
             }else {
                 convertView = View.inflate(mContext, R.layout.article_item_top, null);
                 viewHolderTop = new ViewHolderTop(convertView);
@@ -89,7 +89,7 @@ public class ArticleAdapter extends BaseAdapter {
                 viewHolderTop.topArticleTitle.setText(topArticleIdModel.getArticleTitle());
                 viewHolderTop.topArticleIntro.setText(topArticleIdModel.getArticleIntro());
                 viewHolderTop.topBrowseAmount.setText(String.valueOf(topArticleIdModel.getBrowseAmount()));
-                viewHolderTop.topTime.setText(topArticleIdModel.getPublishTime());
+                viewHolderTop.topTime.setText(topArticleIdModel.getPublishTimeText());
             }
 
         }else
