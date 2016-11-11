@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.EncryptUtil;
+import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.huotu.android.library.libedittext.EditText;
 
@@ -148,6 +150,23 @@ public class PhoneLoginActivity extends BaseActivity {
             }
         });
 
+    }
+    private long exitTime = 0l;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 2秒以内按两次推出程序
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                ToastUtils.showLongToast("再按一次退出程序");
+                exitTime = System.currentTimeMillis();
+            } else {
+                closeSelf(PhoneLoginActivity.this);
+                SystemTools.killAppDestory(PhoneLoginActivity.this);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @OnClick({R.id.tv_forgetpsd,R.id.img_forgetpsd})

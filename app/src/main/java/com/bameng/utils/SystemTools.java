@@ -1,6 +1,8 @@
 package com.bameng.utils;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -178,6 +180,19 @@ public class SystemTools {
     }
 
 
+    public static void killAppDestory(Context context)
+    {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        //2.2之前操作
+        if(8 < SystemTools.getSDKVersion())
+        {
+            am.restartPackage(context.getPackageName());
+        }
+        else if(8<=SystemTools.getSDKVersion())
+        {
+            am.killBackgroundProcesses(context.getPackageName());
+        }
+    }
 
     public static Bitmap readBitmapFromSD(String iconName) {
         String dir = Environment.getExternalStorageDirectory() + File.separator + "buyer" + File.separator + "icon" + File.separator;

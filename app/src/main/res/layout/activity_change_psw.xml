@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_oldpws"
             android:imeOptions="actionNext"
-            android:inputType="textUri"
+            android:inputType="textPassword"
             android:maxLength="20"
             />
     </LinearLayout>
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_newpws1"
             android:imeOptions="actionNext"
-            android:inputType="textUri"
+            android:inputType="textPassword"
             android:maxLength="20"
             />
     </LinearLayout>
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_newpws2"
             android:imeOptions="actionNext"
-            android:inputType="textUri"
+            android:inputType="textPassword"
             android:maxLength="20"
             />
     </LinearLayout>
@@ -117,7 +117,7 @@
         android:id="@+id/btn_commit"
         android:layout_margin="20dp"
         android:layout_below="@+id/loginLay"
-        android:background="@drawable/btn_login"
+        android:background="@drawable/btn_cancel"
         android:text="完成"
         android:textSize="15sp"
         android:textColor="@color/white"

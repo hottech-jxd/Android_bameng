@@ -3,6 +3,7 @@ package com.bameng.service;
 
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CustomListOutput;
+import com.bameng.model.GetRewardOutput;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.PostModel;
 import com.bameng.model.SlideListOutputModel;
@@ -23,8 +24,22 @@ import retrofit2.http.POST;
 public interface ApiService {
 
     @FormUrlEncoded
+    @POST("/user/MyBusiness")
+    Call<PostModel> MyBusiness(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+    @FormUrlEncoded
     @POST("/customer/create")
     Call<PostModel> create(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/user/setallyRaward")
+    Call<PostModel> setallyRaward(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/user/GetAllyReward")
+    Call<GetRewardOutput> GetAllyReward(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("/user/ChanagePassword")
+    Call<PostModel> ChanagePassword(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("/article/list")
@@ -59,6 +74,6 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("user/forgetpwd")
-    Call<PostModel> ForgetPwd(@FieldMap Map<String, String> params);
+    Call<PostModel> ForgetPwd(@Header("Authorization") String token,@FieldMap Map<String, String> params);
 
 }

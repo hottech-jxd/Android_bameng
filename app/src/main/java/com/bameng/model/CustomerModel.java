@@ -1,9 +1,11 @@
 package com.bameng.model;
 
+import java.io.Serializable;
+
 /**
  * Created by 47483 on 2016.11.08.
  */
-public class CustomerModel {
+public class CustomerModel implements Serializable {
 
     String Addr;
     String 	BelongOne;
