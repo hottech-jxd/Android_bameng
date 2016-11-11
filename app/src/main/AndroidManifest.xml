@@ -7,6 +7,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+    <!-- 百度定位需要的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
@@ -52,8 +61,22 @@
         <activity android:name=".ui.news.ChooseObjectActivity" />
         <activity android:name=".ui.AllyHomeActivity" />
         <activity android:name=".ui.login.ForgetPasswordActivity" />
-        <activity android:name=".ui.login.PhoneLoginActivity"></activity>
-        <activity android:name=".ui.WebViewActivity"></activity>
+        <activity android:name=".ui.login.PhoneLoginActivity"/>
+        <activity android:name=".ui.WebViewActivity"/>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.2" >
+                </action>
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="xIa1QGYszsjFs9C9kDANe7BR" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
+
     </application>
 
 </manifest>

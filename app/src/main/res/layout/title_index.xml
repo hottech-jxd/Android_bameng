@@ -9,12 +9,19 @@
 
         <ImageView
             android:id="@+id/titleLeftImage"
-            android:layout_width="@dimen/title_image_width"
+            android:layout_width="25dp"
             android:layout_height="@dimen/title_image_height"
             android:onClick="onGoBackButton"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
              />
+        <TextView
+            android:id="@+id/titleLeftText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/titleText"
+            android:layout_toRightOf="@id/titleLeftImage"/>
 
         <TextView
             android:id="@+id/titleText"

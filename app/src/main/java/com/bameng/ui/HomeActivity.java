@@ -46,9 +46,11 @@ import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
 
-
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
+
+    @Bind(R.id.titleLeftText)
+    TextView titleLeftText;
 
     @Bind(R.id.titleRightImage)
     ImageView titleRightImage;
@@ -58,8 +60,7 @@ public class HomeActivity extends BaseActivity {
 
     @Bind(R.id.fragment_container)
     FrameLayout fragmentContainer;
-
-    //bottom
+    
     @Bind(R.id.homePage)
     RelativeLayout homePage;
 
@@ -124,6 +125,9 @@ public class HomeActivity extends BaseActivity {
     protected void initView() {
         goback=false;
         titleText.setText(getString(R.string.app_name));
+
+        titleLeftText.setText( application.baiduLocation==null || application.baiduLocation.getCity()==null ? "" : application.baiduLocation.getCity());
+
         titleLeftImage.setVisibility(View.VISIBLE);
         titleRightImage.setVisibility(View.GONE);
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);

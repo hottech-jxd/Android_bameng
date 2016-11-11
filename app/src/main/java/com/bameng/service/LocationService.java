@@ -24,8 +24,7 @@ public class LocationService extends Service {
     /**
      * 高精度模式
      */
-    private LocationClientOption.LocationMode mode = LocationClientOption
-            .LocationMode.Hight_Accuracy;
+    private LocationClientOption.LocationMode mode = LocationClientOption.LocationMode.Hight_Accuracy;
     /**
      * 定位客户端
      */
@@ -44,16 +43,16 @@ public class LocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        mLocationClient = ((BaseApplication) getApplication()).mLocationClient;
+        //mLocationClient = ((BaseApplication) getApplication()).mLocationClient;
 
         //设置定位参数
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(mode);
-        option.setCoorType("bd09ll"); //设置坐标类型为bd09ll
+        option.setCoorType("bd09ll"); //可选，默认gcj02，设置返回的定位结果坐标系，如果配合百度地图使用，建议设置为bd09ll;
         option.setOpenGps(true); //打开gps
-        option.setScanSpan(5000); //定时定位，每隔一分钟定位一次，刷新一次数据。
-        option.setIsNeedAddress(true);
-        option.setNeedDeviceDirect(true);
+        option.setScanSpan(5000); //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
+        option.setNeedDeviceDirect(true);//可选，设置是否需要设备方向结果
         mLocationClient.setLocOption(option);
 
         //mLocationClient.registerLocationListener( new MyLocationListener());

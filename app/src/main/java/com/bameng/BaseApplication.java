@@ -15,15 +15,22 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
+import com.bameng.model.BaiduLocation;
 import com.bameng.model.BaseData;
 import com.bameng.model.LocalAddressModel;
 import com.bameng.model.UserData;
 import com.bameng.model.VersionData;
+import com.bameng.service.BaiduLocationService;
 import com.bameng.utils.AssetsUtils;
 import com.bameng.utils.CrashHandler;
 import com.bameng.utils.JSONUtil;
 import com.bameng.utils.PreferenceHelper;
 import com.facebook.drawee.backends.pipeline.Fresco;
+
+import static com.bameng.service.LocationService.Longitude;
+import static com.bameng.service.LocationService.address;
+import static com.bameng.service.LocationService.city;
+import static com.bameng.service.LocationService.latitude;
 
 
 /**
@@ -32,24 +39,28 @@ import com.facebook.drawee.backends.pipeline.Fresco;
  */
 public class BaseApplication extends Application {
     //定位类型
-    public int localType;
+    //public int localType;
+    public BaiduLocation baiduLocation;
     //地址
-    public String address;
+    //public String address;
     //纬度
-    public double latitude;
+    //public double latitude;
     //经度
-    public double Longitude;
+    //public double Longitude;
     public FragManager mFragManager;
 
     public LocalAddressModel localAddress;
     //是否有网络连接
     public boolean isConn = false;
     //城市
-    public String city;
-    public LocationClient mLocationClient;
+    //public String city;
+    //public LocationClient mLocationClient;
     public MyLocationListener mMyLocationListener;//地址从这开始
     //底部菜单是否隐藏 true显示， false隐藏
     //public boolean isMenuHide = false;
+    //百度定位服务
+    BaiduLocationService baiduLocationService;
+
     /**
      * 是否是左划或者返回
      * true 左划
@@ -75,9 +86,12 @@ public class BaseApplication extends Application {
 
 
 
-        mLocationClient = new LocationClient(this.getApplicationContext());
+        //mLocationClient = new LocationClient(this.getApplicationContext());
         mMyLocationListener = new MyLocationListener();
-        mLocationClient.registerLocationListener(mMyLocationListener);
+        //mLocationClient.registerLocationListener(mMyLocationListener);
+        baiduLocationService= new BaiduLocationService(this);
+        baiduLocationService.registerListener(mMyLocationListener);
+        baiduLocationService.start();
 
         // 初始化Volley实例
         //VolleyUtil.init(this);
@@ -172,18 +186,26 @@ public class BaseApplication extends Application {
             if (null == location) {
                 return;
             } else {
-                localType = location.getLocType();
+                int localType = location.getLocType();
 
-                if (BDLocation.TypeGpsLocation == localType) {
-                    latitude = location.getLatitude();
-                    Longitude = location.getLongitude();
-                    city = location.getCity();
-                    address = location.getAddrStr();
-                } else if (BDLocation.TypeNetWorkLocation == localType) {
-                    latitude = location.getLatitude();
-                    Longitude = location.getLongitude();
-                    city = location.getCity();
-                    address = location.getAddrStr();
+                if (BDLocation.TypeGpsLocation == localType || BDLocation.TypeNetWorkLocation == localType || BDLocation.TypeOffLineLocation == localType) {
+//                    latitude = location.getLatitude();
+//                    Longitude = location.getLongitude();
+//                    city = location.getCity();
+//                    address = location.getAddrStr();
+                    baiduLocation =new BaiduLocation();
+                    baiduLocation.setAddress(location.getAddrStr());
+                    baiduLocation.setCity(location.getCity());
+                    baiduLocation.setCityCode(location.getCityCode());
+                    baiduLocation.setCountry(location.getCountry());
+                    baiduLocation.setCountryCode(location.getCountryCode());
+                    baiduLocation.setLatitude(location.getLatitude());
+                    baiduLocation.setLongitude(location.getLongitude());
+                    baiduLocation.setProvince(location.getProvince());
+                    baiduLocation.setStreet( location.getStreet());
+                    baiduLocation.setDistrict(location.getDistrict());
+                } else{
+                    Log.i("BaiduLocation:", "百度定位失败 " + String.valueOf(location.getLocType()));
                 }
             }
 

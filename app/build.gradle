@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply from: 'E:/myjob/keystore/keystore.gradle'
+
 android {
     //Android6.0找不到org.apache.http.Header 的解决方法
     useLibrary 'org.apache.http.legacy'
@@ -13,10 +15,29 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    sourceSets{
+        main{
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     buildTypes {
+        debug{
+            signingConfig signingConfigs.huotu
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //打包渠道
+    productFlavors {
+        bmtest{
+            applicationId 'com.huotu.huobanmall.seller'
+            signingConfig signingConfigs.huotu
         }
     }
 }
