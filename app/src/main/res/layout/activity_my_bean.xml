@@ -5,8 +5,7 @@
     android:layout_height="match_parent" >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height"
-        >
+        android:layout_height="@dimen/act_title_height">
         <include layout="@layout/title_index"></include>
     </RelativeLayout>
     <LinearLayout
@@ -53,8 +52,14 @@
         </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <include layout="@layout/mbean_item"></include>
+        android:layout_height="wrap_content">
+
+        <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycleView"/>
+
+        <include layout="@layout/mbean_item"/>
+
     </RelativeLayout>
     </LinearLayout>

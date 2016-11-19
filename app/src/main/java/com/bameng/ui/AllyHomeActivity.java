@@ -21,6 +21,7 @@ import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.ui.business.SubmitCustomerInfoActivity;
+import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
@@ -82,6 +83,8 @@ public class AllyHomeActivity extends BaseActivity {
     public Resources resources;
     public ProgressPopupWindow progress;
 
+    String currentTab="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +110,7 @@ public class AllyHomeActivity extends BaseActivity {
     }
 
     private void initTab() {
+        currentTab="业务客户";
         Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
         SystemTools.loadBackground(homeImg, oneBuyDraw);
         homeTxt.setTextColor(resources.getColor(R.color.chocolate));
@@ -121,11 +125,16 @@ public class AllyHomeActivity extends BaseActivity {
 
     @OnClick(R.id.titleRightImage)
     void onRightClick(){
-        ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, SubmitCustomerInfoActivity.class);
+        if( currentTab.equals("业务客户")) {
+            ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, SubmitCustomerInfoActivity.class);
+        }else if(currentTab.equals("资讯列表")){
+            ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, AddnewsActivity.class);
+        }
     }
     public void onTabClicked(View view) {
         switch (view.getId()) {
             case R.id.homePage: {
+                currentTab="业务客户";
                 titleText.setText("业务客户");
                 titleLeftImage.setVisibility(View.VISIBLE);
                 titleRightImage.setVisibility(View.VISIBLE);
@@ -146,6 +155,7 @@ public class AllyHomeActivity extends BaseActivity {
             }
             break;
             case R.id.newsPage: {
+                currentTab="资讯列表";
                 titleText.setText("资讯列表");
                 titleLeftImage.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.VISIBLE);
@@ -167,6 +177,7 @@ public class AllyHomeActivity extends BaseActivity {
             }
             break;
             case R.id.richesPage: {
+                currentTab="财富";
                 titleText.setText("财富");
                 titleLeftImage.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.GONE);

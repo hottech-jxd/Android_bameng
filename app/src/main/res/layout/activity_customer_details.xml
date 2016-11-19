@@ -23,15 +23,36 @@
         android:padding="10dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="111"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="1111111"
-            android:gravity="center"
+            android:text="aaaaaa"
+            android:gravity="left"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="111"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="1111"
             />
     </LinearLayout>
     <TextView
@@ -46,7 +67,7 @@
         android:padding="10dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="111"/>
@@ -54,7 +75,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="1111111"
-            android:gravity="center"
             />
     </LinearLayout>
     <TextView
@@ -69,7 +89,7 @@
         android:padding="10dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="111"/>
@@ -77,7 +97,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="1111111"
-            android:gravity="center"
             />
     </LinearLayout>
     <TextView
@@ -92,7 +111,7 @@
         android:padding="10dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="111"/>
@@ -100,7 +119,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="1111111"
-            android:gravity="center"
             />
     </LinearLayout>
     <TextView
@@ -115,7 +133,7 @@
         android:padding="10dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="111"/>
@@ -123,30 +141,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="1111111"
-            android:gravity="center"
-            />
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="111"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="1111111"
-            android:gravity="center"
             />
     </LinearLayout>
     <Button

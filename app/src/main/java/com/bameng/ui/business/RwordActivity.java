@@ -4,8 +4,10 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +35,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/***
+ * 奖励设置
+ */
 public class RwordActivity extends BaseActivity {
 
     @Bind(R.id.titleText)
@@ -68,6 +73,9 @@ public class RwordActivity extends BaseActivity {
 
     @OnClick(R.id.btn_commit)
     void setallyaward(){
+
+        ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         Map<String, String> map = new HashMap<>();
         map.put("version", application.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -84,23 +92,21 @@ public class RwordActivity extends BaseActivity {
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if( response.code() != 200 ){
+                    ToastUtils.showLongToast(response.message()==null? String.valueOf( response.code()) : response.message());
+                    return;
+                }
+
                 if (response.body() != null) {
-
-
-                    if (response.body().getStatus() == 200&&response.body()!=null) {
-
+                    if (response.body().getStatus() == 200 ) {
+                        ToastUtils.showLongToast(response.body().getStatusText());
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
-
                 }
 
                 return;
-
-
-
             }
-
 
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
@@ -129,22 +135,17 @@ public class RwordActivity extends BaseActivity {
                 if (response.body() != null) {
 
 
-                    if (response.body().getStatus() == 200&&response.body()!=null) {
+                    if (response.body().getStatus() == 200&&response.body().getData() !=null) {
                         CustomReward.setText(String.valueOf(response.body().getData().getCustomerReward()));
                         orderReword.setText(String.valueOf(response.body().getData().getOrderReward()));
                         shopReword.setText(String.valueOf(response.body().getData().getShopReward()));
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
-
                 }
-
                 return;
 
-
-
             }
-
 
             @Override
             public void onFailure(Call<GetRewardOutput> call, Throwable t) {

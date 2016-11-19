@@ -18,6 +18,9 @@ allprojects {
             url="http://repo.51flashmall.com:8081/nexus/content/groups/public/"
         }
         jcenter()
+        maven{
+            url="https://jitpack.io"
+        }
     }
 }
 

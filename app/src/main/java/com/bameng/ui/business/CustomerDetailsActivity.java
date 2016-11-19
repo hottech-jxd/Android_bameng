@@ -17,6 +17,9 @@ import com.bameng.utils.SystemTools;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/***
+ * 客户详情界面
+ */
 public class CustomerDetailsActivity extends BaseActivity {
 
     @Bind(R.id.titleText)

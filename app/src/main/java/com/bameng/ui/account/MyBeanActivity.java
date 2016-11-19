@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bameng.R;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.SystemTools;
+//import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,6 +25,8 @@ public class MyBeanActivity extends BaseActivity {
     TextView titleText;
     @Bind(R.id.txt_outbean)
     TextView txtOutbean;
+    //@Bind(R.id.recycleView)
+    //UltimateRecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,9 @@ public class MyBeanActivity extends BaseActivity {
         titleText.setText("盟豆");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+
+        //recyclerView.reenableLoadmore();
+
     }
 
     @Override

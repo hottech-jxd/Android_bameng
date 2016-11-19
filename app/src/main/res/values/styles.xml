@@ -18,4 +18,11 @@
     </style>
     <style name="CyEditTextStyle" parent="android:Theme.Light"> <!-- parent="android:Theme.Light"解决自定义style，光标变白问题 -->
     </style>
+
+
+    <style name="AnimationPop">
+        <item name="android:windowEnterAnimation">@anim/in_from_down</item>
+        <item name="android:windowExitAnimation">@anim/out_to_top</item>
+    </style>
+
 </resources>

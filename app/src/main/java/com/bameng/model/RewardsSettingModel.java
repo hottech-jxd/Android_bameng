@@ -1,5 +1,7 @@
 package com.bameng.model;
 
+import java.math.BigDecimal;
+
 /**
  * Created by 47483 on 2016.11.10.
  */

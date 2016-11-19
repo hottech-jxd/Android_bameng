@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+
+import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.TabPagerAdapter;
 import com.bameng.ui.base.BaseFragment;
@@ -20,7 +22,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
+/***
+ * 资讯列表
+ */
 public class NewsFragment extends BaseFragment {
 
 
@@ -47,47 +51,64 @@ public class NewsFragment extends BaseFragment {
         resources = this.getResources();
         StartApi();
         initSwitch();
+
+        if(BaseApplication.UserData().getUserIdentity() ==1){
+            allyLabel.setText("盟友资讯");
+        }else{
+            allyLabel.setText("盟主资讯");
+        }
     }
 
     private void initSwitch() {
         GroupFrag groupFrag = new GroupFrag();
         StoreFrag storeFrag = new StoreFrag();
-        ShopFrag shopFrag = new ShopFrag();
+
         AllyFrag allyFrag = new AllyFrag();
         Bundle b = new Bundle();
         b.putInt("index", 0);
         groupFrag.setArguments(b);
         mFragmentList.add(groupFrag);
+
         b = new Bundle();
         b.putInt("index", 1);
         storeFrag.setArguments(b);
         mFragmentList.add(storeFrag);
-        b.putInt("index", 2);
-        shopFrag.setArguments(b);
-        mFragmentList.add(shopFrag);
+
+
+
+        if(BaseApplication.UserData().getShopType() == 2) {
+            b.putInt("index", 2);
+            ShopFrag shopFrag = new ShopFrag();
+            shopFrag.setArguments(b);
+            mFragmentList.add(shopFrag);
+            shopLabel.setVisibility(View.VISIBLE);
+        }else{
+            shopLabel.setVisibility(View.GONE);
+        }
+
         b.putInt("index", 3);
         allyFrag.setArguments(b);
         mFragmentList.add(allyFrag);
         tabPagerAdapter = new TabPagerAdapter(getChildFragmentManager(), mFragmentList);
         raidersViewPager.setAdapter(tabPagerAdapter);
         raidersViewPager.setOffscreenPageLimit(4);
-        raidersViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        raidersViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int index) {
-
-
+                 int  idx = tabPagerAdapter.getItem(index).getArguments().getInt("index");
+                changeIndex(idx);
             }
 
 
             @Override
             public void onPageScrolled(int index, float arg1, int pixes) {
-                if (pixes != 0) {
-                }
-                if (pixes == 0) {
-                    currentIndex = index;
-                    changeIndex(currentIndex);
-                }
+//                if (pixes != 0) {
+//                }
+//                if (pixes == 0) {
+//                    currentIndex = index;
+//                    changeIndex(currentIndex);
+//                }
             }
 
             @Override

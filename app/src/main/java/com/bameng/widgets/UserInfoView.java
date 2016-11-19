@@ -3,6 +3,7 @@ package com.bameng.widgets;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -26,11 +27,11 @@ import java.util.HashMap;
 
 public class UserInfoView {
 	public enum Type{
-		Name, Realname,Sex
+		Name, Realname,Sex,ShopStatus
 	}
 	public HashMap<Type, String> titleNames = new HashMap<Type, String>();
 	public interface OnUserInfoBackListener{
-		void onUserInfoBack(Type type);
+		void onUserInfoBack(Type type , String value );
 	}
 	private OnUserInfoBackListener listener;
 	private View mainView;
@@ -41,7 +42,10 @@ public class UserInfoView {
 	private RelativeLayout layMain;
 	private LinearLayout layedt;
 	private LinearLayout laysex;
+	private LinearLayout layShopStatus;
 	private EditText edtName;
+	TextView noInShop;
+	TextView inShop;
 
 	public UserInfoView(Context context){
 		this.mContext = context;
@@ -81,7 +85,12 @@ public class UserInfoView {
 
 
 
+
 				dialog.dismiss();
+
+				if(listener!=null){
+					listener.onUserInfoBack( curType , edtName.getText().toString() );
+				}
 
 			}
 		});
@@ -90,7 +99,7 @@ public class UserInfoView {
 			@Override
 			public void onClick(View v) {
 				 if(listener != null)
-					 listener.onUserInfoBack(null);
+					 listener.onUserInfoBack(null,null);
 				 dialog.dismiss();
 			}
 		});
@@ -98,8 +107,57 @@ public class UserInfoView {
 			@Override
 			public void onClick(View v) {
 				if(listener != null)
-					listener.onUserInfoBack(null);
+					listener.onUserInfoBack(null,null);
 				dialog.dismiss();
+			}
+		});
+
+		mainView.findViewById(R.id.sex_male).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				if(listener!=null){
+					listener.onUserInfoBack( curType , "M");
+				}
+			}
+		});
+
+		mainView.findViewById(R.id.sex_female).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				if(listener!=null){
+					listener.onUserInfoBack( curType , "F");
+				}
+			}
+		});
+
+		mainView.findViewById(R.id.btn_Cancel3).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(listener!=null){
+					listener.onUserInfoBack(null,null);
+				}
+				dialog.dismiss();
+			}
+		});
+
+		mainView.findViewById(R.id.noInShop).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				if(listener!=null){
+					listener.onUserInfoBack( curType , "未进店");
+				}
+			}
+		});
+		mainView.findViewById(R.id.inShop).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				if(listener!=null){
+					listener.onUserInfoBack( curType , "已进店");
+				}
 			}
 		});
 
@@ -109,7 +167,7 @@ public class UserInfoView {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if(keyCode == KeyEvent.KEYCODE_BACK ){
 					 if(listener != null)
-						 listener.onUserInfoBack(null);
+						 listener.onUserInfoBack(null,null);
 					 dialog.dismiss();
 				}
 				return false;
@@ -118,8 +176,9 @@ public class UserInfoView {
 		layMain = (RelativeLayout) mainView.findViewById(R.id.layMain);
 		layedt  = (LinearLayout) mainView.findViewById(R.id.layedt);
 		laysex  = (LinearLayout) mainView.findViewById(R.id.laysex);
-
-
+		layShopStatus=(LinearLayout)mainView.findViewById(R.id.layShopStatus);
+		noInShop = (TextView) mainView.findViewById(R.id.noInShop);
+		inShop = (TextView) mainView.findViewById(R.id.inShop);
 	}
 	private Handler handler = new Handler();
 	private Type curType;
@@ -128,9 +187,17 @@ public class UserInfoView {
 		txtTitle.setText(titleNames.get(type)+":");
 		layedt.setVisibility(type == Type.Name||type == Type.Realname ? View.VISIBLE:View.GONE);
 		laysex.setVisibility(type == Type.Sex ? View.VISIBLE:View.GONE);
+		layShopStatus.setVisibility(type == Type.ShopStatus? View.VISIBLE:View.GONE);
+
+
+
 		dialog.show();
 			if (type == Type.Sex){
 			return;
+			}else if(type== Type.ShopStatus) {
+				inShop.setTextColor( selectIds.equals("已进店") ? Color.parseColor("#ff8888") : Color.parseColor("#000000") );
+				noInShop.setTextColor( selectIds.equals("未进店") ? Color.parseColor("#ff8888") : Color.parseColor("#000000") );
+				return;
 			}else {
 				edtName.requestFocus();
 				edtName.requestFocusFromTouch();
@@ -143,12 +210,7 @@ public class UserInfoView {
 					}
 				}, 10);
 				edtName.setText(selectIds);
-
 			}
-
-
-
-
 
 
 		//set height

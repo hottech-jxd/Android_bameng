@@ -52,6 +52,8 @@ public class BaseApplication extends Application {
     //public double Longitude;
     public FragManager mFragManager;
 
+    protected  static UserData userData;
+
     public LocalAddressModel localAddress;
     //是否有网络连接
     public boolean isConn = false;
@@ -155,6 +157,14 @@ public class BaseApplication extends Application {
 //        PreferenceHelper.writeString(getApplicationContext(), Constants.MEMBER_INFO, Constants.MEMBER_ID, userId);
 //    }
 
+
+    public static UserData UserData(){
+        if( userData==null){
+            userData = readUserInfo();
+        }
+        return userData;
+    }
+
     /**
      * 判断网络是否连接
      */
@@ -237,13 +247,13 @@ public class BaseApplication extends Application {
     /***
      * 加载地址信息
      */
-    public void loadAddress() {
+    public  void loadAddress() {
         if (null != localAddress) return;
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AssetsUtils assetsUtils = new AssetsUtils(getBaseContext());
+                AssetsUtils assetsUtils = new AssetsUtils(BaseApplication.single);
                 String json = assetsUtils.readAddress("addressData.json");
                 JSONUtil<LocalAddressModel> jsonUtil = new JSONUtil<>();
                 LocalAddressModel localAddress = new LocalAddressModel();
@@ -271,17 +281,18 @@ public class BaseApplication extends Application {
     public void writeUserToken(String token) {
         PreferenceHelper.writeString(getApplicationContext(), "token", "token", token);
     }
-    public String readToken(){
-        return PreferenceHelper.readString(getApplicationContext(),"token" ,"token","");
+    public static String readToken(){
+        return PreferenceHelper.readString( single ,"token" ,"token","");
     }
     //加载个人信息
-    public void writeUserInfo(UserData user) {
+    public static void writeUserInfo(UserData user) {
         String json = JSONUtil.getGson().toJson(user);
-        PreferenceHelper.writeString(getApplicationContext(), Constants.LOGIN_USER_INFO, "user", json);
+        PreferenceHelper.writeString(single , Constants.LOGIN_USER_INFO, "user", json);
+        userData=null;
     }
 
-    public UserData readUserInfo(){
-        String json = PreferenceHelper.readString( getApplicationContext(), Constants.LOGIN_USER_INFO , "user", null);
+    public static UserData readUserInfo(){
+        String json = PreferenceHelper.readString( single , Constants.LOGIN_USER_INFO , "user", null);
         if(json==null) return null;
         return JSONUtil.getGson().fromJson(json, UserData.class);
 

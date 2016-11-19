@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:hint="请输入资讯标题"
         android:imeOptions="actionNext"
-        android:inputType="textUri"
-        android:maxLength="20"
+        android:inputType="text"
+        android:maxLength="100"
         />
     </LinearLayout>
     <LinearLayout
@@ -38,7 +38,6 @@
         android:layout_height="200dp"
         android:orientation="horizontal">
 
-
     <com.huotu.android.library.libedittext.EditText
         android:layout_margin="10dp"
         android:id="@+id/edtContent"
@@ -47,10 +46,9 @@
         android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_username2"
+        android:hint="请输入资讯内容"
         android:imeOptions="actionNext"
-        android:inputType="textUri"
-        android:maxLength="20"
+        android:inputType="text"
         />
     </LinearLayout>
     <LinearLayout
@@ -68,6 +66,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="请选择发送对象"
+            android:maxLines="1"
+            android:id="@+id/tvObject"
+            android:ellipsize="end"
             android:layout_weight="1"/>
         <ImageView
             android:layout_width="@dimen/title_image_width"
@@ -75,8 +76,9 @@
             android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <Button
+        android:id="@+id/btnSend"
         android:layout_width="match_parent"
-        android:text="1111"
+        android:text="发送"
         android:textColor="@color/white"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_cancel"

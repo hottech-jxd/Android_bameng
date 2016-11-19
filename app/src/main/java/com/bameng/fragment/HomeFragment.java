@@ -1,10 +1,12 @@
 package com.bameng.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -14,6 +16,7 @@ import android.widget.Switch;
 import com.bameng.R;
 import com.bameng.adapter.ArticleAdapter;
 import com.bameng.adapter.HomeBannerPagerAdapter;
+import com.bameng.config.Constants;
 import com.bameng.model.AdlistModel;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.ArticleModel;
@@ -22,10 +25,12 @@ import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
 import com.bameng.model.SlideListModel;
 import com.bameng.model.SlideListOutputModel;
+import com.bameng.model.SwitchFragmentEvent;
 import com.bameng.model.TopArticleIdModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.HomeActivity;
+import com.bameng.ui.WebViewActivity;
 import com.bameng.ui.account.ExchangeRecordActivity;
 import com.bameng.ui.account.MyAccountActivity;
 import com.bameng.ui.base.BaseFragment;
@@ -42,6 +47,8 @@ import com.bameng.widgets.MyListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,10 +61,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/***
+ * 霸盟 首页
+ */
+public class HomeFragment extends BaseFragment  implements AdapterView.OnItemClickListener {
 
-public class HomeFragment extends BaseFragment   {
-
-    public HomeActivity rootAty;
+    //public HomeActivity rootAty;
     @Bind(R.id.homePullRefresh)
     PullToRefreshScrollView homePullRefresh;
 
@@ -73,7 +82,7 @@ public class HomeFragment extends BaseFragment   {
     public List<SlideListModel> adDataList ;
     public HomeBannerPagerAdapter homeBannerPagerAdapter;
     public List<ListModel> Articles;
-    public List<TopArticleIdModel> TopArticles;
+    public List<ListModel> TopArticles;
     public ArticleAdapter adapter;
 
     private Handler mhandler;
@@ -119,13 +128,15 @@ public class HomeFragment extends BaseFragment   {
 
     public void initList(){
         Articles = new ArrayList<ListModel>();
-        TopArticles = new ArrayList<TopArticleIdModel>();
+        TopArticles = new ArrayList<ListModel>();
         adapter = new ArticleAdapter(Articles,TopArticles, getActivity(), getActivity());
         listL.setAdapter(adapter);
+
+        listL.setOnItemClickListener(this);
     }
-    @OnClick({R.id.layaccount,R.id.layneworder,R.id.layCustomer,R.id.layally,R.id.layExchange,R.id.layReward})
-     void click(View v){
-        switch (v.getId()){
+    @OnClick({R.id.layaccount,R.id.layneworder,R.id.layCustomer,R.id.layally,R.id.layExchange,R.id.layReward , R.id.layMore})
+     void click(View v) {
+        switch (v.getId()) {
             case R.id.layaccount:
                 ActivityUtils.getInstance().showActivity(getActivity(), MyAccountActivity.class);
                 break;
@@ -143,6 +154,9 @@ public class HomeFragment extends BaseFragment   {
                 break;
             case R.id.layReward:
                 ActivityUtils.getInstance().showActivity(getActivity(), RwordActivity.class);
+                break;
+            case R.id.layMore:
+                EventBus.getDefault().post(new SwitchFragmentEvent(Constants.TAG_2));
                 break;
             default:
                 break;
@@ -323,7 +337,6 @@ public class HomeFragment extends BaseFragment   {
         ButterKnife.unbind(this);
     }
 
-
     @Override
     public void onReshow() {
 
@@ -345,4 +358,21 @@ public class HomeFragment extends BaseFragment   {
     }
 
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        String url;
+        Object obj = adapter.getItem(i);
+        if( obj instanceof TopArticleIdModel){
+            TopArticleIdModel model = (TopArticleIdModel) obj;
+            url = model.getArticleUrl();
+        }else{
+            ListModel model = (ListModel) obj;
+            url = model.getArticleUrl();
+        }
+
+        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+        Bundle bd = new Bundle();
+        bd.putString(Constants.INTENT_URL, url);
+        ActivityUtils.getInstance().showActivity(getActivity(), WebViewActivity.class , bd);
+    }
 }

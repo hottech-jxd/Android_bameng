@@ -165,7 +165,7 @@
     </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/llmore"
+            android:id="@+id/layMore"
             android:orientation="horizontal"
             android:background="#FFFFFF"
             android:paddingLeft="5dp"

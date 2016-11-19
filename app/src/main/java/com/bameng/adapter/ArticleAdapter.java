@@ -15,6 +15,8 @@ import com.bameng.model.ListModel;
 import com.bameng.model.TopArticleIdModel;
 import com.bameng.utils.DensityUtils;
 import com.bameng.widgets.custom.FrescoDraweeController;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -29,14 +31,14 @@ import butterknife.ButterKnife;
 public class ArticleAdapter extends BaseAdapter {
 
     private List<ListModel> Articles;
-    private List<TopArticleIdModel> TopArticles;
+    private List<ListModel> TopArticles;
     private Context mContext;
     private Activity aty;
     public ArticleModel Article;
     private Handler mHandler;
     public long index;
 
-    public ArticleAdapter(List<ListModel> Articles, List<TopArticleIdModel> TopArticles, Context mContext, Activity aty)
+    public ArticleAdapter(List<ListModel> Articles, List<ListModel> TopArticles, Context mContext, Activity aty)
     {
         this.Articles = Articles;
         this.TopArticles = TopArticles;
@@ -53,11 +55,11 @@ public class ArticleAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-         if (position>=TopArticles.size()){
-             return Articles.get(position-TopArticles.size());
-         }else {
-             return TopArticles.get(position);
-         }
+        if (position >= TopArticles.size()) {
+            return Articles.get(position - TopArticles.size());
+        } else {
+            return TopArticles.get(position);
+        }
     }
 
     @Override
@@ -75,6 +77,10 @@ public class ArticleAdapter extends BaseAdapter {
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
                 ListModel Article = Articles.get(position-TopArticles.size());
+                DraweeController draweeController= Fresco.newDraweeControllerBuilder()
+                        .setAutoPlayAnimations(true).build();
+                holder.image.setController(draweeController);
+
                 holder.image.setImageURI(Article.getArticleCover());
                 holder.articleTitle.setText(Article.getArticleTitle());
                 holder.articleIntro.setText(Article.getArticleIntro());
@@ -84,7 +90,12 @@ public class ArticleAdapter extends BaseAdapter {
                 convertView = View.inflate(mContext, R.layout.article_item_top, null);
                 viewHolderTop = new ViewHolderTop(convertView);
                 convertView.setTag(viewHolderTop);
-                TopArticleIdModel topArticleIdModel = TopArticles.get(position);
+                ListModel topArticleIdModel = TopArticles.get(position);
+
+                DraweeController draweeController= Fresco.newDraweeControllerBuilder()
+                        .setAutoPlayAnimations(true).build();
+                viewHolderTop.topImage.setController(draweeController);
+
                 viewHolderTop.topImage.setImageURI(topArticleIdModel.getArticleCover());
                 viewHolderTop.topArticleTitle.setText(topArticleIdModel.getArticleTitle());
                 viewHolderTop.topArticleIntro.setText(topArticleIdModel.getArticleIntro());

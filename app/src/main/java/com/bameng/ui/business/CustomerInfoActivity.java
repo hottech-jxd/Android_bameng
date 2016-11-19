@@ -1,6 +1,7 @@
 package com.bameng.ui.business;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
@@ -26,6 +27,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/***
+ * 客户信息界面
+ */
 public class CustomerInfoActivity extends BaseActivity {
 
     @Bind(R.id.titleText)
@@ -112,7 +116,8 @@ public class CustomerInfoActivity extends BaseActivity {
             Drawable drawable_normal = resources.getDrawable(R.color.white);
             SystemTools.loadBackground(nodoneLabel, drawable_press);
             SystemTools.loadBackground(doneLabel, drawable_normal);
-            nodoneLabel.setTextColor(resources.getColor(R.color.red));
+            //nodoneLabel.setTextColor(resources.getColor(R.color.red));
+            nodoneLabel.setTextColor(Color.parseColor("#d8ae76") );
             doneLabel.setTextColor(resources.getColor(R.color.black));
         } else if (index == 1) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
@@ -120,7 +125,8 @@ public class CustomerInfoActivity extends BaseActivity {
             SystemTools.loadBackground(nodoneLabel, drawable_normal);
             SystemTools.loadBackground(doneLabel, drawable_press);
             nodoneLabel.setTextColor(resources.getColor(R.color.black));
-            doneLabel.setTextColor(resources.getColor(R.color.red));
+            //doneLabel.setTextColor(resources.getColor(R.color.red));
+            doneLabel.setTextColor(Color.parseColor("#d8ae76"));
         }
     }
 

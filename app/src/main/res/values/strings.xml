@@ -20,6 +20,10 @@
     <string name="permission_baiduLocation_never_asked">定位权限将不再询问</string>
     <string name="permission_allow">允许</string>
     <string name="permission_dency">拒绝</string>
+    <string name="navigate_home">首页</string>
+    <string name="navigate_news">资讯</string>
+    <string name="navigate_business">我的业务</string>
+    <string name="navigate_account">我的账号</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

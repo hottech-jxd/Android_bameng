@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.model.MyBusinessOutputModel;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
@@ -33,7 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 我的业务
  */
 public class BusinessFragment extends BaseFragment {
 
@@ -45,6 +47,7 @@ public class BusinessFragment extends BaseFragment {
     TextView txtExchange;
     @Bind(R.id.txt_cash)
     TextView txtCash;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -54,24 +57,30 @@ public class BusinessFragment extends BaseFragment {
 
     public void initView(){//******数据为空
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
-        Call<PostModel> call = apiService.MyBusiness(token,map);
-        call.enqueue(new Callback<PostModel>() {
+        String token = BaseApplication.readToken();
+        Call<MyBusinessOutputModel> call = apiService.MyBusiness(token,map);
+        call.enqueue(new Callback<MyBusinessOutputModel>() {
             @Override
-            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+            public void onResponse(Call<MyBusinessOutputModel> call, Response<MyBusinessOutputModel> response) {
+                if(response.code() !=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
                 if (response.body() != null) {
-
 //
-                    if (response.body().getStatus() == 200&&response.body()!=null) {
+                    if (response.body().getStatus() == 200&&response.body().getData()!=null) {
                         //ToastUtils.showLongToast("提交成功");
-
+                        txtOrder.setText( String.valueOf( response.body().getData().getOrderAmount() ));
+                        txtCustomer.setText( String.valueOf( response.body().getData().getCustomerAmount() ) );
+                        txtCash.setText( String.valueOf( response.body().getData().getCashCouponAmount()) );
+                        txtExchange.setText(String.valueOf( response.body().getData().getExchangeAmount() ));
 //
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
@@ -87,7 +96,7 @@ public class BusinessFragment extends BaseFragment {
 
 
             @Override
-            public void onFailure(Call<PostModel> call, Throwable t) {
+            public void onFailure(Call<MyBusinessOutputModel> call, Throwable t) {
                 ToastUtils.showLongToast("失败");
             }
         });

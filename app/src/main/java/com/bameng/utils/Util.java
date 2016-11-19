@@ -782,8 +782,7 @@ public class Util {
         try {
             fs = new FileInputStream(file);
             if (fs != null)
-                return BitmapFactory.decodeFileDescriptor(fs.getFD(), null,
-                        bfOptions);
+                return BitmapFactory.decodeFileDescriptor(fs.getFD(), null, bfOptions);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

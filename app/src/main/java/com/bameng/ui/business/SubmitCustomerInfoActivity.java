@@ -32,6 +32,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/***
+ * 新增客户界面
+ */
 public class SubmitCustomerInfoActivity extends BaseActivity {
 
     @Bind(R.id.titleText)
@@ -86,24 +89,23 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if( response.code() !=200 ){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
                 if (response.body() != null) {
 
 //                    ArticleListOutput articleListOutput = new ArticleListOutput();
 //                    articleListOutput.setData(response.body().getData());
-                    if (response.body().getStatus() == 200&&response.body()!=null) {
-                        ToastUtils.showLongToast("提交成功");
+                    if (response.body().getStatus() == 200 ) {
+                        ToastUtils.showLongToast( response.body().getStatusText() );
                         finish();
-//
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
-
                 }
 
                 return;
-
-
-
             }
 
 

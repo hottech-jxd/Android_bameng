@@ -8,8 +8,8 @@ import android.support.v4.content.ContextCompat;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.bameng.R;
@@ -95,11 +95,20 @@ public class AddressActivity extends BaseActivity {
         titleText.setText("地区");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
-        //initProvinceDatas();
+        initProvinceDatas();
+        initProvince();
+
 //        ArrayAdapter<String> adapter1=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, mProvinceDatas);
 //        spinnerProvince.setAdapter(adapter1);
 //        ArrayAdapter<String> adapter2=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, mCitisDatasMap);
 //        ArrayAdapter<String> adapter3=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, mAreaDatasMap);
+
+    }
+
+    protected void initProvince(){
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mProvinceDatas);
+        spinnerProvince.setAdapter(spinnerAdapter);
 
     }
 

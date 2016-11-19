@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bameng.R;
@@ -48,24 +49,29 @@ public class CustomerAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder holder = null;
+        ViewHolder holder;
+        CustomerModel Customer = Customers.get(position);
         if (convertView == null){
             convertView = View.inflate(mContext, R.layout.choose_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-            CustomerModel Customer = Customers.get(position);
-            holder.name.setText(Customer.getName());
-            holder.moblie.setText(Customer.getMobile());
+        }else{
+            holder = (ViewHolder) convertView.getTag();
         }
+        holder.name.setText(Customer.getName());
+        holder.moblie.setText(Customer.getMobile());
+        holder.image.setImageResource( Customer.isSelected() ? R.mipmap.ic_choose : R.mipmap.ic_nochoose );
+
         return convertView;
     }
 
-    class ViewHolder
-    {
+    class ViewHolder{
         @Bind(R.id.name)
         TextView name;
         @Bind(R.id.moblie)
         TextView moblie;
+        @Bind(R.id.image)
+        ImageView image;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -6,9 +6,9 @@ import com.bameng.R;
 import com.bameng.ui.base.BaseFragment;
 
 /**
+ * 盟友 主页
  * Created by 47483 on 2016.11.02.
  */
-
 public class AllyHomeFrag extends BaseFragment {
     @Override
     public void onReshow() {

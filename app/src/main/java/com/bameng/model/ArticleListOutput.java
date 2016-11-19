@@ -21,14 +21,14 @@ public class ArticleListOutput extends BaseModel {
     }
 
     public  class ArticleListModel{
-        List<TopArticleIdModel> top;
+        List<ListModel> top;
         ResultPageModel list;
 
-        public List<TopArticleIdModel> getTop() {
+        public List<ListModel> getTop() {
             return top;
         }
 
-        public void setTop(List<TopArticleIdModel> top) {
+        public void setTop(List<ListModel> top) {
             this.top = top;
         }
 

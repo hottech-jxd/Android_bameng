@@ -1,30 +1,42 @@
 package com.bameng.ui.news;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.adapter.ChooseCustomerAdapter;
 import com.bameng.adapter.CustomerAdapter;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CustomListOutput;
 import com.bameng.model.CustomerModel;
+import com.bameng.model.MyOutputModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
 import com.bameng.model.TopArticleIdModel;
+import com.bameng.model.UserData;
+import com.bameng.model.UserOutputsModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,22 +44,41 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.bameng.R;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
-public class ChooseObjectActivity extends BaseActivity {
+public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener , BaseQuickAdapter.RequestLoadMoreListener{
 
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
     @Bind(R.id.titleText)
     TextView titleText;
-    @Bind(R.id.customListView)
-    PullToRefreshListView customListView;
+    @Bind(R.id.recycleView)
+    RecyclerView recyclerView;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    //@Bind(R.id.customListView)
+    //PullToRefreshListView customListView;
+    @Bind(R.id.tvSelectAll)
+    TextView tvSelectAll;
+    @Bind(R.id.tvFinish)
+    TextView tvFinish;
+
+    ChooseCustomerAdapter adapter;
+    boolean currentSelected = false;
+
     int pageIndex=1;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<CustomerModel> Customers;
-    public CustomerAdapter adapter;
+    final int PAGESIZE= 1000;
+    //public List<CustomerModel> Customers;
+    //public CustomerAdapter adapter;
+    View noDataView;
+
+    List<UserData> chooses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,95 +90,182 @@ public class ChooseObjectActivity extends BaseActivity {
         StartApi();
     }
     public void initlist(){
-        Customers = new ArrayList<CustomerModel>();
-        adapter = new CustomerAdapter(Customers, this,this);
-        customListView.setAdapter(adapter);
-        customListView.setMode(PullToRefreshBase.Mode.BOTH);
-        customListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                pageIndex=1;
-                StartApi();
-            }
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        swipeRefreshLayout.setOnRefreshListener(this);
+        adapter = new ChooseCustomerAdapter();
+        adapter.openLoadAnimation();
+        adapter.openLoadMore(PAGESIZE);
+        adapter.setOnLoadMoreListener(this);
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                pageIndex= pageIndex+1;
-                StartApi();
-
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                adapter.getItem(i).setSelected( !adapter.getItem(i).isSelected() );
+                adapter.notifyItemChanged(i);
             }
         });
+
+        recyclerView.setAdapter(adapter);
+        //Customers = new ArrayList<CustomerModel>();
+        //adapter = new CustomerAdapter(Customers, this,this);
+        //customListView.setAdapter(adapter);
+        //customListView.setMode(PullToRefreshBase.Mode.BOTH);
+//        customListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+//            @Override
+//            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+//                operateType = OperateTypeEnum.REFRESH;
+//                pageIndex=1;
+//                StartApi();
+//            }
+//
+//            @Override
+//            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+//                operateType = OperateTypeEnum.LOADMORE;
+//                pageIndex= pageIndex+1;
+//                StartApi();
+//
+//            }
+//        });
+
     }
 
     @Override
     protected void initView() {
-        titleText.setText("选着对象");
+
+        titleText.setText("选择对象");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+
+        chooses = (List<UserData>)getIntent().getExtras().getSerializable("customer");
+
     }
 
     @Override
-    protected void StartApi() {
+    protected void StartApi( ) {
+        StartApi(pageIndex);
+    }
+    //
+    protected void StartApi( int idx) {
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        map.put("Type","0");
-        map.put("pageIndex",String.valueOf(pageIndex));
-        map.put("pageSize","1000");
+        //map.put("Type","0");
+        map.put("pageIndex",String.valueOf( idx ));
+        map.put("pageSize", String.valueOf(PAGESIZE) );
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
-        Call<CustomListOutput> call = apiService.customlist(token,map);
-        call.enqueue(new Callback<CustomListOutput>() {
+        String token = BaseApplication.readToken();
+        Call<MyOutputModel> call = apiService.allylist(token,map);
+        call.enqueue(new Callback<MyOutputModel>() {
             @Override
-            public void onResponse(Call<CustomListOutput> call, Response<CustomListOutput> response) {
+            public void onResponse(Call<MyOutputModel> call, Response<MyOutputModel> response) {
+                swipeRefreshLayout.setRefreshing(false);
+                if(response.code()!=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
                 if (response.body() != null) {
-                    customListView.onRefreshComplete();
-
-                    CustomListOutput customListOutput = new CustomListOutput();
-                    customListOutput.setData(response.body().getData());
-                    if (response.body().getStatus() == 200&&response.body()!=null) {
+                    if (response.body().getStatus() == 200&&response.body().getData() !=null) {
                         if (operateType == OperateTypeEnum.REFRESH) {
-                            Customers.clear();
-                            Customers.addAll(response.body().getData().getRows());
-                            adapter.notifyDataSetChanged();
+                            List<UserData> data = response.body().getData().getRows();
+                            setChoose(data);
+
+                            adapter.setNewData(  data  );
+
                         } else if (operateType == OperateTypeEnum.LOADMORE) {
                             if (response.body().getData().getRows().size()==0){
-                                adapter.notifyDataSetChanged();
-                                pageIndex=pageIndex-1;
-                                ToastUtils.showLongToast("没有更多信息...");
+                                if(noDataView==null){
+                                    noDataView = LayoutInflater.from(ChooseObjectActivity.this).inflate(R.layout.layout_nodata,null);
+                                }
+                                adapter.addFooterView(noDataView);
+                                adapter.loadComplete();
+                                return;
                             }
 
+                            List<UserData> data = response.body().getData().getRows();
+                            setChoose(data);
+
+                            adapter.addData( data );
+                            pageIndex++;
                         }
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
-
                 }
 
                 return;
-
-
 
             }
 
 
             @Override
-            public void onFailure(Call<CustomListOutput> call, Throwable t) {
-                customListView.onRefreshComplete();
+            public void onFailure(Call<MyOutputModel> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.showLongToast("失败");
             }
         });
 
     }
 
+    protected void setChoose(List<UserData> data ){
+        if( data ==null || chooses ==null || chooses.size()<1 ) return;
+        for( UserData item : data ){
+            int id = item.getUserId();
+            for(UserData bb : chooses){
+                if( bb.getUserId()  == id ){
+                    item.setSelected(true);
+                }
+            }
+        }
+    }
+
     @Override
     public boolean handleMessage(Message msg) {
         return false;
+    }
+
+    @OnClick(R.id.tvSelectAll)
+    void onSelectAll(){
+        List<UserData> list = adapter.getData();
+        if(list==null) return;
+        currentSelected = !currentSelected;
+        for(UserData item : list){
+            item.setSelected( currentSelected);
+        }
+        adapter.notifyDataSetChanged();
+    }
+    @OnClick(R.id.tvFinish)
+    void onFinish(){
+        Intent data = new Intent();
+        List<UserData> selected = new ArrayList<>();
+        List<UserData> list = adapter.getData();
+        for(UserData item : list){
+            if(item.isSelected()){
+                selected.add(item);
+            }
+        }
+
+        Bundle bd = new Bundle();
+        bd.putSerializable( "customer" , (Serializable) selected );
+        data.putExtras(bd);
+        this.setResult(RESULT_OK , data );
+        this.finish();
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        int idx = pageIndex+1;
+        operateType = OperateTypeEnum.LOADMORE;
+        StartApi( idx );
+    }
+
+    @Override
+    public void onRefresh() {
+        operateType = OperateTypeEnum.REFRESH;
+        pageIndex =1;
+        StartApi(pageIndex);
     }
 }

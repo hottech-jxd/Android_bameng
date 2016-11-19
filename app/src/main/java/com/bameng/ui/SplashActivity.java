@@ -56,6 +56,8 @@ public class SplashActivity extends BaseActivity {
         tvVersion.setText(app + version);
 
 
+        BaseApplication.single.loadAddress();
+
         //加载背景图片
 //        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.splash_bg);
 //        SystemTools.loadBackground(splashL, drawable);
@@ -115,6 +117,9 @@ public class SplashActivity extends BaseActivity {
                         if (initOutputs.getData().getUserData() == null) {
                             ActivityUtils.getInstance().skipActivity(SplashActivity.this, PhoneLoginActivity.class);
                         } else {
+
+                            application.writeUserInfo(response.body().getData().getUserData());
+
                             //加载用户信息
                             if (initOutputs.getData().getUserData().getUserIdentity() == 1) {
                                 ActivityUtils.getInstance().skipActivity(SplashActivity.this, HomeActivity.class);
@@ -128,11 +133,11 @@ public class SplashActivity extends BaseActivity {
                     }
 
                 } else {
+
+                    ActivityUtils.getInstance().skipActivity(SplashActivity.this, HomeActivity.class);
                     ToastUtils.showLongToast("连接服务器失败！！！");
                 }
                 return;
-
-
             }
 
             @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.TabPagerAdapter;
+import com.bameng.fragment.OrderFragment;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
@@ -25,6 +27,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.baidu.location.h.j.m;
 
 
 public class OrderListActivity extends BaseActivity {
@@ -51,7 +55,8 @@ public class OrderListActivity extends BaseActivity {
     public BaseApplication application;
     private int currentIndex = 0;
     public TabPagerAdapter tabPagerAdapter;
-    private List<Fragment> mFragmentList = new ArrayList<Fragment>();
+    private List<Fragment> mFragmentList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +80,52 @@ public class OrderListActivity extends BaseActivity {
         titleLeftImage.setVisibility(View.VISIBLE);
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+
+        orderViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                int  type = tabPagerAdapter.getItem(position).getArguments().getInt("type");
+                changeIndex( type );
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        OrderFragment orderFragment = new OrderFragment();
+        Bundle bd = new Bundle();
+        bd.putInt("type", -1);
+        orderFragment.setArguments(bd);
+        mFragmentList.add(orderFragment);
+        orderFragment = new OrderFragment();
+        bd = new Bundle();
+        bd.putInt("type", 0);
+        orderFragment.setArguments(bd);
+        mFragmentList.add(orderFragment);
+        orderFragment = new OrderFragment();
+        bd = new Bundle();
+        bd.putInt("type", 1);
+        orderFragment.setArguments(bd);
+        mFragmentList.add(orderFragment);
+        orderFragment = new OrderFragment();
+        bd = new Bundle();
+        bd.putInt("type", 2);
+        orderFragment.setArguments(bd);
+        mFragmentList.add(orderFragment);
+
+        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),mFragmentList);
+        orderViewPager.setAdapter(tabPagerAdapter);
+
     }
     private void changeIndex(int index) {
-        if (index == 0) {
+        if (index == -1 ) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
             Drawable drawable_normal = resources.getDrawable(R.color.white);
             SystemTools.loadBackground(allLabel, drawable_press);
@@ -88,7 +136,8 @@ public class OrderListActivity extends BaseActivity {
             backLabel.setTextColor(resources.getColor(R.color.black));
             nodoneLabel.setTextColor(resources.getColor(R.color.black));
             doneLabel.setTextColor(resources.getColor(R.color.black));
-        } else if (index == 1) {
+            orderViewPager.setCurrentItem(0);
+        } else if (index == 0) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
             Drawable drawable_normal = resources.getDrawable(R.color.white);
             SystemTools.loadBackground(allLabel, drawable_normal);
@@ -99,7 +148,8 @@ public class OrderListActivity extends BaseActivity {
             nodoneLabel.setTextColor(resources.getColor(R.color.red));
             doneLabel.setTextColor(resources.getColor(R.color.black));
             backLabel.setTextColor(resources.getColor(R.color.black));
-        } else if (index == 2) {
+            orderViewPager.setCurrentItem(1);
+        } else if (index == 1) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
             Drawable drawable_normal = resources.getDrawable(R.color.white);
             SystemTools.loadBackground(allLabel, drawable_normal);
@@ -110,7 +160,10 @@ public class OrderListActivity extends BaseActivity {
             nodoneLabel.setTextColor(resources.getColor(R.color.black));
             doneLabel.setTextColor(resources.getColor(R.color.red));
             backLabel.setTextColor(resources.getColor(R.color.black));
-        }else if (index ==3){
+
+            orderViewPager.setCurrentItem(2);
+
+        }else if (index ==2){
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
             Drawable drawable_normal = resources.getDrawable(R.color.white);
             SystemTools.loadBackground(allLabel, drawable_normal);
@@ -121,6 +174,8 @@ public class OrderListActivity extends BaseActivity {
             nodoneLabel.setTextColor(resources.getColor(R.color.black));
             doneLabel.setTextColor(resources.getColor(R.color.black));
             backLabel.setTextColor(resources.getColor(R.color.red));
+
+            orderViewPager.setCurrentItem(3);
         }
     }
 
@@ -131,26 +186,26 @@ public class OrderListActivity extends BaseActivity {
 
     @OnClick(R.id.allLabel)
     void clickAll() {
-        //raidersViewPager.setCurrentItem(0);
-        changeIndex(0);
+
+        changeIndex(-1);
     }
 
     @OnClick(R.id.nodoneLabel)
     void clickDoing() {
        // raidersViewPager.setCurrentItem(1);
-        changeIndex(1);
+        changeIndex(0);
     }
 
     @OnClick(R.id.doneLabel)
     void clickDone() {
         //raidersViewPager.setCurrentItem(2);
-        changeIndex(2);
+        changeIndex(1);
     }
 
     @OnClick(R.id.backLabel)
     void clickback() {
        //raidersViewPager.setCurrentItem(2);
-        changeIndex(3);
+        changeIndex(2);
     }
 
     @Override

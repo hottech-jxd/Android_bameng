@@ -30,6 +30,7 @@ import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseModel;
 import com.bameng.model.PostModel;
 import com.bameng.model.SlideListOutputModel;
+import com.bameng.model.SwitchFragmentEvent;
 import com.bameng.receiver.MyBroadcastReceiver;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
@@ -145,7 +146,7 @@ public class HomeActivity extends BaseActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         //application = (BaseApplication) this.getApplication();
-        application.loadAddress();
+        //application.loadAddress();
         mHandler = new Handler(this);
         application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
@@ -170,9 +171,6 @@ public class HomeActivity extends BaseActivity {
     protected void initView() {
         goback=false;
         titleText.setText(getString(R.string.app_name));
-
-        //titleLeftText.setText( application.baiduLocation==null || application.baiduLocation.getCity()==null ? "" : application.baiduLocation.getCity());
-
         titleLeftImage.setVisibility(View.VISIBLE);
         titleRightImage.setVisibility(View.GONE);
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
@@ -484,6 +482,10 @@ public class HomeActivity extends BaseActivity {
         call.enqueue(new Callback<BaseModel>() {
             @Override
             public void onResponse(Call<BaseModel> call, Response<BaseModel> response) {
+                if( response.body()==null) {
+                    application.baiduLocationService.start();
+                    return;
+                }
                 if(response.body().getStatus() == 70035 ){
                     ToastUtils.showLongToast( response.body().getStatusText());
                     ActivityUtils.getInstance().skipActivity(HomeActivity.this, PhoneLoginActivity.class );
@@ -504,5 +506,11 @@ public class HomeActivity extends BaseActivity {
         });
 
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventSwitchFragment(SwitchFragmentEvent event){
+        Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, event.getFragnmentName());
+        mHandler.sendMessage( msg);
     }
 }

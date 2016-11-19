@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -13,6 +14,7 @@ import com.bameng.model.CustomListOutput;
 import com.bameng.model.CustomerModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
+import com.bameng.model.RefreshCustomerEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
@@ -22,6 +24,10 @@ import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,6 +61,24 @@ public class CustomDoneFrag extends BaseFragment implements AdapterView.OnItemCl
         initList();
         loadData();
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        EventBus.getDefault().register(this);
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
     private void initList()
     {
         customDoneList.setMode(PullToRefreshBase.Mode.BOTH);
@@ -106,6 +130,7 @@ public class CustomDoneFrag extends BaseFragment implements AdapterView.OnItemCl
 
                         Customers.addAll(response.body().getData().getRows());
                         adapter.notifyDataSetChanged();
+                        pageIndex++;
                     } else if (response.body().getStatus()==70035){
 
                         ToastUtils.showLongToast(response.body().getStatusText());
@@ -152,5 +177,12 @@ public class CustomDoneFrag extends BaseFragment implements AdapterView.OnItemCl
         bundle.putSerializable("customerinfo", Customers.get(position-1));
         ActivityUtils.getInstance().showActivity(getActivity(), CustomerExamineActivity.class,bundle);
 
+    }
+
+    @Subscribe( threadMode = ThreadMode.MAIN)
+    public void onEventRefreshData(RefreshCustomerEvent event){
+//        if( event.getTabName().equals("DoneFrag") ) {
+//            adapter.notifyDataSetChanged();
+//        }
     }
 }

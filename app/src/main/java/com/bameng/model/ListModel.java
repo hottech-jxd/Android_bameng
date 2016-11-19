@@ -13,6 +13,8 @@ public class ListModel {
     String PublishTime;
     String ArticleUrl;
     String PublishTimeText;
+    int IsRead=0;
+    boolean isTop =false;
 
     public int getArticleId() {
         return ArticleId;
@@ -76,5 +78,21 @@ public class ListModel {
 
     public void setPublishTimeText(String publishTimeText) {
         PublishTimeText = publishTimeText;
+    }
+
+    public boolean isTop() {
+        return isTop;
+    }
+
+    public void setTop(boolean top) {
+        isTop = top;
+    }
+
+    public int getIsRead() {
+        return IsRead;
+    }
+
+    public void setIsRead(int isRead) {
+        IsRead = isRead;
     }
 }

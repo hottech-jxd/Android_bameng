@@ -1,10 +1,13 @@
 package com.bameng.model;
 
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 /**
  * Created by 47483 on 2016.11.03.
  */
-public class UserData  {
+public class UserData  implements Serializable {
 
 
 
@@ -30,6 +33,22 @@ public class UserData  {
         String OrderSuccessAmount;
         String CustomerAmount;
         String token;
+    String UserCity;
+    /***
+     * 待结算盟豆
+     */
+    BigDecimal TempMengBeans;
+
+    boolean selected=false;
+    /**
+     * 性别 男M 女F 未知
+     */
+    String UserGender;
+    /***
+     * 所属门店类型 1：总店，2：分店
+     */
+    int ShopType;
+
 
         public String getToken() {
             return token;
@@ -207,4 +226,44 @@ public class UserData  {
             CustomerAmount = customerAmount;
         }
 
+    public String getUserGender() {
+        return UserGender;
+    }
+
+    public void setUserGender(String userGender) {
+        UserGender = userGender;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getUserCity() {
+        return UserCity;
+    }
+
+    public void setUserCity(String userCity) {
+        UserCity = userCity;
+    }
+
+    public BigDecimal getTempMengBeans() {
+        return TempMengBeans;
+    }
+
+    public void setTempMengBeans(BigDecimal tempMengBeans) {
+        TempMengBeans = tempMengBeans;
+    }
+
+
+    public int getShopType() {
+        return ShopType;
+    }
+
+    public void setShopType(int shopType) {
+        ShopType = shopType;
+    }
 }

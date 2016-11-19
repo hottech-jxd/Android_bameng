@@ -22,11 +22,13 @@
 
         <TextView
             android:id="@+id/btnCamera"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="center_horizontal"
             android:padding="10dp"
-            android:text="拍照"
+            android:drawableLeft="@mipmap/ic_camera"
+            android:text="  拍照"
             android:textColor="@color/black" />
         <TextView
             android:layout_width="match_parent"
@@ -35,12 +37,14 @@
 
         <TextView
             android:id="@+id/btnFile"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:layout_gravity="center_horizontal"
             android:padding="10dp"
-            android:text="相册"
+            android:drawableLeft="@mipmap/ic_picture"
+            android:text="  相册"
             android:textColor="@color/black" />
         <TextView
             android:layout_width="match_parent"

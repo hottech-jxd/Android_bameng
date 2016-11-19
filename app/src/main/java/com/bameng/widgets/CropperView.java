@@ -12,8 +12,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 
 import com.bameng.R;
-import com.huotu.android.library.libcropper.CropImageView;
+//import com.huotu.android.library.libcropper.CropImageView;
 
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 @SuppressLint("SimpleDateFormat")
 public class CropperView {

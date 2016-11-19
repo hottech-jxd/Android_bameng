@@ -73,6 +73,13 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+
+    }
+
+    @Override
     protected void initView() {
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
@@ -233,4 +240,6 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
             }
         });
     }
+
+
 }

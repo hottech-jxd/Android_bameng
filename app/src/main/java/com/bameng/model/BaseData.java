@@ -8,6 +8,7 @@ public class BaseData {
     private int userStatus;
     private String aboutUrl;
     private String agreementUrl;
+    private int enableSignIn;
 
     public int getUserStatus() {
         return userStatus;
@@ -31,5 +32,13 @@ public class BaseData {
 
     public void setAgreementUrl(String agreementUrl) {
         this.agreementUrl = agreementUrl;
+    }
+
+    public int getEnableSignIn() {
+        return enableSignIn;
+    }
+
+    public void setEnableSignIn(int enableSignIn) {
+        this.enableSignIn = enableSignIn;
     }
 }

@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/act_title_height">
 
-        <include layout="@layout/title_index"></include>
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
 
     <LinearLayout

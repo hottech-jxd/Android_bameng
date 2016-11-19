@@ -1,8 +1,12 @@
 package com.bameng.service;
 
 
+import com.bameng.BuildConfig;
 import com.bameng.config.Constants;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -16,14 +20,21 @@ public class ZRetrofitUtil {
      * @return
      */
     public static Retrofit getInstance(){
-        if ( retrofitClient==null){
-            retrofitClient = new Retrofit.Builder()
-                    .baseUrl(  Constants.url  )
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+        if(BuildConfig.DEBUG) {
+            if (retrofitClient == null) {
+                OkHttpClient okHttpClient = new OkHttpClient.Builder().retryOnConnectionFailure(false).connectTimeout(120, TimeUnit.SECONDS).build();
+                retrofitClient = new Retrofit.Builder().client(okHttpClient)
+                        .baseUrl(Constants.url).addConverterFactory(GsonConverterFactory.create()).build();
+            }
+        }else {
+
+            if (retrofitClient == null) {
+                retrofitClient = new Retrofit.Builder()
+                        .baseUrl(Constants.url)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
         }
         return retrofitClient;
     }
-
-
 }

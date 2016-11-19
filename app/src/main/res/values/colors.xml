@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="province_line_border">#FFC7C7C7</color>
 
     <color name="leftmenu_bg_color">#ffffff</color>
 
@@ -120,9 +125,6 @@
     <!-- 艾利斯兰 -->
     <color name="khaki">#f0e68c</color>
     <!-- 黄褐色 -->
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="lightcoral">#f08080</color>
     <!-- 亮珊瑚色 -->
     <color name="palegoldenrod">#eee8aa</color>

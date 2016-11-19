@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.model.PostModel;
 import com.bameng.model.UserData;
@@ -20,6 +21,9 @@ import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshHorizontalScrollView;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,11 +35,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-public class UserFragment extends BaseFragment {
+/***
+ * 盟主 个人中心
+ */
+public class UserFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener{
 
     @Bind(R.id.homePullRefresh)
-    LinearLayout homePullRefresh;
+    PullToRefreshScrollView homePullRefresh;
     @Bind(R.id.img_user)
     SimpleDraweeView img_user;
     @Bind(R.id.txt_name)
@@ -68,16 +74,26 @@ public class UserFragment extends BaseFragment {
         ButterKnife.bind(this, view);
     }
 
+
+    @Override
+    public void onRefresh(PullToRefreshBase refreshView) {
+        initData();
+    }
+
     public void initView() {
 
         userData= application.readUserInfo();
-        img_user.setImageURI(userData.getUserHeadImg());
-        txtName.setText(userData.getNickName());
-        txtPoints.setText(userData.getLevelName());
-        txtMbean.setText(String.valueOf(userData.getMengBeans()));
-        txtNosettlembean.setText(String.valueOf(userData.getMengBeansLocked()));
-        txtIntegral.setText(String.valueOf(userData.getScore()));
 
+        if(userData!=null) {
+            img_user.setImageURI(userData.getUserHeadImg());
+            txtName.setText(userData.getNickName());
+            txtPoints.setText(userData.getLevelName());
+            txtMbean.setText(String.valueOf(userData.getMengBeans()));
+            txtNosettlembean.setText(String.valueOf(userData.getMengBeansLocked()));
+            txtIntegral.setText(String.valueOf(userData.getScore()));
+        }
+
+        homePullRefresh.setOnRefreshListener(this);
 
         initData();
 
@@ -85,20 +101,26 @@ public class UserFragment extends BaseFragment {
 
     public void initData(){
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
+        String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.myinfo(token, map);
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
-                if (response.body() != null) {
 
+                homePullRefresh.onRefreshComplete();
+
+                if(response.code() !=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
+                if (response.body() != null) {
 
                     if (response.body().getStatus() == 200 && response.body().getData() != null&&response.body().getData().size()!=0) {
 
@@ -118,6 +140,8 @@ public class UserFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
+                homePullRefresh.onRefreshComplete();
+
                 ToastUtils.showLongToast("失败");
             }
         });

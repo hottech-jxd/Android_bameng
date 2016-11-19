@@ -22,6 +22,8 @@ public class CustomerModel implements Serializable {
     int ShopId;
     String ShopName;
     int  Status;
+    boolean doing=false;
+    boolean selected = false;
 
     public String getAddr() {
         return Addr;
@@ -141,5 +143,21 @@ public class CustomerModel implements Serializable {
 
     public void setStatus(int status) {
         Status = status;
+    }
+
+    public boolean isDoing() {
+        return doing;
+    }
+
+    public void setDoing(boolean doing) {
+        this.doing = doing;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

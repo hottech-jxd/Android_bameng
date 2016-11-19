@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.bameng.ui.account.PhoneChangeActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              tools:context="com.bameng.ui.account.PhoneChangeActivity">
 
     <RelativeLayout
         android:id="@+id/titleLayoutL"
@@ -85,10 +86,39 @@
             android:background="@color/green"
             android:clickable="true"
             android:gravity="center"
-            android:minWidth="120dp"
+            android:minWidth="100dp"
             android:padding="10dp"
             android:text="获取验证码"
             android:textColor="@color/white" />
+
+        <cn.iwgang.countdownview.CountdownView
+            android:background="@color/line_gray"
+            android:id="@+id/countdown"
+            android:visibility="gone"
+            android:minWidth="100dp"
+            android:layout_width="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            app:suffixSecond="S"
+            app:isShowDay="false"
+            app:isShowHour="false"
+            app:isShowMillisecond="false"
+            app:isShowSecond="true"
+            app:isShowMinute="false"
+            app:timeTextColor="@color/white"
+            app:suffixTextColor="@color/white"
+            app:timeBgBorderColor="@color/line_gray"
+            app:isShowTimeBgBorder="false"
+            app:timeBgBorderSize="1dp"
+            app:timeTextSize="18sp"
+            app:suffixGravity="center"
+            app:suffixTextSize="18sp"
+            app:isHideTimeBackground="true"
+            />
+
+
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"

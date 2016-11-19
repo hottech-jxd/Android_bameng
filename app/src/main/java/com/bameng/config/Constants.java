@@ -291,4 +291,39 @@ public class Constants {
 	 * 发送语音验证码等待时间（毫秒）
 	 */
 	public static int SMS_SEND_VOICE_TIME = 8000;
+
+	/**
+	 * 头像
+	 */
+	public static int User_1=1;
+	/***
+	 * 昵称
+	 */
+	public static int User_2=2;
+	/***
+	 * 手机
+	 */
+	public static int User_3=3;
+	/***
+	 * 姓名
+	 */
+	public static int User_4=4;
+	/***
+	 * 性别
+	 */
+	public static int User_5=5;
+	/***
+	 * 地区
+	 */
+	public static int User_6=6;
+	/***
+	 * 其他扩展
+	 */
+	public static int User_7=7;
+
+
+	/**
+	 * 选择地址
+	 */
+	public static final int SELECT_ADDRESS = 0x00000032;
 }

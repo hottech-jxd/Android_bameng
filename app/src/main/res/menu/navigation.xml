@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/navigateHome"  android:icon="@mipmap/ic_on_homepage" android:title="@string/navigate_home" />
+    <item android:id="@+id/navigateNews" android:icon="@mipmap/ic_zx" android:title="@string/navigate_news" />
+    <item android:id="@+id/navigateBusiness" android:icon="@mipmap/ic_yw" android:title="@string/navigate_business" />
+    <item android:id="@+id/navigateAccount" android:icon="@mipmap/ic_account" android:title="@string/navigate_account" />
+</menu>
