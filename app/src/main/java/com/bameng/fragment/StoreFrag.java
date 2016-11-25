@@ -56,6 +56,7 @@ import static com.baidu.location.h.a.i;
 import static com.baidu.location.h.j.t;
 import static com.bameng.R.id.homePullRefresh;
 import static com.bameng.R.id.nodoneLabel;
+import static com.bameng.R.id.transition_current_scene;
 
 /**
  * Created by 47483 on 2016.11.01.
@@ -80,7 +81,14 @@ public class StoreFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
     OnItemClickListener onItemClickListener = new OnItemClickListener() {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position ) {
+
+
+
             ListModel model = (ListModel) baseQuickAdapter.getItem(position);
+
+            model.setIsRead(1);
+            baseQuickAdapter.notifyItemChanged(position);
+
             Bundle bd = new Bundle();
             bd.putString(Constants.INTENT_URL, model.getArticleUrl());
             ActivityUtils.getInstance().showActivity( getActivity() , WebViewActivity.class , bd );

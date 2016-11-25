@@ -96,7 +96,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
         if( viewPage !=null ){
             viewPage.setVisibility(View.GONE);
         }
-        EventBus.getDefault().post(new RefreshWebViewEvent());
+        //EventBus.getDefault().post(new RefreshWebViewEvent());
     }
 
     @Override
