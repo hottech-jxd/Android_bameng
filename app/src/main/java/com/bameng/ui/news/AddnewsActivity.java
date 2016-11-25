@@ -80,7 +80,7 @@ public class AddnewsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        titleText.setText("新增资讯");
+        titleText.setText("新增消息");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
 
@@ -116,7 +116,7 @@ public class AddnewsActivity extends BaseActivity {
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.articlecreate( token,map);
         call.enqueue(new Callback<PostModel>() {

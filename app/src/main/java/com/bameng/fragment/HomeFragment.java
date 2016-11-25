@@ -5,7 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -13,13 +18,17 @@ import android.widget.ScrollView;
 import android.widget.Switch;
 
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.ArticleAdapter;
 import com.bameng.adapter.HomeBannerPagerAdapter;
+import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
+import com.bameng.model.AdBannerConfig;
 import com.bameng.model.AdlistModel;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.ArticleModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.ListModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
@@ -40,10 +49,15 @@ import com.bameng.ui.business.ExchangeExamineActivity;
 import com.bameng.ui.business.MyAlliesActivity;
 import com.bameng.ui.business.NewOrderActivity;
 import com.bameng.ui.business.RwordActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.MyListView;
+import com.bameng.widgets.RecycleItemDivider;
+import com.bameng.widgets.custom.AdBannerWidget;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
@@ -61,80 +75,114 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.baidu.location.h.j.B;
+import static com.baidu.location.h.j.ad;
+import static com.baidu.location.h.j.t;
+import static com.bameng.R.id.dot;
+import static com.bameng.R.id.home;
+import static com.bameng.R.id.homeViewPager;
+import static com.bameng.R.id.layBanner;
+import static com.bameng.R.id.listL;
+import static com.bameng.R.id.swipeRefreshLayout;
+import static com.bameng.config.Constants.url;
+
 /***
  * 霸盟 首页
  */
-public class HomeFragment extends BaseFragment  implements AdapterView.OnItemClickListener {
+public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.OnRefreshListener
+ ,BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener{
 
-    //public HomeActivity rootAty;
     @Bind(R.id.homePullRefresh)
-    PullToRefreshScrollView homePullRefresh;
+    SwipeRefreshLayout homePullRefresh;
+    @Bind(listL)
+    RecyclerView recyclerView;
 
-    @Bind(R.id.dot)
-    LinearLayout dot;
+    LinearLayout layBanner;
 
-    @Bind(R.id.homeViewPager)
-    ViewPager homeViewPager;
-    @Bind(R.id.listL)
-    MyListView listL;
     int pageIndex=1;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<SlideListModel> adDataList ;
-    public HomeBannerPagerAdapter homeBannerPagerAdapter;
-    public List<ListModel> Articles;
-    public List<ListModel> TopArticles;
-    public ArticleAdapter adapter;
-
-    private Handler mhandler;
-
+    public List<SlideListModel> adDataList;
+    StoreAdapter adapter;
+    View header;
+    View emptyView;
+    View noDataView;
+    int PAGESIZE=10;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initView();
-        ButterKnife.bind(this, view);
+
     }
 
     public void initView() {
 
         initList();
-        loadData();
-        initProduct();
+        loadData(pageIndex);
+
         initSwitchImg();
-    }
-    public void initProduct(){
-        homePullRefresh.setMode(PullToRefreshBase.Mode.BOTH);
-        homePullRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                pageIndex=1;
-                Articles.clear();
-                loadData();
-                initSwitchImg();
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                pageIndex= pageIndex+1;
-                loadData();
-
-            }
-        });
-
     }
 
     public void initList(){
-        Articles = new ArrayList<ListModel>();
-        TopArticles = new ArrayList<ListModel>();
-        adapter = new ArticleAdapter(Articles,TopArticles, getActivity(), getActivity());
-        listL.setAdapter(adapter);
+        homePullRefresh.setOnRefreshListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        listL.setOnItemClickListener(this);
+        recyclerView.addItemDecoration(new RecycleItemDivider(getContext(),RecyclerView.VERTICAL, 8 , R.color.dividerColor));
+
+        //Articles = new ArrayList<ListModel>();
+        //TopArticles = new ArrayList<ListModel>();
+        //dapter = new ArticleAdapter(Articles,TopArticles, getActivity(), getActivity());
+        adapter = new StoreAdapter();
+        adapter.setOnLoadMoreListener(this);
+
+        emptyView = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty, (ViewGroup) recyclerView.getParent());
+        adapter.setEmptyView(emptyView);
+
+        adapter.openLoadMore(PAGESIZE);
+
+        //listL.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+        //listL.setOnItemClickListener(this);
+
+        header = LayoutInflater.from(getContext()).inflate(R.layout.layout_home_header , null );
+
+
+
+        adapter.addHeaderView(header);
+
+        layBanner = (LinearLayout) header.findViewById(R.id.layBanner);
+
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                ListModel model = (ListModel) baseQuickAdapter.getItem(i);
+                Bundle bd = new Bundle();
+                bd.putString(Constants.INTENT_URL, model.getArticleUrl());
+                ActivityUtils.getInstance().showActivity(getActivity(), WebViewActivity.class , bd);
+            }
+        });
+
+
+        LinearLayout layaccount = (LinearLayout) header.findViewById(R.id.layaccount);
+        layaccount.setOnClickListener(this);
+        LinearLayout layneworder = (LinearLayout) header.findViewById(R.id.layneworder);
+        layneworder.setOnClickListener(this);
+        LinearLayout layCustomer = (LinearLayout) header.findViewById(R.id.layCustomer);
+        layCustomer.setOnClickListener(this);
+        LinearLayout layally = (LinearLayout) header.findViewById(R.id.layally);
+        layally.setOnClickListener(this);
+        LinearLayout layExchange = (LinearLayout) header.findViewById(R.id.layExchange);
+        layExchange.setOnClickListener(this);
+        LinearLayout layReward = (LinearLayout) header.findViewById(R.id.layReward);
+        layReward.setOnClickListener(this);
+        RelativeLayout layMore = (RelativeLayout) header.findViewById(R.id.layMore);
+        layMore.setOnClickListener(this);
     }
-    @OnClick({R.id.layaccount,R.id.layneworder,R.id.layCustomer,R.id.layally,R.id.layExchange,R.id.layReward , R.id.layMore})
+
+
+
+    //@OnClick({R.id.layaccount,R.id.layneworder,R.id.layCustomer,R.id.layally,R.id.layExchange,R.id.layReward , R.id.layMore})
      void click(View v) {
         switch (v.getId()) {
             case R.id.layaccount:
@@ -164,110 +212,120 @@ public class HomeFragment extends BaseFragment  implements AdapterView.OnItemCli
         }
     }
 
-
-    private void loadData() {
-        homePullRefresh.onRefreshComplete();
-        homePullRefresh.setMode(PullToRefreshBase.Mode.BOTH);
+    private void loadData(int idx) {
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("identity","0");
-        map.put("pageIndex",String.valueOf(pageIndex));
-        map.put("pageSize","10");
+        map.put("pageIndex",String.valueOf(idx));
+        map.put("pageSize", String.valueOf(PAGESIZE));
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
+        ApiService apiService = ZRetrofitUtil.getApiService();
+        String token = BaseApplication.readToken();
         Call<ArticleListOutput> call = apiService.list(token,map);
         call.enqueue(new Callback<ArticleListOutput>() {
             @Override
             public void onResponse(Call<ArticleListOutput> call, Response<ArticleListOutput> response) {
-                if (response.body() != null) {
-
-                    ArticleListOutput articleListOutput = new ArticleListOutput();
-                    articleListOutput.setData(response.body().getData());
-                    if (response.body().getStatus() == 200&&response.body()!=null) {
-                        if (operateType == OperateTypeEnum.REFRESH) {
-                            Articles.clear();
-                            TopArticles.clear();
-                            Articles.addAll(response.body().getData().getList().getRows());
-                            TopArticles.addAll(response.body().getData().getTop());
-                            adapter.notifyDataSetChanged();
-                        } else if (operateType == OperateTypeEnum.LOADMORE) {
-                            if (response.body().getData().getList().getRows().size()==0){
-                                adapter.notifyDataSetChanged();
-                                pageIndex=pageIndex-1;
-                                ToastUtils.showLongToast("没有更多信息...");
-                            }
-
-                        }
-                    } else {
-                        ToastUtils.showLongToast(response.body().getStatusText());
-                    }
-
+                homePullRefresh.setRefreshing(false);
+                if (response.code() != 200) {
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
+                if (response.body() == null) {
+                    adapter.showLoadMoreFailedView();
+                    return;
+                }
+                if(response.body().getStatus()==Constants.STATUS_70035){
+                    ToastUtils.showLongToast( response.body().getStatusText() );
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity(), PhoneLoginActivity.class);
+                    return;
+                }
+                if (response.body().getStatus() != 200) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
                 }
 
-                return;
+                if (response.body().getData() == null) {
+                    ToastUtils.showLongToast("返回错误数据");
+                    return;
+                }
 
+                if (operateType == OperateTypeEnum.REFRESH) {
+                    List<ListModel> Articles = new ArrayList<ListModel>();
+                    List<ListModel> topList = response.body().getData().getTop();
+                    if (topList != null) {
+                        for (ListModel item : topList) {
+                            item.setTop(true);
+                        }
+                        Articles.addAll(topList);
+                    }
+                    if (response.body().getData().getList() != null && response.body().getData().getList().getRows() != null) {
+                        Articles.addAll(response.body().getData().getList().getRows());
+                    }
+                    adapter.setNewData(Articles);
 
+                } else if (operateType == OperateTypeEnum.LOADMORE) {
+                    if (response.body().getData().getList().getRows() == null || response.body().getData().getList().getRows().size() == 0) {
+                        if (noDataView == null) {
+                            noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
+                        }
+                        adapter.removeAllFooterView();
+                        adapter.addFooterView(noDataView);
+                        adapter.loadComplete();
+                    } else {
+                        adapter.addData(response.body().getData().getList().getRows());
+                        pageIndex = pageIndex + 1;
+                    }
+                }
 
             }
 
 
             @Override
             public void onFailure(Call<ArticleListOutput> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
+                homePullRefresh.setRefreshing(false);
+                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
             }
         });
     }
 
-    public void scrollToTop() {
-        homePullRefresh.getRefreshableView().smoothScrollBy(0, 0);
-    }
-
     private void initSwitchImg() {
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("type","2");
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
+        ApiService apiService = ZRetrofitUtil.getApiService();
+        String token = BaseApplication.readToken();
         Call<SlideListOutputModel> call = apiService.FocusPic(token,map);
         call.enqueue(new Callback<SlideListOutputModel>() {
             @Override
             public void onResponse(Call<SlideListOutputModel> call, Response<SlideListOutputModel> response) {
                 if (response.body() != null) {
-//                    PostModel initOutputs = new PostModel();
-//                    initOutputs.setData( response.body().getData());
 
                     if (response.body().getStatus() == 200&&response.body().getData()!=null) {
                         adDataList= new ArrayList<SlideListModel>();
-                        homeBannerPagerAdapter = new HomeBannerPagerAdapter(adDataList, getContext(), mhandler);
                         adDataList.addAll(response.body().getData());
-                        initDots();
-                        //通过适配器引入图片
-                        homeViewPager.setAdapter(homeBannerPagerAdapter);
-                        homeViewPager.setCurrentItem(0);
-                        initListener();
-                        //更新文本内容
-                        updateTextAndDot();
-                        homeBannerPagerAdapter.notifyDataSetChanged();
-                        ToastUtils.showLongToast("成功");
+                        AdBannerConfig config = new AdBannerConfig();
+                        config.setAutoPlay(true);
+                        config.setImages(adDataList);
+
+                        AdBannerWidget adBannerWidget = new AdBannerWidget(getContext(),config);
+                        layBanner.removeAllViews();
+                        layBanner.addView( adBannerWidget );
+
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
 
                 }
-
-                return;
-
-
 
             }
 
@@ -277,60 +335,8 @@ public class HomeFragment extends BaseFragment  implements AdapterView.OnItemCli
                 ToastUtils.showLongToast("失败");
             }
         });
-        //if(adDataList==null || adDataList.size()<1 ) return;
-
-
-
     }
 
-    /**
-     * 初始化监听器
-     */
-    @SuppressWarnings("deprecation")
-    private void initListener() {
-        homeViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                updateTextAndDot();
-
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-    }
-    private void updateTextAndDot() {
-        int currentPage = homeViewPager.getCurrentItem();
-
-        //改变dot
-        for (int i = 0; i < dot.getChildCount(); i++) {
-            dot.getChildAt(i).setEnabled(i == currentPage);
-        }
-
-    }
-    private void initDots() {
-        for (int i = 0; i < adDataList.size(); i++) {
-            View view = new View(getActivity());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8, 8);
-            if (i != 0) {
-                params.leftMargin = 5;
-            }
-
-            view.setLayoutParams(params);
-            view.setBackgroundResource(R.drawable.selecter_dot);
-            dot.addView(view);
-        }
-    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -349,7 +355,7 @@ public class HomeFragment extends BaseFragment  implements AdapterView.OnItemCli
 
     @Override
     public void onClick(View view) {
-
+        click(view);
     }
 
     @Override
@@ -357,22 +363,17 @@ public class HomeFragment extends BaseFragment  implements AdapterView.OnItemCli
         return R.layout.fragment_home;
     }
 
+    @Override
+    public void onRefresh() {
+        operateType = OperateTypeEnum.REFRESH;
+        pageIndex = 1;
+        loadData(pageIndex);
+        initSwitchImg();
+    }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String url;
-        Object obj = adapter.getItem(i);
-        if( obj instanceof TopArticleIdModel){
-            TopArticleIdModel model = (TopArticleIdModel) obj;
-            url = model.getArticleUrl();
-        }else{
-            ListModel model = (ListModel) obj;
-            url = model.getArticleUrl();
-        }
-
-        Intent intent = new Intent(getActivity(), WebViewActivity.class);
-        Bundle bd = new Bundle();
-        bd.putString(Constants.INTENT_URL, url);
-        ActivityUtils.getInstance().showActivity(getActivity(), WebViewActivity.class , bd);
+    public void onLoadMoreRequested() {
+        operateType = OperateTypeEnum.LOADMORE;
+        loadData( pageIndex+1);
     }
 }

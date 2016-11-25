@@ -120,6 +120,7 @@
         android:layout_height="1px"
         android:background="@color/line_gray"/>
     <LinearLayout
+        android:id="@+id/layDesc"
         android:orientation="vertical"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"

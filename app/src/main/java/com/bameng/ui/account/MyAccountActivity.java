@@ -1,9 +1,11 @@
 package com.bameng.ui.account;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,11 +22,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.bameng.R.id.swipeRefreshLayout;
+
 /***
  * 我的账号
  */
 public class MyAccountActivity extends BaseActivity {
-
     @Bind(R.id.titleText)
     TextView titleText;
     @Bind(R.id.titleLeftImage)
@@ -35,12 +38,18 @@ public class MyAccountActivity extends BaseActivity {
     TextView txtJifen;
     @Bind(R.id.txt_countbean)
     TextView txtCountbean;
+    final static int REQUEST_CODE_CONFIRM = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
         ButterKnife.bind(this);
+
+        titleText.setText("我的账号");
+        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
+
         initView();
         StartApi();
 
@@ -50,7 +59,7 @@ public class MyAccountActivity extends BaseActivity {
     void onclick(View view) {
         switch (view.getId()){
             case R.id.btn_checkout://兑换
-                ActivityUtils.getInstance().showActivity(MyAccountActivity.this,ExchangeBeanActivity.class);
+                ActivityUtils.getInstance().showActivityForResult(MyAccountActivity.this, REQUEST_CODE_CONFIRM , ExchangeConfirmActivity.class);
                 break;
             case R.id.layMbean://
                 ActivityUtils.getInstance().showActivity(MyAccountActivity.this,MyBeanActivity.class);
@@ -70,13 +79,12 @@ public class MyAccountActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        titleText.setText("我的账号");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+
 
         txtMbean.setText(String.valueOf(BaseApplication.UserData().getMengBeans()));
-        txtCountbean.setText(String.valueOf(BaseApplication.UserData().getMengBeansLocked()));
+        txtCountbean.setText(String.valueOf(BaseApplication.UserData().getTempMengBeans()));
         txtJifen.setText(String.valueOf(BaseApplication.UserData().getScore()));
+
     }
 
     @Override
@@ -87,5 +95,14 @@ public class MyAccountActivity extends BaseActivity {
     @Override
     public boolean handleMessage(Message msg) {
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if( resultCode != RESULT_OK)return;
+        if( requestCode==REQUEST_CODE_CONFIRM){
+            initView();
+        }
     }
 }

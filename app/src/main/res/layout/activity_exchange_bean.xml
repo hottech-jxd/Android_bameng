@@ -4,15 +4,16 @@
     android:layout_height="match_parent" >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height"
-        >
-        <include layout="@layout/title_index"></include>
+        android:layout_height="@dimen/act_title_height">
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
     <TextView
         android:layout_marginTop="30dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/black"
         android:text="盟豆"/>
 
     <TextView
@@ -20,9 +21,9 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="111111"
+        android:text="0"
         android:textSize="23sp"
-        android:textColor="@color/chocolate"
+        android:textColor="@color/red"
         android:id="@+id/txt_mbean" />
     <Button
         android:id="@+id/btn_exchange"
@@ -31,7 +32,7 @@
         android:text="我要兑换"
         android:layout_margin="20dp"
         android:textColor="@color/white"
-        android:background="@drawable/btn_cancel"/>
+        android:background="@drawable/btn_green"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,23 +42,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
         android:text="兑换说明:"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:textColor="@color/black"
         android:text="1.盟豆大于100时才可申请兑现"/>
     <TextView
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:textColor="@color/black"
         android:text="2.盟豆兑换由盟主来操作"/>
     <TextView
         android:layout_gravity="center"
         android:id="@+id/tv_record"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
+        android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="兑换记录"/>

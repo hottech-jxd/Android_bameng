@@ -1,6 +1,7 @@
 package com.bameng.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,11 +17,14 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.OrderAdapter;
 import com.bameng.model.OperateTypeEnum;
+import com.bameng.model.OrderModel;
 import com.bameng.model.OrderOutputModel;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
+import com.bameng.ui.business.OrderDetailsActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.RecycleItemDivider;
@@ -35,26 +39,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
 /**
  *
  */
-public class OrderFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
-
+public class OrderFragment extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recycleView)
     RecyclerView recyclerView;
-
     OrderAdapter orderAdapter;
-
     OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     final int PAGESIZE =10;
     long lastId=0;
     int type=0;
-
     View noDataView;
     View emptyView;
 
+
+    OnItemClickListener onItemClickListener=new OnItemClickListener() {
+        @Override
+        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+            OrderModel orderModel =(OrderModel) baseQuickAdapter.getItem(i);
+            String orderId =orderModel.getOrderId();
+            Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
+            intent.putExtra("orderid", orderId );
+            ActivityUtils.getInstance().showActivity( getActivity(), intent);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,32 +78,27 @@ public class OrderFragment extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initView();
     }
 
     public void initView() {
         emptyView =  getActivity().getLayoutInflater().inflate(R.layout.layout_empty, (ViewGroup) recyclerView.getParent(), false);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout.setOnRefreshListener(this);
         orderAdapter = new OrderAdapter();
         orderAdapter.openLoadMore(PAGESIZE);
         orderAdapter.setOnLoadMoreListener(this);
-
         orderAdapter.setEmptyView(emptyView);
-
         recyclerView.setAdapter(orderAdapter);
 
-        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                //TODO
-            }
-        });
+        recyclerView.addOnItemTouchListener(onItemClickListener);
+    }
 
-        recyclerView.addItemDecoration( new RecycleItemDivider(getContext(),RecyclerView.VERTICAL,2));
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
+        recyclerView.removeOnItemTouchListener(onItemClickListener);
     }
 
     @Override
@@ -112,7 +120,6 @@ public class OrderFragment extends BaseFragment implements SwipeRefreshLayout.On
     public int getLayoutRes() {
         return R.layout.frag_order;
     }
-
 
 
     @Override
@@ -138,7 +145,7 @@ public class OrderFragment extends BaseFragment implements SwipeRefreshLayout.On
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<OrderOutputModel> call = apiService.ordermyList(token,map);
         call.enqueue(new Callback<OrderOutputModel>() {
@@ -150,34 +157,25 @@ public class OrderFragment extends BaseFragment implements SwipeRefreshLayout.On
                     return;
                 }
 
-
                 if( operateType == OperateTypeEnum.REFRESH){
-                    if( response.body().getData() ==null || response.body().getData().size()<1){
-//                        if(emptyView ==null){
-//                        }
-//                        orderAdapter.setEmptyView(emptyView);
-//                        orderAdapter.notifyItemChanged(0);
-                        return;
+                    orderAdapter.setNewData( response.body().getData().getList() );
+                    if(response.body().getData().getList()!=null && response.body().getData().getList().size()>0) {
+                        lastId = response.body().getData().getList().get(response.body().getData().getList().size() - 1).getId();
                     }
-
-                    orderAdapter.setNewData( response.body().getData() );
-                    lastId = response.body().getData().get( response.body().getData().size()-1 ).getId();
-
                 }else {
-
-
-                    if (response.body().getData() == null || response.body().getData().size()<1) {
+                    if (response.body().getData().getList() == null || response.body().getData().getList().size()<1) {
                         if (noDataView == null) {
                             noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
                         }
+                        orderAdapter.removeAllFooterView();
                         orderAdapter.addFooterView(noDataView);
                         orderAdapter.loadComplete();
                         return;
                     }
 
-                    orderAdapter.addData( response.body().getData());
+                    orderAdapter.addData( response.body().getData().getList());
 
-                    lastId = response.body().getData().get( response.body().getData().size()-1 ).getId();
+                    lastId = response.body().getData().getList().get( response.body().getData().getList().size()-1 ).getId();
                 }
 
             }
@@ -185,9 +183,20 @@ public class OrderFragment extends BaseFragment implements SwipeRefreshLayout.On
             @Override
             public void onFailure(Call<OrderOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast("error");
+                ToastUtils.showLongToast(t.getMessage()==null?"发送错误":t.getMessage());
             }
         });
 
+    }
+
+    @Override
+    protected void loadData() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 }

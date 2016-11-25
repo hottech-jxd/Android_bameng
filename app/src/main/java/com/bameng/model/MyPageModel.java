@@ -6,11 +6,11 @@ import java.util.List;
  * Created by Administrator on 2016/11/17.
  */
 
-public class MyPageModel  {
+public class MyPageModel<T>  {
     int PageCount;
     int PageIndex;
     int PageSize;
-    List<UserData> Rows;
+    List<T> Rows;
     int Total;
 
     public int getPageCount() {
@@ -37,11 +37,11 @@ public class MyPageModel  {
         PageSize = pageSize;
     }
 
-    public List<UserData> getRows() {
+    public List<T> getRows() {
         return Rows;
     }
 
-    public void setRows(List<UserData> rows) {
+    public void setRows(List<T> rows) {
         Rows = rows;
     }
 

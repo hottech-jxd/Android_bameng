@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_height="wrap_content"
               android:layout_width="match_parent"
+              android:layout_marginTop="1dp"
+              android:background="@color/white"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
     <LinearLayout
@@ -12,27 +14,33 @@
         android:background="#FFFFFF"
         android:padding="10dp">
         <com.facebook.drawee.view.SimpleDraweeView
-    android:id="@+id/image"
-    android:layout_width="60dp"
-    android:layout_height="60dp" />
+            android:layout_gravity="center_vertical"
+            android:id="@+id/image"
+            app:placeholderImage="@mipmap/ic_picture"
+            app:failureImage="@mipmap/ic_picture"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
         <LinearLayout
         android:paddingLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <TextView
+        <TextView
         android:id="@+id/articleTitle"
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text=""/>
-    <TextView
+        <TextView
         android:layout_marginTop="5dp"
         android:id="@+id/articleIntro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="2"
+        android:ellipsize="end"
         android:text=""/>
         <LinearLayout
             android:layout_gravity="right"
@@ -66,12 +74,5 @@
         </LinearLayout>
     </LinearLayout>
     </LinearLayout>
-    <TextView
-        android:id="@+id/line"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/line_gray"/>
+
 </LinearLayout>

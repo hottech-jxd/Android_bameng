@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bameng.R;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.PostModel;
 import com.bameng.receiver.MyBroadcastReceiver;
@@ -27,6 +28,10 @@ import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.ProgressPopupWindow;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -90,10 +95,20 @@ public class AllyHomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ally_home);
         ButterKnife.bind(this);
+
+        EventBus.getDefault().register(this);
+
         application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         initView();
         StartApi();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FragManager.clear();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -193,8 +208,7 @@ public class AllyHomeActivity extends BaseActivity {
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_riches);
                 SystemTools.loadBackground(richesImg, listDraw);
                 richesTxt.setTextColor(resources.getColor(R.color.chocolate));
-                application.mFragManager.setCurrentFrag(FragManager.FragType.RICHES);
-
+                application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE );
 
             }
             break;
@@ -237,4 +251,10 @@ public class AllyHomeActivity extends BaseActivity {
     public boolean handleMessage(Message msg) {
         return false;
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventClose(CloseEvent event){
+        finish();
+    }
+
 }

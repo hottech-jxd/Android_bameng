@@ -8,16 +8,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.model.CloseEvent;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public abstract class BaseActivity extends FragmentActivity implements Handler.Callback {
@@ -32,6 +36,7 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
         super.onCreate ( savedInstanceState );
         mHandler=new Handler(this);
         application = ( BaseApplication ) this.getApplication ();
+
         //禁止横屏
         BaseActivity.this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
     }
@@ -57,6 +62,8 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
     @Override
     protected void onDestroy() {
         super.onDestroy ( );
+
+
     }
 
     @Override
@@ -78,19 +85,7 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
 //        JPushInterface.onResume(this);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
 
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        EventBus.getDefault().unregister(this);
-    }
     public boolean canConnect(){
         //网络访问前先检测网络是否可用
         if(!Util.isConnect(BaseActivity.this)){
@@ -166,6 +161,22 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
         if(v.getId() == R.id.titleLeftImage){
             finish();
         }}
-
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if( keyCode == KeyEvent.KEYCODE_BACK) {
+            this.finish();
+        }
+
+        return super.onKeyDown(keyCode,event);
+    }
+
+//
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEventClose(CloseEvent event){
+//        finish();
+//    }
 }

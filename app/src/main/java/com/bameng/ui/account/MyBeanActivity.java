@@ -4,18 +4,44 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.adapter.MBeanFlowAdapter;
+import com.bameng.model.BeanFlowOutputModel;
+import com.bameng.model.OperateTypeEnum;
+import com.bameng.model.PostModel;
+import com.bameng.service.ApiService;
+import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.news.AddnewsActivity;
+import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
+import com.bameng.utils.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 //import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MyBeanActivity extends BaseActivity {
+/***
+ * 盟豆 流水 界面
+ */
+public class MyBeanActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener{
 
     @Bind(R.id.txt_income)
     TextView txtIncome;
@@ -25,8 +51,17 @@ public class MyBeanActivity extends BaseActivity {
     TextView titleText;
     @Bind(R.id.txt_outbean)
     TextView txtOutbean;
-    //@Bind(R.id.recycleView)
-    //UltimateRecyclerView recyclerView;
+    @Bind(R.id.recycleView)
+    RecyclerView recyclerView;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    MBeanFlowAdapter adapter;
+    final  int PAGESIZE = 10;
+    long lastId=0;
+    View noDataView;
+    View emptyView;
+    OperateTypeEnum operateTypeEnum = OperateTypeEnum.REFRESH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +69,7 @@ public class MyBeanActivity extends BaseActivity {
         setContentView(R.layout.activity_my_bean);
         ButterKnife.bind(this);
         initView();
-        StartApi();
+        //StartApi();
     }
 
     @Override
@@ -43,8 +78,24 @@ public class MyBeanActivity extends BaseActivity {
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
 
-        //recyclerView.reenableLoadmore();
+        adapter = new MBeanFlowAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        swipeRefreshLayout.setOnRefreshListener(this);
+        adapter.setOnLoadMoreListener(this);
+        adapter.openLoadMore(PAGESIZE);
 
+        emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty, (ViewGroup)recyclerView.getParent(),false);
+        adapter.setEmptyView(emptyView);
+
+        recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 
     @Override
@@ -55,5 +106,67 @@ public class MyBeanActivity extends BaseActivity {
     @Override
     public boolean handleMessage(Message msg) {
         return false;
+    }
+
+
+    @Override
+    public void onRefresh() {
+        operateTypeEnum = OperateTypeEnum.REFRESH;
+        lastId=0;
+        loadData();
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        operateTypeEnum = OperateTypeEnum.LOADMORE;
+        loadData();
+    }
+
+    protected void loadData(){
+        Map<String, String> map = new HashMap<>();
+        map.put("version", BaseApplication.getAppVersion());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("os", "android");
+        map.put("lastId", String.valueOf( lastId ));
+        AuthParamUtils authParamUtils = new AuthParamUtils();
+        String sign = authParamUtils.getSign(map);
+        map.put("sign", sign);
+        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        String token = BaseApplication.readToken();
+        Call<BeanFlowOutputModel> call = apiService.BeanFlowList(token,map);
+        call.enqueue(new Callback<BeanFlowOutputModel>() {
+            @Override
+            public void onResponse(Call<BeanFlowOutputModel> call, Response<BeanFlowOutputModel> response) {
+                swipeRefreshLayout.setRefreshing(false);
+                if(response.code()!=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
+                if(response.body()==null){
+                    ToastUtils.showLongToast("服务端返回空数据");
+                    return;
+                }
+                if(response.body().getStatus()!=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
+
+                if(operateTypeEnum == OperateTypeEnum.REFRESH){
+
+                    //adapter.setNewData(  );
+
+                }else{
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BeanFlowOutputModel> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+            }
+        });
+
     }
 }

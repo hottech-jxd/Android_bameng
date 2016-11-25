@@ -1,6 +1,8 @@
 package com.bameng.config;
 
 
+import static com.baidu.location.h.j.P;
+
 public class Constants {
 	// 屏幕高度
 	public static int SCREEN_HEIGHT = 800;
@@ -55,7 +57,7 @@ public class Constants {
 	//test url
 	public final static String url= "http://bmapi.fancat.cn";
 	//test miyao
-	public final static String APP_SECRET="BAMEENG20161021_TEST";
+	public final static String APP_SECRET="BAMEENG20161021";
 	// url
 	//public final static String url= "http://bmapi.fancat.cn";
 	//App_Secret
@@ -72,6 +74,8 @@ public class Constants {
 	 */
 	// 登录信息文件
 	public final static String LOGIN_USER_INFO = "login_user_info";
+
+	public final static String BASE_DATA ="BASE_DATA";
 
 	/**
 	 * ************************定位信息设置
@@ -326,4 +330,42 @@ public class Constants {
 	 * 选择地址
 	 */
 	public static final int SELECT_ADDRESS = 0x00000032;
+
+	/***
+	 * 未成交
+	 */
+	public static final int ORDER_NODEAL=0;
+	/****
+	 * 已成交
+	 */
+	public static final int ORDER_DEAL=1;
+	/***
+	 * 退单
+	 */
+	public static final int ORDER_BACK = 2;
+
+	/***
+	 * 已登录
+	 */
+	public  static final int USER_LOGIN_STATUS_LOGINED=1;
+	/***
+	 * 冻结
+	 */
+	public static final int USER_LOGIN_STATUS_FREEZE = 0;
+	/***
+	 * 未登录
+	 */
+	public static final int USER_LOGIN_STATUS_NOlOGIN = -1;
+	/***
+	 *
+	 */
+	public static final int STATUS_70035 = 70035;
+	/***
+	 * 盟主 类型
+	 */
+	public static final int MENG_ZHU=1;
+	/***
+	 * 盟友 类型
+	 */
+	public static final int MENG_YOU = 0;
 }

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_setting"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".ui.business.AlliesDetailsActivity">
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/activity_setting"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/white"
+              tools:context=".ui.business.AlliesDetailsActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/titleLayoutL"
@@ -22,10 +28,12 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@mipmap/ic_user"
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/image"
+        app:placeholderImage="@mipmap/ic_ally"
+        app:failureImage="@mipmap/ic_ally"
         android:layout_gravity="center"
         android:layout_margin="10dp"/>
     <LinearLayout
@@ -281,4 +289,5 @@
         android:layout_height="1px"
         android:background="@color/line_gray" />
 
-</LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -162,7 +162,7 @@ public class PhoneLoginActivity extends BaseActivity {
                 exitTime = System.currentTimeMillis();
             } else {
                 closeSelf(PhoneLoginActivity.this);
-                SystemTools.killAppDestory(PhoneLoginActivity.this);
+                //SystemTools.killAppDestory(PhoneLoginActivity.this);
             }
             return true;
         }

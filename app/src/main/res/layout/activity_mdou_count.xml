@@ -18,7 +18,7 @@
             android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="剩余结算盟豆"
+            android:text="剩余待结算盟豆"
             android:textColor="@color/white"/>
         <TextView
             android:id="@+id/mdou_count"
@@ -26,23 +26,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="1000"
+            android:text="0"
             android:textSize="@dimen/large_text_size"/>
     </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="兑换流水"
+            android:text="流水记录"
             android:textSize="@dimen/medium_text_size"
             android:textColor="@color/black"
             android:layout_margin="10dp"
             />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <include layout="@layout/mbean_item"></include>
+        android:layout_height="wrap_content">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
     </RelativeLayout>
 
 

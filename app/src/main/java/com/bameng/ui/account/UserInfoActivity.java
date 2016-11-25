@@ -13,6 +13,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.text.style.ReplacementSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.bameng.config.Constants;
 import com.bameng.listener.PoponDismissListener;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.PostModel;
+import com.bameng.model.RefreshUserDataEvent;
 import com.bameng.model.UserData;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
@@ -43,6 +45,8 @@ import com.bameng.widgets.PhotoSelectView;
 import com.bameng.widgets.UserInfoView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.memory.BitmapPool;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -61,6 +65,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.R.attr.baselineAlignBottom;
 import static android.R.attr.bitmap;
 import static com.baidu.location.h.j.ar;
 import static com.baidu.location.h.j.t;
@@ -339,7 +344,7 @@ public class UserInfoActivity extends BaseActivity
         }else if( type == UserInfoView.Type.Sex){
             userData.setUserGender( value );
             BaseApplication.writeUserInfo(userData);
-            txtSex.setText( value.equals("M")?"男":"女");
+            txtSex.setText( value.equals("M")?"男": value.equals("F")?"女":"未知");
             updateUserInfo(Constants.User_5 , value);
         }else if( type == UserInfoView.Type.Realname) {
             userData.setRealName(value);
@@ -351,7 +356,7 @@ public class UserInfoActivity extends BaseActivity
 
     }
 
-    protected void updateUserInfo(int type , String value){
+    protected void updateUserInfo(int type , final String value){
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -361,22 +366,33 @@ public class UserInfoActivity extends BaseActivity
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.UpdateInfo(token,map);
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
                 if( response.code() !=200) {
-                    Log.i("updateuserinfo", response.message());
+                    ToastUtils.showLongToast(response.message());
                     return;
                 }
-
+                if(response.body()==null){
+                    ToastUtils.showLongToast("返回错误数据");
+                    return;
+                }
+                if(response.body().getStatus() !=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
+                ToastUtils.showLongToast(response.body().getStatusText());
+                BaseApplication.UserData().setUserCity( value );
+                BaseApplication.writeUserInfo( BaseApplication.UserData() );
+                EventBus.getDefault().post( new RefreshUserDataEvent( BaseApplication.UserData() ));
             }
 
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
-                Log.e("updateuserinfo", "error");
+                ToastUtils.showLongToast( t.getMessage()==null? "请求失败": t.getMessage() );
             }
         });
 

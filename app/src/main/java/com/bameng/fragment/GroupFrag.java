@@ -17,6 +17,9 @@ import com.bameng.R;
 import com.bameng.adapter.ArticleAdapter;
 import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
+import com.bameng.config.Constants;
+import com.bameng.model.AdBannerConfig;
+import com.bameng.model.AdImageBean;
 import com.bameng.model.AdlistModel;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.ListModel;
@@ -26,13 +29,18 @@ import com.bameng.model.SlideListOutputModel;
 import com.bameng.model.TopArticleIdModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
+import com.bameng.ui.WebViewActivity;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.ui.news.AddnewsActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.MyListView;
 import com.bameng.widgets.RecycleItemDivider;
+import com.bameng.widgets.custom.AdBannerWidget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
@@ -47,7 +55,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.baidu.location.h.j.ad;
+import static com.bameng.R.id.dot;
 import static com.bameng.R.id.homePullRefresh;
+import static com.bameng.R.id.homeViewPager;
 import static com.bameng.R.id.listL;
 import static com.bameng.R.id.recycleView;
 
@@ -60,52 +71,27 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recycleView)
     RecyclerView recyclerView;
-//    @Bind(R.id.listL)
-//    MyListView listL;
     int pageIndex=1;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    //public List<ListModel> Articles;
-    //public List<ListModel> TopArticles;
-    //public ArticleAdapter adapter;
-
     StoreAdapter adapter;
     final static int PAGESIZE=10;
-
-//    @Bind(R.id.homePullRefresh)
-//    PullToRefreshScrollView homePullRefresh;
-
-    //@Bind(R.id.dot)
-    LinearLayout dot;
-
-    //@Bind(R.id.homeViewPager)
-    ViewPager homeViewPager;
-    HomeBannerPagerAdapter homeBannerPagerAdapter;
-
-    List<SlideListModel> adDataList ;
-
+    List<SlideListModel> adDataList;
     View noDataView;
-
-    private Handler mhandler;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initView();
-       // ButterKnife.bind(this, view);
     }
     public void initView() {
-
-
-
-
-
         initlist();
 
-        initSwitchImg();
+        initBanner();
 
         loadData(pageIndex);
     }
+
+
     public void initlist(){
         swipeRefreshLayout.setOnRefreshListener(this);
         adapter = new StoreAdapter(R.layout.article_item);
@@ -114,15 +100,31 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
         recyclerView.setLayoutManager( new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addItemDecoration( new RecycleItemDivider( this.getContext() , LinearLayoutManager.VERTICAL));
+        //recyclerView.addItemDecoration( new RecycleItemDivider( this.getContext() , LinearLayoutManager.VERTICAL));
 
 
-        View header = LayoutInflater.from(getContext()).inflate(R.layout.layout_group_header,null);
-        //ButterKnife.bind( this ,header  );
-        dot = (LinearLayout) header.findViewById(R.id.dot);
-        homeViewPager = (ViewPager) header.findViewById(R.id.homeViewPager);
+        adDataList = new ArrayList<>();
 
-        adapter.addHeaderView(header);
+
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ListModel model = (ListModel) baseQuickAdapter.getItem(position);
+                Bundle bd = new Bundle();
+                bd.putString(Constants.INTENT_URL, model.getArticleUrl());
+                ActivityUtils.getInstance().showActivity( getActivity() , WebViewActivity.class , bd );
+            }
+        });
+
+        //View header = LayoutInflater.from(getContext()).inflate(R.layout.layout_group_header,null);
+//        AdBannerConfig config = new AdBannerConfig();
+//        config.setAutoPlay(true);
+//        View header = new  AdBannerWidget(getContext(), config);
+
+//        dot = (LinearLayout) header.findViewById(R.id.dot);
+//        homeViewPager = (ViewPager) header.findViewById(R.id.homeViewPager);
+//
+//        adapter.addHeaderView(header);
 
 
         //Articles = new ArrayList<ListModel>();
@@ -150,8 +152,13 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
 //        });
     }
 
-    private void loadData( int idx ) {
-        //homePullRefresh.setMode(PullToRefreshBase.Mode.BOTH);
+    @Override
+    protected void loadData() {
+        onRefresh();
+    }
+
+    private void loadData(int idx ) {
+
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -195,20 +202,12 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
 
                             adapter.setNewData( Articles );
 
-                            //Articles.clear();
-                            //TopArticles.clear();
-                            //Articles.addAll(response.body().getData().getList().getRows());
-                            //TopArticles.addAll(response.body().getData().getTop());
-                            //adapter.notifyDataSetChanged();
-                            //pageIndex++;
                         } else if (operateType == OperateTypeEnum.LOADMORE) {
                             if (response.body().getData().getList().getRows().size()==0){
-                                //adapter.notifyDataSetChanged();
-                                //pageIndex=pageIndex-1;
-                                //ToastUtils.showLongToast("没有更多信息...");
                                 if(noDataView==null){
                                     noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
                                 }
+                                adapter.removeAllFooterView();
                                 adapter.addFooterView(noDataView);
                                 adapter.loadComplete();
                             }else{
@@ -219,13 +218,7 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
-
                 }
-
-                return;
-
-
-
             }
 
 
@@ -237,14 +230,7 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
         });
     }
 
-    private void initSwitchImg() {
-        adDataList = new ArrayList<>();
-
-        //通过适配器引入图片
-        homeBannerPagerAdapter=new HomeBannerPagerAdapter(adDataList, getContext(),mhandler);
-        homeViewPager.setAdapter(homeBannerPagerAdapter);
-        homeViewPager.setCurrentItem(0);
-
+    private void initBanner(){
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -253,110 +239,53 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<SlideListOutputModel> call = apiService.FocusPic(token,map);
         call.enqueue(new Callback<SlideListOutputModel>() {
             @Override
             public void onResponse(Call<SlideListOutputModel> call, Response<SlideListOutputModel> response) {
+                if(response.code()!=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200&&response.body().getData()!=null) {
+                        adDataList.clear();
                         adDataList.addAll(response.body().getData());
-                        initDots();
-                        //通过适配器引入图片
-                        homeViewPager.setAdapter(homeBannerPagerAdapter);
-                        homeViewPager.setCurrentItem(0);
-                        initListener();
-                        //更新文本内容
-                        updateTextAndDot();
-                        homeBannerPagerAdapter.notifyDataSetChanged();
-                        ToastUtils.showLongToast("成功");
+                        AdBannerConfig config = new AdBannerConfig();
+                        List<AdImageBean> images = new ArrayList<>();
+                        config.setAutoPlay(true);
+                        config.setImages(adDataList);
+                        config.setWidth(DensityUtils.getDialogW(getActivity()));
+
+                        AdBannerWidget adBannerWidget = new AdBannerWidget(getContext(),config);
+                        adapter.removeAllHeaderView();
+                        adapter.addHeaderView(adBannerWidget);
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
 
                 }
-
-                return;
-
-
-
             }
-
 
             @Override
             public void onFailure(Call<SlideListOutputModel> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast("获得轮播图失败");
             }
         });
-        initListener();
-        initDots();
-        //更新文本内容
-        updateTextAndDot();
-    }
-    /**
-     * 初始化监听器
-     */
-    @SuppressWarnings("deprecation")
-    private void initListener() {
-        homeViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                updateTextAndDot();
-
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-    }
-
-    private void initDots() {
-        for (int i = 0; i < adDataList.size(); i++) {
-            View view = new View(getActivity());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8, 8);
-            if (i != 0) {
-                params.leftMargin = 5;
-            }
-
-            view.setLayoutParams(params);
-            view.setBackgroundResource(R.drawable.selecter_dot);
-            dot.addView(view);
-        }
-    }
-    private void updateTextAndDot() {
-        int currentPage = homeViewPager.getCurrentItem();
-
-        //改变dot
-        for (int i = 0; i < dot.getChildCount(); i++) {
-            dot.getChildAt(i).setEnabled(i == currentPage);
-        }
-
     }
 
     @Override
     public void onReshow() {
-
     }
 
     @Override
     public void onFragPasue() {
-
     }
 
     @Override
     public void onClick(View view) {
-
     }
 
     @Override
@@ -368,7 +297,7 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
     public void onRefresh() {
         operateType = OperateTypeEnum.REFRESH;
         pageIndex = 1;
-        initSwitchImg();
+        initBanner();
         loadData(pageIndex);
     }
 

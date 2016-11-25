@@ -10,6 +10,8 @@ import com.bameng.utils.DensityUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -45,9 +47,14 @@ public class StoreAdapter extends BaseQuickAdapter<ListModel , BaseViewHolder> {
         }
 
        DraweeController draweeController= Fresco.newDraweeControllerBuilder()
-                .setAutoPlayAnimations(true).build();
+               .setUri(listModel.getArticleCover())
+               .setAutoPlayAnimations(true).build();
+        GenericDraweeHierarchy genericDraweeHierarchy =
+                new GenericDraweeHierarchyBuilder(mContext.getResources()).setFailureImage(R.mipmap.ic_picture)
+                .setPlaceholderImage(R.mipmap.ic_picture).build();
         imv.setController(draweeController);
-        imv.setImageURI( listModel.getArticleCover() );
+        imv.setHierarchy(genericDraweeHierarchy);
+
 
         baseViewHolder.setText(R.id.articleTitle, listModel.getArticleTitle());
         baseViewHolder.setText(R.id.articleIntro, listModel.getArticleIntro());

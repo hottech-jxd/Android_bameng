@@ -22,6 +22,7 @@ import com.bameng.adapter.CustomerAdapter;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CustomListOutput;
 import com.bameng.model.CustomerModel;
+import com.bameng.model.MengModel;
 import com.bameng.model.MyOutputModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
@@ -61,8 +62,6 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
     RecyclerView recyclerView;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    //@Bind(R.id.customListView)
-    //PullToRefreshListView customListView;
     @Bind(R.id.tvSelectAll)
     TextView tvSelectAll;
     @Bind(R.id.tvFinish)
@@ -74,11 +73,14 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
     int pageIndex=1;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     final int PAGESIZE= 1000;
-    //public List<CustomerModel> Customers;
-    //public CustomerAdapter adapter;
+
     View noDataView;
 
     List<UserData> chooses;
+    /***
+     * 是否单选
+     */
+    boolean isRadio = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +134,9 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
     @Override
     protected void initView() {
 
+        isRadio = getIntent().getBooleanExtra("select" , false);
+        tvSelectAll.setVisibility( isRadio? View.GONE:View.VISIBLE);
+
         titleText.setText("选择对象");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
@@ -153,15 +158,19 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
         //map.put("Type","0");
         map.put("pageIndex",String.valueOf( idx ));
         map.put("pageSize", String.valueOf(PAGESIZE) );
+
+        map.put("orderbyCode",  "-1");
+        map.put("isDesc", "0");
+
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
         String token = BaseApplication.readToken();
-        Call<MyOutputModel> call = apiService.allylist(token,map);
-        call.enqueue(new Callback<MyOutputModel>() {
+        Call<MyOutputModel<MengModel>> call = apiService.allylist(token,map);
+        call.enqueue(new Callback<MyOutputModel<MengModel>>() {
             @Override
-            public void onResponse(Call<MyOutputModel> call, Response<MyOutputModel> response) {
+            public void onResponse(Call<MyOutputModel<MengModel>> call, Response<MyOutputModel<MengModel>> response) {
                 swipeRefreshLayout.setRefreshing(false);
                 if(response.code()!=200){
                     ToastUtils.showLongToast(response.message());
@@ -180,6 +189,7 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
                                 if(noDataView==null){
                                     noDataView = LayoutInflater.from(ChooseObjectActivity.this).inflate(R.layout.layout_nodata,null);
                                 }
+                                adapter.removeAllFooterView();
                                 adapter.addFooterView(noDataView);
                                 adapter.loadComplete();
                                 return;
@@ -195,14 +205,11 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
                 }
-
-                return;
-
             }
 
 
             @Override
-            public void onFailure(Call<MyOutputModel> call, Throwable t) {
+            public void onFailure(Call<MyOutputModel<MengModel>> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.showLongToast("失败");
             }
@@ -239,7 +246,7 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
     }
     @OnClick(R.id.tvFinish)
     void onFinish(){
-        Intent data = new Intent();
+        Intent data = getIntent();
         List<UserData> selected = new ArrayList<>();
         List<UserData> list = adapter.getData();
         for(UserData item : list){

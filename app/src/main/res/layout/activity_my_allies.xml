@@ -1,45 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/act_title_height">
-
-        <include layout="@layout/title_index"></include>
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ListSwitch"
-        android:layout_width="fill_parent"
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="horizontal"
-        >
+        app:tabSelectedTextColor="@color/red"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/red"
+        app:tabIndicatorHeight="1dp"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/black"
+        android:id="@+id/tablayout">
 
-        <TextView
-            android:padding="10dp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:id="@+id/ApplyLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="盟友申请"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+    </android.support.design.widget.TabLayout>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewerPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-        <TextView
-            android:padding="10dp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:id="@+id/AlliesLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="盟友列表"
-            android:textColor="@color/black"
-            android:textSize="14sp"/>
-    </LinearLayout>
 </LinearLayout>

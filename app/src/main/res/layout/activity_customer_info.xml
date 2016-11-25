@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/act_title_height">
 
-        <include layout="@layout/title_index"></include>
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -16,8 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:padding="10dp"
@@ -46,7 +45,6 @@
         android:id="@+id/customViewPager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center"
-         >
+        android:layout_gravity="center">
     </android.support.v4.view.ViewPager>
 </LinearLayout>

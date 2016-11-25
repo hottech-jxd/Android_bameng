@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bameng.widgets.CouponView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cv_semicircle_color="@color/white"
+    app:cv_semicircle_gap="8dp"
+    app:cv_semicircle_radius="4dp"
+    app:cv_is_semicircle_top="false"
+    app:cv_is_semicircle_bottom="false"
+    app:cv_is_semicircle_left="true"
+    app:cv_is_semicircle_right="true"
+    app:cv_is_dash_line_bottom="false"
+    app:cv_is_dash_line_top="false"
+    app:cv_is_dash_line_left="false"
+    app:cv_is_dash_line_right="false"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_margin="10dp"
     android:padding="10dp"
     android:background="@color/red">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="￥100"
+        android:text="￥0"
+        android:id="@+id/tvMoney"
         android:layout_gravity="center_vertical"
         android:textColor="@color/white"
-        android:layout_margin="20dp"/>
+        android:layout_margin="10dp"/>
     <TextView
         android:layout_width="1px"
         android:layout_height="match_parent"
@@ -27,24 +42,48 @@
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111111111111"
+            android:id="@+id/tvName"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_margin="5dp"
+            android:id="@+id/tvDue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="12sp"
             android:textColor="@color/white"/>
         <TextView
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111111111111"
-            android:textColor="@color/white"/>
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="111111111111"
+            android:text="仅限转发一次"
+            android:textSize="12sp"
             android:textColor="@color/white"/>
     </LinearLayout>
-    <ImageView
+    <LinearLayout
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/ivInShare"
+        android:visibility="visible"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/ic_forward"/>
+    <TextView
+        android:id="@+id/ivOutShare"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@mipmap/ic_forward"/>
-</LinearLayout>
+        android:drawableRight="@mipmap/ic_forward"/>
+    </LinearLayout>
+
+</com.bameng.widgets.CouponView>

@@ -8,8 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/act_title_height">
-
-        <include layout="@layout/title_index"></include>
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
@@ -26,11 +25,12 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="111"/>
+            android:text="客户姓名"/>
         <TextView
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="aaaaaa"
+            android:text=""
             android:gravity="left"/>
     </LinearLayout>
     <TextView
@@ -48,11 +48,12 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="111"/>
+            android:text="客户电话"/>
         <TextView
+            android:id="@+id/moblie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="1111"
+            android:text=""
             />
     </LinearLayout>
     <TextView
@@ -70,11 +71,12 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="111"/>
+            android:text="地址"/>
         <TextView
+            android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="1111111"
+            android:text=""
             />
     </LinearLayout>
     <TextView
@@ -92,11 +94,12 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="111"/>
+            android:text="审核状态"/>
         <TextView
+            android:id="@+id/status"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="1111111"
+            android:text=""
             />
     </LinearLayout>
     <TextView
@@ -114,11 +117,12 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="111"/>
+            android:text="备注"/>
         <TextView
+            android:id="@+id/remark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="1111111"
+            android:text=""
             />
     </LinearLayout>
     <TextView
@@ -136,18 +140,13 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="111"/>
+            android:text="客户上门情况"/>
         <TextView
+            android:id="@+id/inShopStatus"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="1111111"
+            android:text="未进店"
             />
     </LinearLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_cancel"
-        android:layout_margin="20dp"
-        android:textColor="@color/white"
-        android:text="1111"/>
+
     </LinearLayout>

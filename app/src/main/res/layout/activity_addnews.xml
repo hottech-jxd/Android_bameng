@@ -6,9 +6,8 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height"
-        >
-        <include layout="@layout/title_index"></include>
+        android:layout_height="@dimen/act_title_height">
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_marginTop="20dp"
@@ -25,31 +24,24 @@
         android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入资讯标题"
+        android:hint="请输入消息标题"
         android:imeOptions="actionNext"
         android:inputType="text"
-        android:maxLength="100"
-        />
+        android:maxLength="100"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="20dp"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="horizontal">
-
-    <com.huotu.android.library.libedittext.EditText
-        android:layout_margin="10dp"
-        android:id="@+id/edtContent"
-        cy:style="transparent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入资讯内容"
-        android:imeOptions="actionNext"
-        android:inputType="text"
-        />
+        android:layout_height="200dp">
+        <com.huotu.android.library.libedittext.EditText
+            android:layout_margin="10dp"
+            android:id="@+id/edtContent"
+            cy:style="transparent"
+            android:gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请输入消息内容"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="20dp"

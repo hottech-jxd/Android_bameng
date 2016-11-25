@@ -1,7 +1,12 @@
 package com.bameng.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +16,25 @@ import android.widget.ListView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.CustomDetailsAdapter;
+import com.bameng.adapter.CustomerDetailAdapter;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.CustomListOutput;
 import com.bameng.model.CustomerModel;
 import com.bameng.model.OperateTypeEnum;
+import com.bameng.model.PostModel;
 import com.bameng.model.RefreshCustomerEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.ui.business.CustomerExamineActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
+import com.bameng.widgets.AddressPopWin;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -39,27 +52,41 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.baidu.location.h.j.m;
-
 /**
  * 未处理的客户信息
  * Created by 47483 on 2016.11.09.
  */
-public class CustomNoDoneFrag extends BaseFragment{
+public class CustomNoDoneFrag extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener{
 
-    @Bind(R.id.customDoneList)
-    PullToRefreshListView customDoneList;
+    //@Bind(R.id.customDoneList)
+    //PullToRefreshListView customDoneList;
+
+
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    @Bind(R.id.recycleView)
+    RecyclerView recyclerView;
+
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<CustomerModel> Customers;
-    public CustomDetailsAdapter adapter;
+
     int pageIndex= 1;
+    final int PAGESIZE=10;
+    View noDataView;
+    View emptyView;
+    int type = 1;
+
+    CustomerDetailAdapter adapter;
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        type = getArguments().getInt("type");
+
         initList();
-        loadData();
+        //loadData();
     }
 
     @Override
@@ -83,7 +110,6 @@ public class CustomNoDoneFrag extends BaseFragment{
     public void onStop() {
         super.onStop();
 
-
     }
 
     @Override
@@ -93,67 +119,137 @@ public class CustomNoDoneFrag extends BaseFragment{
         EventBus.getDefault().unregister(this);
     }
 
-    private void initList()
-    {
-        customDoneList.setMode(PullToRefreshBase.Mode.BOTH);
-        customDoneList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+    private void initList(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter = new CustomerDetailAdapter();
+        adapter.setOnLoadMoreListener(this);
+        adapter.openLoadMore(PAGESIZE);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        recyclerView.setAdapter(adapter);
+
+        emptyView = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty, (ViewGroup) recyclerView.getParent() ,false);
+
+        adapter.setEmptyView(emptyView);
+
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                Customers.clear();
-                pageIndex=1;
-                loadData();
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                loadData();
-
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemChildClick(adapter, view, position);
+                if( view.getId() == R.id.btnAgree){
+                    CustomerModel model = (CustomerModel) adapter.getItem(position);
+                    audit(  position , model , 1 );
+                }else if(view.getId() == R.id.btnReject){
+                    CustomerModel model = (CustomerModel) adapter.getItem(position);
+                    audit( position , model , 2 );
+                }else {
+                    CustomerModel customerModel = (CustomerModel)adapter.getItem(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("customerinfo", customerModel);
+                    ActivityUtils.getInstance().showActivity( getActivity() , CustomerExamineActivity.class,bundle);
+                }
             }
         });
-        Customers = new ArrayList<CustomerModel>();
-        adapter = new CustomDetailsAdapter(Customers, getActivity(), getActivity());
-        customDoneList.setAdapter(adapter);
+
+//        customDoneList.setMode(PullToRefreshBase.Mode.BOTH);
+//        customDoneList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+//            @Override
+//            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+//                operateType = OperateTypeEnum.REFRESH;
+//                Customers.clear();
+//                pageIndex=1;
+//                loadData();
+//            }
+//
+//            @Override
+//            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+//                operateType = OperateTypeEnum.LOADMORE;
+//                loadData();
+//
+//            }
+//        });
+//        Customers = new ArrayList<CustomerModel>();
+//        adapter = new CustomDetailsAdapter(Customers, getActivity(), getActivity());
+//        customDoneList.setAdapter(adapter);
+//
+
     }
 
 
-    private void loadData()
+    @Override
+    protected void loadData() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
+    }
+
+    private void loadData(int indx )
     {
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        map.put("type","1");
-        map.put("pageIndex",String.valueOf(pageIndex));
-        map.put("pageSize","20");
+        map.put("type", String.valueOf(type));
+        map.put("pageIndex",String.valueOf(indx));
+        map.put("pageSize",String.valueOf(PAGESIZE));
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<CustomListOutput> call = apiService.customlist(token, map);
         call.enqueue(new Callback<CustomListOutput>() {
             @Override
             public void onResponse(Call<CustomListOutput> call, Response<CustomListOutput> response) {
-                if (response.body() != null) {
-                    customDoneList.onRefreshComplete();
+                swipeRefreshLayout.setRefreshing(false);
+                if (response.code() != 200) {
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
+                if (response.body() == null) {
+                    ToastUtils.showLongToast("返回错误数据");
+                    return;
+                }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity(), PhoneLoginActivity.class);
+                    return;
+                }
+                if(response.body().getStatus()!=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
 
-                    if (response.body().getStatus() == 200 && response.body().getData() != null) {
-                        Customers.addAll(response.body().getData().getRows());
-                        adapter.notifyDataSetChanged();
+
+                if(operateType==OperateTypeEnum.REFRESH) {
+                    adapter.setNewData(response.body().getData().getRows());
+                    if ( response.body().getData().getRows() .size()>0) {
                         pageIndex++;
-
-                    } else if (response.body().getStatus()==70035){
-
-                        ToastUtils.showLongToast(response.body().getStatusText());
+                    }
+                }else{
+                    if(response.body().getData().getRows()==null|| response.body().getData().getRows().size()<1){
+                        if (noDataView == null){
+                            noDataView = LayoutInflater.from(getContext()).inflate(R.layout.layout_nodata,null);
+                        }
+                        adapter.removeAllFooterView();
+                        adapter.addFooterView(noDataView);
+                        adapter.loadComplete();
+                        return;
                     }
 
-                } else {
-                    ToastUtils.showLongToast("连接服务器失败！！！");
+                    adapter.addData(response.body().getData().getRows());
+                    pageIndex ++;
                 }
-                return;
-
 
             }
 
@@ -187,13 +283,74 @@ public class CustomNoDoneFrag extends BaseFragment{
     @Subscribe( threadMode = ThreadMode.MAIN)
     public void onEventRefreshData(RefreshCustomerEvent event){
         if( event.getTabName().equals("NoDoneFrag")) {
-            for (int i = 0; i < Customers.size(); i++) {
-                if (Customers.get(i).getID() == event.getCustomerModel().getID()) {
-                    Customers.remove(Customers.get(i));
-                    break;
-                }
-            }
-            adapter.notifyDataSetChanged();
+//            for (int i = 0; i < Customers.size(); i++) {
+//                if (Customers.get(i).getID() == event.getCustomerModel().getID()) {
+//                    Customers.remove(Customers.get(i));
+//                    break;
+//                }
+//            }
+//            adapter.notifyDataSetChanged();
+
+            onRefresh();
         }
     }
+
+    @Override
+    public void onRefresh() {
+        operateType = OperateTypeEnum.REFRESH;
+        pageIndex=0;
+        loadData(pageIndex);
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        operateType=OperateTypeEnum.LOADMORE;
+        loadData(pageIndex+1);
+    }
+
+    protected void audit(final int position , final CustomerModel customerModel , int status ){
+
+        Map<String, String> map = new HashMap<>();
+        map.put("version", BaseApplication.getAppVersion());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("os", "android");
+        map.put("cid", String.valueOf( customerModel.getID()  ) );
+        map.put("status",  String.valueOf( status ));
+        AuthParamUtils authParamUtils = new AuthParamUtils();
+        String sign = authParamUtils.getSign(map);
+        map.put("sign", sign);
+        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        String token = BaseApplication.readToken();
+        Call<PostModel> call = apiService.audit(token, map);
+        call.enqueue(new Callback<PostModel>() {
+            @Override
+            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if( response.code() !=200){
+                    customerModel.setDoing(false);
+                    adapter.notifyDataSetChanged();
+                    ToastUtils.showLongToast( response.message() );
+                    return;
+                }
+                if( response.body() !=null && response.body().getStatus() ==200 ){
+                    //Customers.remove( customerModel );
+
+                    adapter.remove(position);
+
+                    adapter.notifyDataSetChanged();
+                }else{
+                    customerModel.setDoing(false);
+                    adapter.notifyDataSetChanged();
+                    ToastUtils.showLongToast( response.body() !=null ?  response.body().getStatusText() : "失败");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostModel> call, Throwable t) {
+                ToastUtils.showLongToast("请求失败");
+                customerModel.setDoing(false);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 }

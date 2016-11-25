@@ -62,32 +62,30 @@ import static com.bameng.R.id.nodoneLabel;
  */
 
 public class StoreFrag extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener , BaseQuickAdapter.RequestLoadMoreListener {
-
     int pageIndex=1;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    //public List<ListModel> Articles;
-    //public List<TopArticleIdModel> TopArticles;
-    //public ArticleAdapter adapter;
-
-    //@Bind(R.id.homePullRefresh)
-    //PullToRefreshListView homePullRefresh;
-
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
     @Bind(R.id.recycleView)
     RecyclerView recyclerView;
 
     BaseQuickAdapter baseAdapter;
     final int PAGESIZE=5;
-
-    int mCurrentCounter=0;
-
     View noDataView;
 
     protected int type = 1;
 
     protected  int layoutId = R.layout.article_item;
+
+    OnItemClickListener onItemClickListener = new OnItemClickListener() {
+        @Override
+        public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position ) {
+            ListModel model = (ListModel) baseQuickAdapter.getItem(position);
+            Bundle bd = new Bundle();
+            bd.putString(Constants.INTENT_URL, model.getArticleUrl());
+            ActivityUtils.getInstance().showActivity( getActivity() , WebViewActivity.class , bd );
+        }
+    };
 
     public StoreFrag(){
         baseAdapter = new StoreAdapter( layoutId );
@@ -99,65 +97,40 @@ public class StoreFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
         super.onViewCreated(view, savedInstanceState);
 
         initView();
-        //ButterKnife.bind(this, view);
+
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        recyclerView.removeOnItemTouchListener(onItemClickListener);
+    }
+
     public void initView() {
-        //Articles=new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout.setOnRefreshListener(this);
-
-        //baseAdapter = new StoreAdapter( layoutId );
-        //storeAdapter.openLoadAnimation();
         baseAdapter.openLoadMore(PAGESIZE);
         baseAdapter.setOnLoadMoreListener(this);
         recyclerView.setAdapter(baseAdapter);
-        //mCurrentCounter = storeAdapter.getData().size();
-
-        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ListModel model = (ListModel) baseQuickAdapter.getItem(i);
-                Bundle bd = new Bundle();
-                bd.putString(Constants.INTENT_URL, model.getArticleUrl());
-                ActivityUtils.getInstance().showActivity( getActivity() , WebViewActivity.class , bd );
-            }
-        });
-
-        recyclerView.addItemDecoration( new RecycleItemDivider( this.getContext() , LinearLayoutManager.VERTICAL));
-
+        recyclerView.addOnItemTouchListener( onItemClickListener);
 
         loadData(pageIndex);
-        //initlist();
     }
 
-//    public void initlist(){
-//        Articles = new ArrayList<ListModel>();
-//        TopArticles = new ArrayList<TopArticleIdModel>();
-//        adapter = new ArticleAdapter(Articles,TopArticles, getActivity(), getActivity());
-//        homePullRefresh.setAdapter(adapter);
-//        homePullRefresh.setMode(PullToRefreshBase.Mode.BOTH);
-//        homePullRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-//            @Override
-//            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//                operateType = OperateTypeEnum.REFRESH;
-//                pageIndex=1;
-//                Articles.clear();
-//                loadData();
-//            }
-//
-//            @Override
-//            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//                operateType = OperateTypeEnum.LOADMORE;
-//                pageIndex= pageIndex+1;
-//                loadData();
-//
-//            }
-//        });
-//    }
+    @Override
+    protected void loadData() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
+    }
 
     private void loadData(int pidx ) {
 
-        //homePullRefresh.setMode(PullToRefreshBase.Mode.BOTH);
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -175,7 +148,6 @@ public class StoreFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
             @Override
             public void onResponse(Call<ArticleListOutput> call, Response<ArticleListOutput> response) {
                 swipeRefreshLayout.setRefreshing(false);
-
 
                 if(response.code()!=200){
                     //storeAdapter.
@@ -212,6 +184,7 @@ public class StoreFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
                                 if(noDataView==null){
                                     noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
                                 }
+                                baseAdapter.removeAllFooterView();
                                 baseAdapter.addFooterView(noDataView);
 
                                 baseAdapter.loadComplete();
@@ -274,10 +247,6 @@ public class StoreFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
         operateType = OperateTypeEnum.REFRESH;
         pageIndex=1;
         baseAdapter.removeAllFooterView();
-        //Articles.clear();
-        //storeAdapter.setNewData(Articles);
-
-
         loadData(pageIndex);
     }
 

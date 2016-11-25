@@ -4,9 +4,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
@@ -16,6 +18,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/***
+ * 兑换界面
+ */
 public class ExchangeBeanActivity extends BaseActivity {
 
     @Bind(R.id.titleLeftImage)
@@ -49,6 +54,8 @@ public class ExchangeBeanActivity extends BaseActivity {
         titleText.setText("兑换");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+
+        txtMbean.setText( BaseApplication.UserData().getMengBeans() );
     }
 
     @Override
@@ -60,4 +67,5 @@ public class ExchangeBeanActivity extends BaseActivity {
     public boolean handleMessage(Message msg) {
         return false;
     }
+
 }

@@ -30,9 +30,10 @@ import butterknife.OnClick;
 
 import static com.baidu.location.h.j.m;
 
-
+/***
+ * 我的订单
+ */
 public class OrderListActivity extends BaseActivity {
-
     @Bind(R.id.ListSwitch)
     LinearLayout listSwitch;
     @Bind(R.id.allLabel)
@@ -51,8 +52,10 @@ public class OrderListActivity extends BaseActivity {
     ImageView titleLeftImage;
     @Bind(R.id.titleRightText)
     TextView titleRightText;
-    public Resources resources;
-    public BaseApplication application;
+    @Bind(R.id.titleRightImage)
+    ImageView  titleRightImage;
+
+    private Resources resources;
     private int currentIndex = 0;
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<>();
@@ -64,19 +67,15 @@ public class OrderListActivity extends BaseActivity {
         setContentView(R.layout.activity_order_list);
         ButterKnife.bind(this);
         initView();
-        application = (BaseApplication) this.getApplication();
         resources = this.getResources();
-        StartApi();
         changeIndex(currentIndex);
-
     }
 
 
     @Override
     protected void initView() {
-
         titleText.setText("我的订单");
-        titleRightText.setText("新增");
+        titleRightImage.setBackgroundResource(R.mipmap.ic_newadd);
         titleLeftImage.setVisibility(View.VISIBLE);
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
@@ -99,31 +98,35 @@ public class OrderListActivity extends BaseActivity {
             }
         });
 
-        OrderFragment orderFragment = new OrderFragment();
+        OrderFragment orderFragment1 = new OrderFragment();
         Bundle bd = new Bundle();
         bd.putInt("type", -1);
-        orderFragment.setArguments(bd);
-        mFragmentList.add(orderFragment);
-        orderFragment = new OrderFragment();
+        orderFragment1.setArguments(bd);
+        mFragmentList.add(orderFragment1);
+
+        OrderFragment orderFragment2 = new OrderFragment();
         bd = new Bundle();
         bd.putInt("type", 0);
-        orderFragment.setArguments(bd);
-        mFragmentList.add(orderFragment);
-        orderFragment = new OrderFragment();
+        orderFragment2.setArguments(bd);
+        mFragmentList.add(orderFragment2);
+
+        OrderFragment orderFragment3 = new OrderFragment();
         bd = new Bundle();
         bd.putInt("type", 1);
-        orderFragment.setArguments(bd);
-        mFragmentList.add(orderFragment);
-        orderFragment = new OrderFragment();
+        orderFragment3.setArguments(bd);
+        mFragmentList.add(orderFragment3);
+
+        OrderFragment orderFragment4 = new OrderFragment();
         bd = new Bundle();
         bd.putInt("type", 2);
-        orderFragment.setArguments(bd);
-        mFragmentList.add(orderFragment);
+        orderFragment4.setArguments(bd);
+        mFragmentList.add(orderFragment4);
 
         tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),mFragmentList);
         orderViewPager.setAdapter(tabPagerAdapter);
 
     }
+
     private void changeIndex(int index) {
         if (index == -1 ) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
@@ -179,32 +182,28 @@ public class OrderListActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.titleRightText)
+    @OnClick(R.id.titleRightImage)
     void clicknew(){
         ActivityUtils.getInstance().showActivity(OrderListActivity.this,NewOrderActivity.class);
     }
 
     @OnClick(R.id.allLabel)
     void clickAll() {
-
         changeIndex(-1);
     }
 
     @OnClick(R.id.nodoneLabel)
     void clickDoing() {
-       // raidersViewPager.setCurrentItem(1);
         changeIndex(0);
     }
 
     @OnClick(R.id.doneLabel)
     void clickDone() {
-        //raidersViewPager.setCurrentItem(2);
         changeIndex(1);
     }
 
     @OnClick(R.id.backLabel)
     void clickback() {
-       //raidersViewPager.setCurrentItem(2);
         changeIndex(2);
     }
 

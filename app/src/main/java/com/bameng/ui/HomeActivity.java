@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -28,6 +29,7 @@ import com.bameng.fragment.FragManager;
 import com.bameng.fragment.HomeFragment;
 import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
 import com.bameng.model.SlideListOutputModel;
 import com.bameng.model.SwitchFragmentEvent;
@@ -51,6 +53,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
@@ -145,8 +148,10 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        //application = (BaseApplication) this.getApplication();
-        //application.loadAddress();
+
+        EventBus.getDefault().register(this);
+        Log.i( HomeActivity.class.getName() , " EventBus.register---" + HomeActivity.class.getName());
+
         mHandler = new Handler(this);
         application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
@@ -156,15 +161,15 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
+    protected void onDestroy() {
+        super.onDestroy();
 
-    @Override
-    protected void onStop() {
-        super.onStop();
         EventBus.getDefault().unregister(this);
+
+        Log.i( HomeActivity.class.getName() , " EventBus.unregister---" + HomeActivity.class.getName());
+
+
+        FragManager.clear();
     }
 
     @Override
@@ -181,7 +186,11 @@ public class HomeActivity extends BaseActivity {
         initTab();
 
         //
-        baiduLocation();
+        requestBaiduLocation();
+    }
+
+    void requestBaiduLocation(){
+        HomeActivityPermissionsDispatcher.baiduLocationWithCheck(this);
     }
 
 
@@ -206,7 +215,7 @@ public class HomeActivity extends BaseActivity {
         Toast.makeText(this, R.string.permission_baiduLocation_denied , Toast.LENGTH_SHORT).show();
     }
 
-    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE ,
+    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE ,
             Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void onBaiduLocationNeverAskAgain(){
@@ -237,7 +246,7 @@ public class HomeActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
 
-        //HomeActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        HomeActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Override
@@ -248,16 +257,16 @@ public class HomeActivity extends BaseActivity {
             int data = bundle.getInt("home");
             if (100 == data) {
                 application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
-                ((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
+                //((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
                 initTab();
 
             }else if (200 == data){
                 application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
-                ((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
+                //((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
                 initTab();
             }else if (300 == data){
                 application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
-                ((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
+                //((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
                 initTab();
             }
         }
@@ -415,7 +424,7 @@ public class HomeActivity extends BaseActivity {
                 exitTime = System.currentTimeMillis();
             } else {
                 closeSelf(HomeActivity.this);
-                SystemTools.killAppDestory(HomeActivity.this);
+                //SystemTools.killAppDestory(HomeActivity.this);
             }
             return true;
         }
@@ -510,7 +519,23 @@ public class HomeActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventSwitchFragment(SwitchFragmentEvent event){
-        Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, event.getFragnmentName());
-        mHandler.sendMessage( msg);
+        //Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, event.getFragnmentName());
+        //mHandler.sendMessage( msg);
+        if( event.getFragnmentName().equals( Constants.TAG_1 ) ) {
+            onTabClicked(homePage);
+        }else if( event.getFragnmentName().equals( Constants.TAG_2 )){
+            onTabClicked(newsPage);
+        }else if(event.getFragnmentName().equals( Constants.TAG_3 )){
+            onTabClicked( businessPage);
+        }else if(event.getFragnmentName().equals(Constants.TAG_4)){
+            onTabClicked(profilePage);
+        }
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventClose(CloseEvent event){
+        finish();
+    }
+
 }

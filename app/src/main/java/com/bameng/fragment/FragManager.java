@@ -28,6 +28,12 @@ public class FragManager {
             fragIns = null;
         return fragIns = new FragManager(context, viewId);
     }
+
+    public static void clear(){
+
+        fragIns = null;
+    }
+
     private FragManager(FragmentActivity context, int viewId){
         this.viewId = viewId;
         this.fragManager = context.getSupportFragmentManager();

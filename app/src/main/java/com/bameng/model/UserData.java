@@ -10,13 +10,13 @@ import java.math.BigDecimal;
 public class UserData  implements Serializable {
 
 
-
+        String BelongOne;
         int UserId;
         int UserIdentity;
         String MerchantID;
         String ShopId;
         String IsActive;
-        String Score;
+        int Score;
         String ScoreLocked;
         int MengBeans;
         int MengBeansLocked;
@@ -34,10 +34,12 @@ public class UserData  implements Serializable {
         String CustomerAmount;
         String token;
     String UserCity;
+
+
     /***
      * 待结算盟豆
      */
-    BigDecimal TempMengBeans;
+    int TempMengBeans;
 
     boolean selected=false;
     /**
@@ -50,7 +52,41 @@ public class UserData  implements Serializable {
     int ShopType;
 
 
-        public String getToken() {
+    /***
+     * 我的二维码地址属性
+     */
+    private String myqrcodeUrl;
+
+    public String getMyShareQrcodeUrl() {
+        return myShareQrcodeUrl;
+    }
+
+    public void setMyShareQrcodeUrl(String myShareQrcodeUrl) {
+        this.myShareQrcodeUrl = myShareQrcodeUrl;
+    }
+
+    public String getMyqrcodeUrl() {
+        return myqrcodeUrl;
+    }
+
+    public void setMyqrcodeUrl(String myqrcodeUrl) {
+        this.myqrcodeUrl = myqrcodeUrl;
+    }
+
+    /***
+     * 分享二维码地址
+     */
+    private String myShareQrcodeUrl;
+
+    public String getBelongOne() {
+        return BelongOne;
+    }
+
+    public void setBelongOne(String belongOne) {
+        BelongOne = belongOne;
+    }
+
+    public String getToken() {
             return token;
         }
 
@@ -98,11 +134,11 @@ public class UserData  implements Serializable {
             IsActive = isActive;
         }
 
-        public String getScore() {
+        public int getScore() {
             return Score;
         }
 
-        public void setScore(String score) {
+        public void setScore(int score) {
             Score = score;
         }
 
@@ -250,11 +286,11 @@ public class UserData  implements Serializable {
         UserCity = userCity;
     }
 
-    public BigDecimal getTempMengBeans() {
+    public int getTempMengBeans() {
         return TempMengBeans;
     }
 
-    public void setTempMengBeans(BigDecimal tempMengBeans) {
+    public void setTempMengBeans(int tempMengBeans) {
         TempMengBeans = tempMengBeans;
     }
 

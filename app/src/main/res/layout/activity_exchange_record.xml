@@ -4,14 +4,23 @@
     android:layout_height="match_parent" >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height"
-        >
-        <include layout="@layout/title_index"></include>
+        android:layout_height="@dimen/act_title_height">
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
-    <RelativeLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <include layout="@layout/exchange_item"></include>
-    </RelativeLayout>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <!---->
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--&gt;-->
+        <!--<include layout="@layout/exchange_item"></include>-->
+    <!--</RelativeLayout>-->
     </LinearLayout>

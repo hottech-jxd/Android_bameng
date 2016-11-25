@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,8 +13,9 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ListSwitch"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
@@ -42,4 +44,29 @@
             android:textColor="@color/black"
             android:textSize="14sp"/>
     </LinearLayout>
+
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:tabSelectedTextColor="@color/red"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/red"
+        app:tabIndicatorHeight="1dp"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/black"
+        android:id="@+id/tablayout">
+
+    </android.support.design.widget.TabLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+
 </LinearLayout>

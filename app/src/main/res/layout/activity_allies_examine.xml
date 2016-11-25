@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_setting"
     android:layout_width="match_parent"
@@ -7,6 +7,11 @@
     android:orientation="vertical"
     android:background="@color/white"
     tools:context=".ui.business.AlliesExamineActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/titleLayoutL"
@@ -22,9 +27,10 @@
         android:layout_height="1px"
         android:background="@color/line_gray" />
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@mipmap/ic_user"
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@mipmap/ic_ally"
         android:layout_gravity="center"
         android:layout_margin="10dp"/>
 
@@ -47,8 +53,7 @@
             android:id="@+id/txt_realname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
-
+            android:text="" />
 
 
     </LinearLayout>
@@ -75,7 +80,7 @@
             android:id="@+id/txt_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="盟友" />
 
 
 
@@ -103,7 +108,7 @@
             android:id="@+id/txt_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
 
@@ -131,7 +136,7 @@
             android:id="@+id/txt_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
 
@@ -159,7 +164,7 @@
             android:id="@+id/txt_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
 
@@ -175,21 +180,28 @@
         android:orientation="horizontal">
         <TextView
             android:layout_margin="20dp"
-            android:padding="5dp"
+            android:padding="10dp"
             android:gravity="center"
-            android:text="1111"
+            android:text="同意"
+            android:textColor="@color/white"
+            android:id="@+id/tvAgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/green"/>
+            android:background="@drawable/btn_green"/>
         <TextView
             android:layout_margin="20dp"
-            android:padding="5dp"
+            android:padding="10dp"
             android:gravity="center"
-            android:text="1111"
+            android:id="@+id/tvReject"
+            android:text="拒绝"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/line_gray"/>
+            android:textColor="@color/red"
+            android:background="@drawable/btn_pink_back"/>
     </LinearLayout>
-</LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

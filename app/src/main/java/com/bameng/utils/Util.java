@@ -45,6 +45,43 @@ import javax.crypto.spec.DESKeySpec;
  */
 public class Util {
 
+    /***
+     * 判断是否正整数
+     * @param orginal
+     * @return
+     */
+    public  static  boolean isPositiveInt(String orginal ){
+        return isMatch("^\\+{0,1}[1-9]\\d*", orginal);
+    }
+
+    private static boolean isMatch(String regex, String orginal){
+        if (orginal == null || orginal.trim().equals("")) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile(regex);
+        Matcher isNum = pattern.matcher(orginal);
+        return isNum.matches();
+    }
+
+
+    /***
+     * 判断是否金额
+     * @param value
+     * @return
+     */
+    public  static  boolean isMoney(String value ){
+        java.util.regex.Pattern pattern=java.util.regex.Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,3})?$"); // 判断小数点后3位的数字的正则表达式
+        java.util.regex.Matcher match=pattern.matcher(value);
+        if(match.matches()==false)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 
     /***
      * 检索手机号码是否合法

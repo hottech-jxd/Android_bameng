@@ -40,116 +40,121 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
 /**
  * Created by 47483 on 2016.11.09.
  */
 
-public class CustomDoneFrag extends BaseFragment implements AdapterView.OnItemClickListener {
+public class CustomDoneFrag extends CustomNoDoneFrag //implements AdapterView.OnItemClickListener {
+{
 
 
-    @Bind(R.id.customDoneList)
-    PullToRefreshListView customDoneList;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<CustomerModel> Customers;
-    public CustomDetailsAdapter adapter;
-    int pageIndex= 1;
+//    @Bind(R.id.customDoneList)
+//    PullToRefreshListView customDoneList;
+//    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+//    public List<CustomerModel> Customers;
+//    public CustomDetailsAdapter adapter;
+//    int pageIndex= 1;
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initList();
-        loadData();
-    }
+        //initList();
+        //loadData();
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        EventBus.getDefault().register(this);
-
-        return super.onCreateView(inflater, container, savedInstanceState);
+        //this.type = getArguments().getInt("type");
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//
+//        EventBus.getDefault().register(this);
+//
+//        return super.onCreateView(inflater, container, savedInstanceState);
+//
+//    }
 
-        EventBus.getDefault().unregister(this);
-    }
-
-    private void initList()
-    {
-        customDoneList.setMode(PullToRefreshBase.Mode.BOTH);
-        customDoneList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                Customers.clear();
-                pageIndex=1;
-                loadData();
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                loadData();
-
-            }
-        });
-        Customers = new ArrayList<CustomerModel>();
-        adapter = new CustomDetailsAdapter(Customers, getActivity(), getActivity());
-        customDoneList.setAdapter(adapter);
-        customDoneList.setOnItemClickListener(this);
-    }
-
-
-    private void loadData()
-    {
-        Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
-        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
-        map.put("os", "android");
-        map.put("type","2");
-        map.put("pageIndex",String.valueOf(pageIndex));
-        map.put("pageSize","20");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
-        map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
-        Call<CustomListOutput> call = apiService.customlist(token, map);
-        call.enqueue(new Callback<CustomListOutput>() {
-            @Override
-            public void onResponse(Call<CustomListOutput> call, Response<CustomListOutput> response) {
-                if (response.body() != null) {
-                    customDoneList.onRefreshComplete();
-
-                    if (response.body().getStatus() == 200 && response.body().getData() != null) {
-
-                        Customers.addAll(response.body().getData().getRows());
-                        adapter.notifyDataSetChanged();
-                        pageIndex++;
-                    } else if (response.body().getStatus()==70035){
-
-                        ToastUtils.showLongToast(response.body().getStatusText());
-                    }
-
-                } else {
-                    ToastUtils.showLongToast("连接服务器失败！！！");
-                }
-                return;
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//
+//        EventBus.getDefault().unregister(this);
+//    }
+//
+//    private void initList()
+//    {
+//        customDoneList.setMode(PullToRefreshBase.Mode.BOTH);
+//        customDoneList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+//            @Override
+//            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+//                operateType = OperateTypeEnum.REFRESH;
+//                Customers.clear();
+//                pageIndex=1;
+//                loadData();
+//            }
+//
+//            @Override
+//            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+//                operateType = OperateTypeEnum.LOADMORE;
+//                loadData();
+//
+//            }
+//        });
+//        Customers = new ArrayList<CustomerModel>();
+//        adapter = new CustomDetailsAdapter(Customers, getActivity(), getActivity());
+//        customDoneList.setAdapter(adapter);
+//        customDoneList.setOnItemClickListener(this);
+//    }
 
 
-            }
-
-            @Override
-            public void onFailure(Call<CustomListOutput> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
-            }
-        });
-    }
+//    private void loadData()
+//    {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("version", application.getAppVersion());
+//        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+//        map.put("os", "android");
+//        map.put("type","2");
+//        map.put("pageIndex",String.valueOf(pageIndex));
+//        map.put("pageSize","20");
+//        AuthParamUtils authParamUtils = new AuthParamUtils();
+//        String sign = authParamUtils.getSign(map);
+//        map.put("sign", sign);
+//        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+//        String token = application.readToken();
+//        Call<CustomListOutput> call = apiService.customlist(token, map);
+//        call.enqueue(new Callback<CustomListOutput>() {
+//            @Override
+//            public void onResponse(Call<CustomListOutput> call, Response<CustomListOutput> response) {
+//                if (response.body() != null) {
+//                    customDoneList.onRefreshComplete();
+//
+//                    if (response.body().getStatus() == 200 && response.body().getData() != null) {
+//
+//                        Customers.addAll(response.body().getData().getRows());
+//                        adapter.notifyDataSetChanged();
+//                        pageIndex++;
+//                    } else if (response.body().getStatus()==70035){
+//
+//                        ToastUtils.showLongToast(response.body().getStatusText());
+//                    }
+//
+//                } else {
+//                    ToastUtils.showLongToast("连接服务器失败！！！");
+//                }
+//                return;
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<CustomListOutput> call, Throwable t) {
+//                ToastUtils.showLongToast("失败");
+//            }
+//        });
+//    }
 
     @Override
     public void onReshow() {
@@ -171,13 +176,13 @@ public class CustomDoneFrag extends BaseFragment implements AdapterView.OnItemCl
         return R.layout.frag_customdone;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-         Bundle bundle = new Bundle();
-        bundle.putSerializable("customerinfo", Customers.get(position-1));
-        ActivityUtils.getInstance().showActivity(getActivity(), CustomerExamineActivity.class,bundle);
-
-    }
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//         Bundle bundle = new Bundle();
+//        bundle.putSerializable("customerinfo", Customers.get(position-1));
+//        ActivityUtils.getInstance().showActivity(getActivity(), CustomerExamineActivity.class,bundle);
+//
+//    }
 
     @Subscribe( threadMode = ThreadMode.MAIN)
     public void onEventRefreshData(RefreshCustomerEvent event){

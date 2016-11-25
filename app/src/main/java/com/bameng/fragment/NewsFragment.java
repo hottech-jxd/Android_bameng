@@ -27,7 +27,6 @@ import butterknife.OnClick;
  */
 public class NewsFragment extends BaseFragment {
 
-
     @Bind(R.id.groupLabel)
     TextView groupLabel;
     @Bind(R.id.storeLabel)
@@ -49,13 +48,13 @@ public class NewsFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         resources = this.getResources();
-        StartApi();
+
         initSwitch();
 
         if(BaseApplication.UserData().getUserIdentity() ==1){
-            allyLabel.setText("盟友资讯");
+            allyLabel.setText(getString(R.string.tab_mengyou));
         }else{
-            allyLabel.setText("盟主资讯");
+            allyLabel.setText(getString(R.string.tab_mengzhu));
         }
     }
 
@@ -75,8 +74,8 @@ public class NewsFragment extends BaseFragment {
         mFragmentList.add(storeFrag);
 
 
-
         if(BaseApplication.UserData().getShopType() == 2) {
+            b = new Bundle();
             b.putInt("index", 2);
             ShopFrag shopFrag = new ShopFrag();
             shopFrag.setArguments(b);
@@ -86,6 +85,7 @@ public class NewsFragment extends BaseFragment {
             shopLabel.setVisibility(View.GONE);
         }
 
+        b = new Bundle();
         b.putInt("index", 3);
         allyFrag.setArguments(b);
         mFragmentList.add(allyFrag);
@@ -103,19 +103,15 @@ public class NewsFragment extends BaseFragment {
 
             @Override
             public void onPageScrolled(int index, float arg1, int pixes) {
-//                if (pixes != 0) {
-//                }
-//                if (pixes == 0) {
-//                    currentIndex = index;
-//                    changeIndex(currentIndex);
-//                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
+
         raidersViewPager.setCurrentItem(currentIndex);
+        changeIndex(currentIndex);
     }
 
 
@@ -165,9 +161,6 @@ public class NewsFragment extends BaseFragment {
             shopLabel.setTextColor(resources.getColor(R.color.black));
             allyLabel.setTextColor(resources.getColor(R.color.red));
         }
-    }
-    void StartApi(){
-
     }
 
     @Override

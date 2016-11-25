@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="province_line_border">#FFC7C7C7</color>
+    <color name="dividerColor">#eeeeee</color>
 
     <color name="leftmenu_bg_color">#ffffff</color>
 

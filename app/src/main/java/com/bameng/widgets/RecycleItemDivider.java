@@ -5,10 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
+
+import com.bameng.R;
 
 import static android.R.attr.orientation;
 
@@ -35,9 +39,17 @@ public class RecycleItemDivider extends RecyclerView.ItemDecoration {
      * 来绘制个性分割线
      */
     private Paint mPaint ;
+    /***
+     * 风格线颜色
+     */
+    @ColorRes
+    private int mDividerColor = R.color.line_gray;
 
     public RecycleItemDivider(Context context, int orientation   ){
-        this(context , orientation , 1);
+        this(context , orientation , 1 , R.color.line_gray);
+    }
+    public RecycleItemDivider(Context context, int orientation  , int itemSize ){
+        this(context , orientation , itemSize , R.color.line_gray);
     }
 
     /**
@@ -45,16 +57,17 @@ public class RecycleItemDivider extends RecyclerView.ItemDecoration {
      * @param context
      * @param orientation
      */
-    public RecycleItemDivider(Context context, int orientation , int itemSize  ) {
+    public RecycleItemDivider(Context context, int orientation , int itemSize , @ColorRes int color ) {
         this.mOrientation = orientation;
         this.mItemSize = itemSize;
+        this.mDividerColor = color;
 
         if(orientation != LinearLayoutManager.VERTICAL && orientation != LinearLayoutManager.HORIZONTAL){
             throw new IllegalArgumentException("请传入正确的参数") ;
         }
-        mItemSize = (int) TypedValue.applyDimension(mItemSize, TypedValue.COMPLEX_UNIT_DIP,context.getResources().getDisplayMetrics());
+        mItemSize = (int) TypedValue.applyDimension(  TypedValue.COMPLEX_UNIT_DIP, mItemSize ,context.getResources().getDisplayMetrics());
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG) ;
-        mPaint.setColor(Color.LTGRAY );
+        mPaint.setColor( ContextCompat.getColor(context, mDividerColor));
          /*设置填充*/
         mPaint.setStyle(Paint.Style.FILL);
     }

@@ -10,11 +10,15 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.baidu.location.h.j.ap;
+
 /**
  * Created by Administrator on 2016/3/15.
  */
 public class ZRetrofitUtil {
     private static Retrofit retrofitClient;
+
+    private static ApiService apiService;
     /**
      * 获得UI配置接口
      * @return
@@ -22,7 +26,9 @@ public class ZRetrofitUtil {
     public static Retrofit getInstance(){
         if(BuildConfig.DEBUG) {
             if (retrofitClient == null) {
-                OkHttpClient okHttpClient = new OkHttpClient.Builder().retryOnConnectionFailure(false).connectTimeout(120, TimeUnit.SECONDS).build();
+                OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                        .readTimeout(15,TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(false).connectTimeout(120, TimeUnit.SECONDS).build();
                 retrofitClient = new Retrofit.Builder().client(okHttpClient)
                         .baseUrl(Constants.url).addConverterFactory(GsonConverterFactory.create()).build();
             }
@@ -36,5 +42,12 @@ public class ZRetrofitUtil {
             }
         }
         return retrofitClient;
+    }
+
+    public static ApiService getApiService(){
+        if( apiService ==null){
+            apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        }
+        return apiService;
     }
 }

@@ -18,12 +18,23 @@
     <string name="permission_baiduLocation_rationale">请求允许使用此设备的定位信息</string>
     <string name="permission_baiduLocation_denied">请允许设备使用定位功能</string>
     <string name="permission_baiduLocation_never_asked">定位权限将不再询问</string>
+
+    <string name="permission_writefile_asked">请求写外部存储</string>
+    <string name="permission_writefile_denied">请允许设备使用外部存储</string>
+    <string name="permission_writefile_never_asked">外部存储将不再询问</string>
+
     <string name="permission_allow">允许</string>
     <string name="permission_dency">拒绝</string>
     <string name="navigate_home">首页</string>
     <string name="navigate_news">资讯</string>
     <string name="navigate_business">我的业务</string>
     <string name="navigate_account">我的账号</string>
+    <string name="tab_mengzhu">盟主消息</string>
+    <string name="tab_mengyou">盟友消息</string>
+
+    <string name="noDeal">未成交</string>
+    <string name="deal">已成交</string>
+    <string name="backorder">退单</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

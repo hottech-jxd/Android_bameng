@@ -1,6 +1,8 @@
 package com.bameng.ui.business;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -11,13 +13,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
@@ -28,12 +35,16 @@ import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.account.UserInfoActivity;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
 import com.bameng.widgets.CropperView;
+import com.bameng.widgets.ImageCropperView;
 import com.bameng.widgets.PhotoSelectView;
 import com.huotu.android.library.libedittext.EditText;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -47,15 +58,26 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.R.attr.bitmap;
 import static android.R.attr.type;
+import static com.baidu.location.h.j.s;
 import static com.baidu.location.h.j.v;
+import static com.baidu.location.h.j.w;
 import static com.bameng.ui.account.UserInfoActivity.RESULT_CODE_CHNAGEPHONE;
 
-public class NewOrderActivity extends BaseActivity implements CropperView.OnCropperBackListener, PhotoSelectView.OnPhotoSelectBackListener{
+@RuntimePermissions
+public class NewOrderActivity extends BaseActivity
+        implements CropperView.OnCropperBackListener, PhotoSelectView.OnPhotoSelectBackListener{
 
     @Bind(R.id.titleText)
     TextView titleText;
@@ -85,7 +107,10 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
     private String imgPath;
     public Resources resources;
     private CropperView cropperView;
+    //private ImageCropperView imageCropperView;
+
     private Bitmap cropBitmap;
+    private Bitmap currentBitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +119,7 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
         initView();
         application = (BaseApplication) this.getApplication();
         resources = this.getResources();
-        StartApi();
-
+        //StartApi();
     }
 
     @Override
@@ -111,6 +135,19 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cropBitmap != null) {
+            cropBitmap.recycle();
+            cropBitmap = null;
+        }
+        if (currentBitmap != null) {
+            currentBitmap.recycle();
+            currentBitmap = null;
+        }
+    }
+
+    @Override
     protected void StartApi() {
         String name = etName.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
@@ -119,12 +156,21 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
         String cash = etCash.getText().toString().trim();
 
         boolean isok=true;
-        if(name.isEmpty()){
-            etName.setError("请输入客户名称");
+        if(address.isEmpty()){
+            etAddress.setError("请输入客户地址");
             isok=false;
         }
         if(phone.isEmpty()){
             etPhone.setError("请输入手机号");
+            isok=false;
+        }
+        if(name.isEmpty()){
+            etName.setError("请输入客户名称");
+            isok=false;
+        }
+
+        if(currentBitmap==null){
+            ToastUtils.showLongToast("请上传订单图片");
             isok=false;
         }
         if(!isok){
@@ -170,8 +216,8 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
         requestBody=RequestBody.create(MediaType.parse("text/plain"), sign);
         requestBodyMap.put("sign",requestBody);
 
-        if( cropBitmap !=null) {
-            requestBody = RequestBody.create(MediaType.parse("image/*"), Util.bitmap2Bytes(cropBitmap));
+        if( currentBitmap !=null) {
+            requestBody = RequestBody.create(MediaType.parse("image/*"), Util.bitmap2Bytes(currentBitmap));
             requestBodyMap.put("image\"; filename=\"" + timestamp + "\"", requestBody);
         }
 
@@ -207,15 +253,59 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
 
     @OnClick(R.id.btncreate)
     void create(){
-
         StartApi();
     }
 
+
+
     @OnClick(R.id.layAddImage)
+    public void onUploadFile(){
+//        if(null == pop) pop = new PhotoSelectView(this, this);
+//        pop.show();
+        NewOrderActivityPermissionsDispatcher.uploadFileWithCheck(this);
+    }
+
+    @NeedsPermission( {Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void uploadFile(){
         if(null == pop) pop = new PhotoSelectView(this, this);
         pop.show();
     }
+
+    @OnShowRationale({Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    public void showRationaleForWriteStorage(PermissionRequest request){
+        showRationaleDialog( R.string.permission_writefile_asked , request );
+    }
+
+    @OnPermissionDenied({Manifest.permission.WRITE_EXTERNAL_STORAGE })
+    public void onWriteStorageDenied(){
+        Toast.makeText(this, R.string.permission_writefile_denied , Toast.LENGTH_SHORT).show();
+    }
+
+    @OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE })
+    public void onWriteStorageNeverAskAgain(){
+        Toast.makeText(this, R.string.permission_writefile_never_asked , Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
+        new AlertDialog.Builder(this)
+                .setPositiveButton(R.string.permission_allow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton(R.string.permission_dency, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        request.cancel();
+                    }
+                })
+                .setCancelable(false)
+                .setMessage(messageResId)
+                .show();
+    }
+
 
     @Override
     public void onPhotoSelectBack(PhotoSelectView.SelectType type) {
@@ -258,6 +348,19 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
         startActivityForResult(intent2, 1);
     }
 
+//    private void cropperImage( Bitmap bitmap  ){
+//        //Uri uri = Uri.parse(path);
+//        if( null == imageCropperView ) imageCropperView = new ImageCropperView(this, this);
+//        imageCropperView.cropper(  bitmap  );
+//    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        NewOrderActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -265,13 +368,16 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
         if (resultCode != Activity.RESULT_OK) return;
 
         if (requestCode == 0) {// camera back
-            Bitmap bitmap = Util.readBitmapByPath(imgPath);
-            if (bitmap == null) {
+//            cropBitmap = Util.readBitmapByPath(imgPath);
+//            cropperImage( cropBitmap );
+
+            cropBitmap = Util.readBitmapByPath(imgPath);
+            if (cropBitmap == null) {
                 ToastUtils.showLongToast( "未获取到图片!");
                 return;
             }
             if (null == cropperView)  cropperView = new CropperView(this, this);
-            cropperView.cropper(bitmap);
+            cropperView.cropper(cropBitmap);
         } else if (requestCode == 1) {// file back
             if (data != null) {
                 Bitmap bitmap = null;
@@ -289,30 +395,31 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
                         cursor.moveToFirst();
                         path = cursor.getString(colunm_index);
 
-                        bitmap = Util.readBitmapByPath(path);
+                        cropBitmap = Util.readBitmapByPath(path);
                         cursor.close();
                     }
 
-                    if (bitmap == null) {
+                    if (cropBitmap == null) {
                         ToastUtils.showLongToast("未获取到图片!");
                         return;
                     }
 
                 } else if (uri.toString().startsWith("file:///")) {
                     String path = uri.toString().substring(8, uri.toString().length());
-                    bitmap = Util.readBitmapByPath(path);
-                    if (bitmap == null) {
+                    cropBitmap = Util.readBitmapByPath(path);
+                    if (cropBitmap == null) {
                         ToastUtils.showLongToast("未获取到图片!");
                         return;
                     }
 
-                    //cropperView.cropper( bitmap );
-
                 }
                 if (null == cropperView)
                     cropperView = new CropperView(this, this);
-                cropperView.cropper(bitmap);
+                cropperView.cropper(cropBitmap);
             }
+
+        }else if( requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
         }
 
@@ -320,21 +427,57 @@ public class NewOrderActivity extends BaseActivity implements CropperView.OnCrop
 
     @Override
     public void OnCropperBack(Bitmap bitmap) {
-        if(null == bitmap)  return;
-        cropBitmap = bitmap;
+        if(null == bitmap) {
+            if(cropBitmap !=null){
+                cropBitmap.recycle();
+                cropBitmap=null;
+            }
+            return;
+        }
+        currentBitmap = bitmap;
 
         layAddImage.setVisibility(View.GONE);
         layImage.setVisibility(View.VISIBLE);
-        ivImage.setImageBitmap(cropBitmap);
-    }
+        setWidthHeight(ivImage,bitmap);
+        ivImage.setImageBitmap(bitmap);
 
-    @OnClick(R.id.tvClose)
-    void closeImage(){
-        if(cropBitmap!=null){
+        if(cropBitmap !=null){
             cropBitmap.recycle();
             cropBitmap=null;
         }
+    }
+
+    void setWidthHeight( ImageView iv , Bitmap bitmap){
+        int width = bitmap.getWidth();
+        int height =bitmap.getHeight();
+        int sw = DensityUtils.getScreenW(this);
+        int sh = DensityUtils.getScreenH(this);
+        int tw;
+        int th;
+        if( width <= sw && height <= sh  ){
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width,height);
+            layoutParams.gravity = Gravity.CENTER;
+            iv.setLayoutParams(layoutParams);
+        }else  {
+            tw = sw * height / sh;
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+            layoutParams.gravity = Gravity.CENTER;
+            iv.setLayoutParams(layoutParams);
+        }
+    }
+
+    @OnClick(R.id.tvClose)
+    void closeImage() {
+
         ivImage.setImageBitmap(null);
+        if (cropBitmap != null) {
+            cropBitmap.recycle();
+            cropBitmap = null;
+        }
+        if (currentBitmap != null) {
+            currentBitmap.recycle();
+            currentBitmap = null;
+        }
 
         layAddImage.setVisibility(View.VISIBLE);
         layImage.setVisibility(View.GONE);

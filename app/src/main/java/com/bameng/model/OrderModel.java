@@ -1,17 +1,27 @@
 package com.bameng.model;
 
+import android.graphics.Bitmap;
+
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/11/18.
  */
 
-public class OrderModel {
+public class OrderModel  implements Serializable{
     private long id;
     private String mobile;
     private String money;
     private String pictureUrl;
-    private String status;
+    private int status;
     private String userName;
     private String statusName;
+    private String orderId;
+    private long orderTime;
+    private String address;
+    private String remark;
+    //private String price;
+    //private Bitmap bitmap;
 
     public long getId() {
         return id;
@@ -45,11 +55,11 @@ public class OrderModel {
         this.pictureUrl = pictureUrl;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -68,4 +78,46 @@ public class OrderModel {
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public long getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(long orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+
+//
+//    public Bitmap getBitmap() {
+//        return bitmap;
+//    }
+//
+//    public void setBitmap(Bitmap bitmap) {
+//        this.bitmap = bitmap;
+//    }
 }

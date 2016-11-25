@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CouponView">
+        <attr name="cv_semicircle_gap" format="dimension|reference"/>
+        <attr name="cv_semicircle_radius" format="dimension|reference"/>
+        <attr name="cv_semicircle_color" format="color|reference"/>
+        <attr name="cv_dash_line_length" format="dimension|reference"/>
+        <attr name="cv_dash_line_gap" format="dimension|reference"/>
+        <attr name="cv_dash_line_height" format="dimension|reference"/>
+        <attr name="cv_dash_line_color" format="color|reference"/>
+        <attr name="cv_is_semicircle_top" format="boolean|reference"/>
+        <attr name="cv_is_semicircle_bottom" format="boolean|reference"/>
+        <attr name="cv_is_semicircle_left" format="boolean|reference"/>
+        <attr name="cv_is_semicircle_right" format="boolean|reference"/>
+        <attr name="cv_is_dash_line_top" format="boolean|reference"/>
+        <attr name="cv_is_dash_line_bottom" format="boolean|reference"/>
+        <attr name="cv_is_dash_line_left" format="boolean|reference"/>
+        <attr name="cv_is_dash_line_right" format="boolean|reference"/>
+        <attr name="cv_dash_line_margin_top" format="dimension|reference"/>
+        <attr name="cv_dash_line_margin_bottom" format="dimension|reference"/>
+        <attr name="cv_dash_line_margin_left" format="dimension|reference"/>
+        <attr name="cv_dash_line_margin_right" format="dimension|reference"/>
+    </declare-styleable>
+</resources>

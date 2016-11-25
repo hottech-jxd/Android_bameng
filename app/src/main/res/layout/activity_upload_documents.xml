@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -14,21 +20,34 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
+
     <LinearLayout
+        android:id="@+id/llAddPic"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="vertical"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:background="@drawable/btn_gray">
+        android:background="@drawable/btn_lightgray">
         <ImageView
+            android:id="@+id/ivAddPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/ic_on_yw"/>
+            android:background="@mipmap/ic_newadd"/>
         <TextView
+            android:id="@+id/tvAddPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111111"/>
+            android:layout_marginTop="6dp"
+            android:textSize="16sp"
+            android:text="上传成交凭证照片"/>
+
+        <ImageView
+            android:id="@+id/ivPicture"
+            android:visibility="gone"
+            android:scaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
     <TextView
@@ -43,11 +62,33 @@
         android:padding="5dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="111"/>
+            android:text="客户名称"/>
+        <com.huotu.android.library.libedittext.EditText
+            android:id="@+id/txtCustomer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="客户电话"/>
         <com.huotu.android.library.libedittext.EditText
             android:layout_width="match_parent"
+            android:id="@+id/txtPhone"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             />
@@ -64,34 +105,15 @@
         android:padding="5dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="111"/>
+            android:text="价格"/>
         <com.huotu.android.library.libedittext.EditText
             android:layout_width="match_parent"
+            android:id="@+id/txtPrice"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            />
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="111"/>
-        <com.huotu.android.library.libedittext.EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:inputType="numberDecimal"
             />
     </LinearLayout>
     <TextView
@@ -106,20 +128,29 @@
         android:padding="5dp"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="111"/>
+            android:text="补充说明"/>
         <com.huotu.android.library.libedittext.EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
+            android:gravity="top"
+            android:id="@+id/txtRemark"
+            android:hint="请输入内容"
             />
     </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_cancel"
-        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:textColor="@color/white"
-        android:text="11111"/>
+        android:id="@+id/btnSubmit"
+        android:textSize="18sp"
+        android:text="提交"/>
     </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

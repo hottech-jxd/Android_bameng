@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.StrictMode;
 import android.util.Log;
 import android.webkit.CookieManager;
 
@@ -29,6 +30,8 @@ import com.bameng.utils.PreferenceHelper;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 import org.greenrobot.eventbus.EventBus;
+
+import cn.sharesdk.framework.ShareSDK;
 
 import static com.bameng.service.LocationService.Longitude;
 import static com.bameng.service.LocationService.address;
@@ -53,6 +56,8 @@ public class BaseApplication extends Application {
     public FragManager mFragManager;
 
     protected  static UserData userData;
+
+    protected static BaseData baseData;
 
     public LocalAddressModel localAddress;
     //是否有网络连接
@@ -85,6 +90,8 @@ public class BaseApplication extends Application {
 
         single = this;
 
+        setStrictMode();
+
         //加载异常处理模块
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
@@ -104,13 +111,22 @@ public class BaseApplication extends Application {
         // JPushInterface.setDebugMode(true);// 日志，生产环境关闭
         //JPushInterface.init ( this );
         //初始化shareSDK参数
-        //ShareSDK.initSDK(getApplicationContext());
+        ShareSDK.initSDK(getApplicationContext());
 
         // 极光初始化
         //PushHelper.init(this, BuildConfig.DEBUG, BuildConfig.Push_Url);
 
         //初始化 fresco
         Fresco.initialize(this);
+    }
+
+    void setStrictMode(){
+        if(BuildConfig.DEBUG){
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll().penaltyLog().build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll().build());
+        }
     }
 //
 //    @Override
@@ -163,6 +179,13 @@ public class BaseApplication extends Application {
             userData = readUserInfo();
         }
         return userData;
+    }
+
+    public static BaseData BaseData(){
+        if(baseData==null){
+            baseData = readBaseInfo();
+        }
+        return baseData;
     }
 
     /**
@@ -296,6 +319,19 @@ public class BaseApplication extends Application {
         if(json==null) return null;
         return JSONUtil.getGson().fromJson(json, UserData.class);
 
+    }
+
+    //加载个人信息
+    public static void writeBaseInfo(BaseData baseData ) {
+        String json = JSONUtil.getGson().toJson(baseData);
+        PreferenceHelper.writeString(single , Constants.BASE_INFO, Constants.BASE_DATA , json);
+        baseData=null;
+    }
+
+    public static BaseData readBaseInfo(){
+        String json = PreferenceHelper.readString( single , Constants.BASE_INFO , Constants.BASE_DATA , null);
+        if(json==null) return null;
+        return JSONUtil.getGson().fromJson(json, BaseData.class);
     }
 
     public void clearAllCookies(){

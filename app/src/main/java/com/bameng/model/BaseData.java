@@ -10,6 +10,7 @@ public class BaseData {
     private String agreementUrl;
     private int enableSignIn;
 
+
     public int getUserStatus() {
         return userStatus;
     }
@@ -41,4 +42,5 @@ public class BaseData {
     public void setEnableSignIn(int enableSignIn) {
         this.enableSignIn = enableSignIn;
     }
+
 }

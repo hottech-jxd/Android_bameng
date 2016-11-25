@@ -66,10 +66,12 @@ public class CustomerInfoActivity extends BaseActivity {
         CustomNoDoneFrag customNoDoneFrag = new CustomNoDoneFrag();
         Bundle b = new Bundle();
         b.putInt("index", 0);
+        b.putInt("type",1);
         customNoDoneFrag.setArguments(b);
         mFragmentList.add(customNoDoneFrag);
         b = new Bundle();
         b.putInt("index", 1);
+        b.putInt("type",2);
         customDoneFrag.setArguments(b);
         mFragmentList.add(customDoneFrag);
         tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragmentList);

@@ -7,10 +7,12 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
@@ -50,6 +52,8 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
     EditText customAddress;
     @Bind(R.id.remark)
     EditText remark;
+    @Bind(R.id.layDesc)
+    LinearLayout layDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,12 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
         titleLeftImage.setVisibility(View.VISIBLE);
         Drawable leftDraw = ContextCompat.getDrawable(this, R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+
+        if( BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU){
+            layDesc.setVisibility(View.VISIBLE);
+        }else{
+            layDesc.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.btn_submit)

@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
@@ -23,6 +24,8 @@ import com.bameng.utils.EncryptUtil;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.huotu.android.library.libedittext.EditText;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +98,7 @@ public class ChangePswActivity extends BaseActivity {
 
                     if (response.body().getStatus() == 200&&response.body()!=null) {
                         application.writeUserToken("");
+                        EventBus.getDefault().post(new CloseEvent());
                         ActivityUtils.getInstance().skipActivity(ChangePswActivity.this, PhoneLoginActivity.class);
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());

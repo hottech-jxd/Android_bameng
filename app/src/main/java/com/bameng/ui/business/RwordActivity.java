@@ -73,11 +73,27 @@ public class RwordActivity extends BaseActivity {
 
     @OnClick(R.id.btn_commit)
     void setallyaward(){
+        boolean isok = true;
+        if( CustomReward.getText().toString().isEmpty() ){
+            CustomReward.setError("请输入盟豆");
+            isok=false;
+        }
+        if( orderReword.getText().toString().isEmpty() ){
+            orderReword.setError("请输入盟豆");
+            isok=false;
+        }
+        if( shopReword.getText().toString().isEmpty() ){
+            shopReword.setError("请输入盟豆");
+            isok=false;
+        }
+        if(isok==false){
+            return;
+        }
 
         ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("creward",CustomReward.getText().toString());
@@ -87,7 +103,7 @@ public class RwordActivity extends BaseActivity {
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
+        String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.setallyRaward(token,map);
         call.enqueue(new Callback<PostModel>() {
             @Override

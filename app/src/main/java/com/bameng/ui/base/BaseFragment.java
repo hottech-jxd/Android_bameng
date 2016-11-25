@@ -31,6 +31,10 @@ public abstract class BaseFragment extends Fragment {
     public abstract void onFragPasue();//暂时不可见
     public abstract void onClick(View view);
 
+    protected boolean isViewInited = false;
+    protected boolean isDataLoaded = false;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,4 +63,37 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract int getLayoutRes();
 
+    protected void preLoadData(){
+        if( getUserVisibleHint() && isViewInited && !isDataLoaded){
+                loadData();
+            isDataLoaded=true;
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        isViewInited = true;
+
+        preLoadData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isViewInited=false;
+        isDataLoaded = false;
+    }
+
+
+    protected  void loadData(){
+
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        preLoadData();
+    }
 }

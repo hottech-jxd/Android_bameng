@@ -52,14 +52,19 @@
         android:orientation="horizontal"
         android:padding="10dp"
         android:gravity="center_vertical"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="清除缓存"
-            android:layout_weight="1"/>
+            android:text="清除缓存"/>
+        <TextView
+            android:id="@+id/txtCache"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:gravity="right"
+            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"/>
         <ImageView
             android:layout_width="@dimen/title_image_width"
             android:layout_height="@dimen/title_image_height"

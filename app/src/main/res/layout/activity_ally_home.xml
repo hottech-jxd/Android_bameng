@@ -5,9 +5,8 @@
     android:layout_height="match_parent" >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height"
-        >
-        <include layout="@layout/title_index"></include>
+        android:layout_height="@dimen/act_title_height">
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -15,6 +14,5 @@
         android:layout_height="0dip"
         android:layout_weight="1" >
     </FrameLayout>
-    <include
-        layout="@layout/layout_ally_bottom"/>
+    <include layout="@layout/layout_ally_bottom"/>
 </LinearLayout>

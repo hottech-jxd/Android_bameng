@@ -3,6 +3,7 @@ package com.bameng.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ import retrofit2.Response;
 /**
  * 我的业务
  */
-public class BusinessFragment extends BaseFragment {
+public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
     @Bind(R.id.txt_order)
     TextView txtOrder;
@@ -47,11 +48,16 @@ public class BusinessFragment extends BaseFragment {
     TextView txtExchange;
     @Bind(R.id.txt_cash)
     TextView txtCash;
+    @Bind(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         initView();
     }
 
@@ -69,6 +75,7 @@ public class BusinessFragment extends BaseFragment {
         call.enqueue(new Callback<MyBusinessOutputModel>() {
             @Override
             public void onResponse(Call<MyBusinessOutputModel> call, Response<MyBusinessOutputModel> response) {
+                swipeRefreshLayout.setRefreshing(false);
                 if(response.code() !=200){
                     ToastUtils.showLongToast(response.message());
                     return;
@@ -87,16 +94,12 @@ public class BusinessFragment extends BaseFragment {
                     }
 
                 }
-
-                return;
-
-
-
             }
 
 
             @Override
             public void onFailure(Call<MyBusinessOutputModel> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.showLongToast("失败");
             }
         });
@@ -142,6 +145,7 @@ public class BusinessFragment extends BaseFragment {
         }
 
     }
+
     @Override
     public void onClick(View view) {
 
@@ -150,5 +154,10 @@ public class BusinessFragment extends BaseFragment {
     @Override
     public int getLayoutRes() {
         return R.layout.fragment_business;
+    }
+
+    @Override
+    public void onRefresh() {
+        initView();
     }
 }
