@@ -66,6 +66,8 @@
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
 
+        <activity android:name=".ui.SelectedPhotoActivity"/>
+
         <activity android:name=".wxapi.WXEntryActivity"/>
 
         <service

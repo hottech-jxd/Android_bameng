@@ -20,7 +20,6 @@ import android.widget.Switch;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
-import com.bameng.adapter.ArticleAdapter;
 import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
@@ -58,8 +57,7 @@ import com.bameng.widgets.RecycleItemDivider;
 import com.bameng.widgets.custom.AdBannerWidget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -99,6 +97,8 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
 
     LinearLayout layBanner;
 
+    AdBannerWidget adBannerWidget;
+
     int pageIndex=1;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<SlideListModel> adDataList;
@@ -116,23 +116,23 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
 
     }
 
-    public void initView() {
-
-        initList();
-        loadData(pageIndex);
-
-        initSwitchImg();
+    @Override
+    protected void loadData() {
+        homePullRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                homePullRefresh.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 
-    public void initList(){
+    public void initView(){
         homePullRefresh.setOnRefreshListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         recyclerView.addItemDecoration(new RecycleItemDivider(getContext(),RecyclerView.VERTICAL, 8 , R.color.dividerColor));
 
-        //Articles = new ArrayList<ListModel>();
-        //TopArticles = new ArrayList<ListModel>();
-        //dapter = new ArticleAdapter(Articles,TopArticles, getActivity(), getActivity());
         adapter = new StoreAdapter();
         adapter.setOnLoadMoreListener(this);
 
@@ -141,13 +141,12 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
 
         adapter.openLoadMore(PAGESIZE);
 
-        //listL.setAdapter(adapter);
+
         recyclerView.setAdapter(adapter);
-        //listL.setOnItemClickListener(this);
 
         header = LayoutInflater.from(getContext()).inflate(R.layout.layout_home_header , null );
 
-
+        adBannerWidget = (AdBannerWidget) header.findViewById(R.id.adbannerWidget);
 
         adapter.addHeaderView(header);
 
@@ -179,8 +178,6 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
         RelativeLayout layMore = (RelativeLayout) header.findViewById(R.id.layMore);
         layMore.setOnClickListener(this);
     }
-
-
 
     //@OnClick({R.id.layaccount,R.id.layneworder,R.id.layCustomer,R.id.layally,R.id.layExchange,R.id.layReward , R.id.layMore})
      void click(View v) {
@@ -255,9 +252,9 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
                 }
 
                 if (operateType == OperateTypeEnum.REFRESH) {
-                    List<ListModel> Articles = new ArrayList<ListModel>();
+                    List<ListModel> Articles = new ArrayList<>();
                     List<ListModel> topList = response.body().getData().getTop();
-                    if (topList != null) {
+                    if (topList != null && topList.size()>0 ) {
                         for (ListModel item : topList) {
                             item.setTop(true);
                         }
@@ -281,7 +278,6 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
                         pageIndex = pageIndex + 1;
                     }
                 }
-
             }
 
 
@@ -311,15 +307,16 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
                 if (response.body() != null) {
 
                     if (response.body().getStatus() == 200&&response.body().getData()!=null) {
-                        adDataList= new ArrayList<SlideListModel>();
+                        adDataList= new ArrayList<>();
                         adDataList.addAll(response.body().getData());
                         AdBannerConfig config = new AdBannerConfig();
                         config.setAutoPlay(true);
                         config.setImages(adDataList);
 
-                        AdBannerWidget adBannerWidget = new AdBannerWidget(getContext(),config);
-                        layBanner.removeAllViews();
-                        layBanner.addView( adBannerWidget );
+                        //AdBannerWidget adBannerWidget = new AdBannerWidget(getContext(),config);
+                        //layBanner.removeAllViews();
+                        //layBanner.addView( adBannerWidget );
+                        adBannerWidget.setAdBannerConfig( config );
 
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
@@ -332,7 +329,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
 
             @Override
             public void onFailure(Call<SlideListOutputModel> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
             }
         });
     }

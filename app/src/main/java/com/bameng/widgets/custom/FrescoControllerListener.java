@@ -16,19 +16,22 @@ import java.lang.ref.WeakReference;
 public class FrescoControllerListener extends BaseControllerListener<ImageInfo> {
     WeakReference< SimpleDraweeView> ref;
     int width;
+    int position=0;
     ImageCallback imageCallback;
 
     public interface ImageCallback{
-        void imageCallback(int width, int height);
+        void imageCallback(int position,int width, int height);
+        //void imageCallback(int position , int width , int height);
     }
 
     public void setImageCallback(ImageCallback imageCallback){
         this.imageCallback = imageCallback;
     }
 
-    public FrescoControllerListener(SimpleDraweeView iv, int width){
+    public FrescoControllerListener(SimpleDraweeView iv, int width , int position ){
         this.ref= new WeakReference<>(iv);
         this.width=width;
+        this.position = position;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class FrescoControllerListener extends BaseControllerListener<ImageInfo> 
         ref.get().setAspectRatio(ratio);
 
         if(imageCallback!=null){
-            imageCallback.imageCallback(ivw,ivh);
+            imageCallback.imageCallback( position , ivw,ivh);
         }
     }
 

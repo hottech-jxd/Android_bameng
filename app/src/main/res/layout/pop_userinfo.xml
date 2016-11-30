@@ -150,10 +150,12 @@
             android:text="未知"
             android:textColor="@color/black" />
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/line_gray"/>
             <TextView
+                android:visibility="gone"
                 android:id="@+id/btn_Cancel2"
                 android:layout_gravity="center"
                 android:layout_width="120dp"
@@ -196,10 +198,12 @@
             android:text="已进店"
             android:textColor="@color/black" />
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/line_gray"/>
         <TextView
+            android:visibility="gone"
             android:id="@+id/btn_Cancel3"
             android:layout_gravity="center"
             android:layout_width="120dp"
@@ -254,10 +258,12 @@
             android:text="@string/backorder"
             android:textColor="@color/black" />
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/line_gray"/>
         <TextView
+            android:visibility="gone"
             android:id="@+id/btn_Cancel4"
             android:layout_gravity="center"
             android:layout_width="120dp"

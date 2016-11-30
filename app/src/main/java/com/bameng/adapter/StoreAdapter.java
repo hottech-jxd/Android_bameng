@@ -1,6 +1,7 @@
 package com.bameng.adapter;
 
 import android.telephony.CellIdentityGsm;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 
 import com.bameng.R;
@@ -34,15 +35,17 @@ public class StoreAdapter extends BaseQuickAdapter<ListModel , BaseViewHolder> {
     protected void convert(BaseViewHolder baseViewHolder, ListModel listModel ) {
         SimpleDraweeView imv = baseViewHolder.getView(R.id.image);
         if(listModel.isTop()) {
-            int wPx = DensityUtils.dip2px(this.mContext, 80);
+            int wPx = DensityUtils.dip2px(this.mContext, 90);
             int hPx = wPx;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(wPx,hPx);
+            layoutParams.gravity= Gravity.CENTER_VERTICAL;
             imv.setLayoutParams(layoutParams);
         }else{
 
-            int wPx = DensityUtils.dip2px(this.mContext, 60);
+            int wPx = DensityUtils.dip2px(this.mContext, 70);
             int hPx = wPx;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(wPx,hPx);
+            layoutParams.gravity = Gravity.CENTER_VERTICAL;
             imv.setLayoutParams(layoutParams);
         }
 

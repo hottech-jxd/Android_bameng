@@ -28,7 +28,7 @@ public class ZRetrofitUtil {
             if (retrofitClient == null) {
                 OkHttpClient okHttpClient = new OkHttpClient.Builder()
                         .readTimeout(15,TimeUnit.SECONDS)
-                        .retryOnConnectionFailure(false).connectTimeout(120, TimeUnit.SECONDS).build();
+                        .retryOnConnectionFailure(false).connectTimeout(600, TimeUnit.SECONDS).build();
                 retrofitClient = new Retrofit.Builder().client(okHttpClient)
                         .baseUrl(Constants.url).addConverterFactory(GsonConverterFactory.create()).build();
             }

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
@@ -27,12 +28,15 @@ import com.bameng.R;
 import com.bameng.config.Constants;
 import com.bameng.listener.PoponDismissListener;
 import com.bameng.model.ArticleListOutput;
+import com.bameng.model.AvatarOutputModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
 import com.bameng.model.RefreshUserDataEvent;
 import com.bameng.model.UserData;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.base.PhoteActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
@@ -40,11 +44,12 @@ import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
 import com.bameng.widgets.AddressPopWin;
-import com.bameng.widgets.CropperView;
+//import com.bameng.widgets.CropperView;
 import com.bameng.widgets.PhotoSelectView;
 import com.bameng.widgets.UserInfoView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.memory.BitmapPool;
+import com.jph.takephoto.model.TResult;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -67,6 +72,7 @@ import retrofit2.Response;
 
 import static android.R.attr.baselineAlignBottom;
 import static android.R.attr.bitmap;
+import static android.R.attr.data;
 import static com.baidu.location.h.j.ar;
 import static com.baidu.location.h.j.t;
 import static com.bameng.R.id.add;
@@ -77,8 +83,9 @@ import static com.bameng.service.LocationService.city;
 /***
  * 个人信息
  */
-public class UserInfoActivity extends BaseActivity
-        implements PhotoSelectView.OnPhotoSelectBackListener,CropperView.OnCropperBackListener,UserInfoView.OnUserInfoBackListener {
+public class UserInfoActivity extends PhoteActivity
+        implements PhotoSelectView.OnPhotoSelectBackListener,
+        UserInfoView.OnUserInfoBackListener ,Handler.Callback {
 
     @Bind(R.id.layImg)
     LinearLayout layImg;
@@ -110,13 +117,14 @@ public class UserInfoActivity extends BaseActivity
     ImageView titleLeftImage;
     public Resources resources;
     private PhotoSelectView pop;
-    private CropperView cropperView;
     private UserInfoView userInfoView;
     UserData userData;
     public static final int RESULT_CODE_CHNAGEPHONE=100;
 
     public AddressPopWin addressPopWin;
     public InputMethodManager inputMethodManager;
+    private Bitmap cropBitmap;
+    protected Handler mHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +137,13 @@ public class UserInfoActivity extends BaseActivity
         inputMethodManager = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
 
         initView();
-        StartApi();
+
     }
 
-    @Override
     protected void initView() {
+
+        mHandler= new Handler(this);
+
         titleText.setText("个人信息");
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
@@ -184,17 +194,12 @@ public class UserInfoActivity extends BaseActivity
                 break;
         }
     }
-    @Override
-    protected void StartApi() {
 
-    }
-
-    @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
             case Constants.SELECT_ADDRESS: {
                 List<String> address = (List<String>) msg.obj;
-                String temp = address.get(0) +"_" + address.get(1) +"_" + address.get(2);
+                String temp = address.get(0) +"-" + address.get(1) +"-" + address.get(2);
                 txtNationality.setText( temp );
                 updateUserInfo( Constants.User_6 , temp);
             }
@@ -210,62 +215,63 @@ public class UserInfoActivity extends BaseActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK)
             return;
-        if (requestCode == 0) {// camera back
-            Bitmap bitmap = Util.readBitmapByPath(imgPath);
-            if (bitmap == null) {
-                ToastUtils.showLongToast( "未获取到图片!");
-                return;
-            }
-            if (null == cropperView)
-                cropperView = new CropperView(this, this);
-            cropperView.cropper(bitmap);
-        } else if (requestCode == 1) {// file back
-            if (data != null) {
-                Bitmap bitmap = null;
-                Uri uri = data.getData();
-                // url是content开头的格式
-                if (uri.toString().startsWith("content://")) {
-                    String path = null;
-                    String[] pojo = { MediaStore.Images.Media.DATA };
-                    Cursor cursor = this.getContentResolver().query(uri, pojo, null,
-                            null, null);
-                    // managedQuery(uri, pojo, null, null, null);
+//        if (requestCode == 0) {// camera back
+//            Bitmap bitmap = Util.readBitmapByPath(imgPath);
+//            if (bitmap == null) {
+//                ToastUtils.showLongToast( "未获取到图片!");
+//                return;
+//            }
+//            if (null == cropperView)
+//                cropperView = new CropperView(this, this);
+//            cropperView.cropper(bitmap);
+//        } else if (requestCode == 1) {// file back
+//            if (data != null) {
+//                Bitmap bitmap = null;
+//                Uri uri = data.getData();
+//                // url是content开头的格式
+//                if (uri.toString().startsWith("content://")) {
+//                    String path = null;
+//                    String[] pojo = { MediaStore.Images.Media.DATA };
+//                    Cursor cursor = this.getContentResolver().query(uri, pojo, null,
+//                            null, null);
+//                    // managedQuery(uri, pojo, null, null, null);
+//
+//                    if (cursor != null) {
+//                        // ContentResolver cr = this.getContentResolver();
+//                        int colunm_index = cursor
+//                                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        cursor.moveToFirst();
+//                        path = cursor.getString(colunm_index);
+//
+//                        bitmap = Util.readBitmapByPath(path);
+//                    }
+//
+//                    if (bitmap == null) {
+//                        ToastUtils.showLongToast("未获取到图片!");
+//                        return;
+//                    }
+//
+//                    //cropperView.cropper( bitmap );
+//
+//                } else if (uri.toString().startsWith("file:///")) {
+//                    String path = uri.toString().substring(8,
+//                            uri.toString().length());
+//                    bitmap = Util.readBitmapByPath(path);
+//                    if (bitmap == null) {
+//                        ToastUtils.showLongToast("未获取到图片!");
+//                        return;
+//                    }
+//
+//                    //cropperView.cropper( bitmap );
+//
+//                }
+//                if (null == cropperView)
+//                    cropperView = new CropperView(this, this);
+//                cropperView.cropper(bitmap);
+//            }
 
-                    if (cursor != null) {
-                        // ContentResolver cr = this.getContentResolver();
-                        int colunm_index = cursor
-                                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        cursor.moveToFirst();
-                        path = cursor.getString(colunm_index);
-
-                        bitmap = Util.readBitmapByPath(path);
-                    }
-
-                    if (bitmap == null) {
-                        ToastUtils.showLongToast("未获取到图片!");
-                        return;
-                    }
-
-                    //cropperView.cropper( bitmap );
-
-                } else if (uri.toString().startsWith("file:///")) {
-                    String path = uri.toString().substring(8,
-                            uri.toString().length());
-                    bitmap = Util.readBitmapByPath(path);
-                    if (bitmap == null) {
-                        ToastUtils.showLongToast("未获取到图片!");
-                        return;
-                    }
-
-                    //cropperView.cropper( bitmap );
-
-                }
-                if (null == cropperView)
-                    cropperView = new CropperView(this, this);
-                cropperView.cropper(bitmap);
-            }
-
-        }else if( requestCode == RESULT_CODE_CHNAGEPHONE){
+//        }else
+            if( requestCode == RESULT_CODE_CHNAGEPHONE){
             String newPhone = data.getStringExtra("newPhone");
             txtPhone.setText( newPhone );
             userData.setUserMobile(newPhone);
@@ -275,14 +281,6 @@ public class UserInfoActivity extends BaseActivity
     }
 
 
-    private Bitmap cropBitmap;
-    @Override
-    public void OnCropperBack(Bitmap bitmap) {
-        if(null == bitmap)
-            return;
-        cropBitmap = bitmap;
-        commitPhoto();
-    }
     private void commitPhoto(){
         updateFile( Constants.User_1 , cropBitmap );
     }
@@ -290,17 +288,19 @@ public class UserInfoActivity extends BaseActivity
 
     @Override
     public void onPhotoSelectBack(PhotoSelectView.SelectType type) {
-        if(null == type)
-            return;
+        if(null == type) return;
         getPhotoByType(type);
     }
+
     private void getPhotoByType(PhotoSelectView.SelectType type){
         switch (type) {
             case Camera:
-                getPhotoByCamera();
+                //getPhotoByCamera();
+                selectPhotoByCamera();
                 break;
             case File:
-                getPhotoByFile();
+                //getPhotoByFile();
+                selectPhotoByFile();
                 break;
 
             default:
@@ -308,31 +308,71 @@ public class UserInfoActivity extends BaseActivity
         }
     }
 
+
+    void selectPhotoByCamera(){
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
+
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+
+        selectByCamera(imageUri);
+    }
+
+    void selectPhotoByFile(){
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
+
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+        selectByFile(imageUri);
+    }
+
+    @Override
+    public void takeCancel() {
+        super.takeCancel();
+    }
+
+    @Override
+    public void takeFail(TResult result, String msg) {
+        super.takeFail(result, msg);
+    }
+
+    @Override
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        //hasImage=true;
+        //showImg(result.getImages());
+
+        String imagePath = result.getImages().get(0).getPath();
+        cropBitmap = Util.readBitmapByPath( imagePath );
+        commitPhoto();
+    }
+
+
     private String imgPath;
 
-    public void getPhotoByCamera(){
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-            Log.v("TestFile","SD card is not avaiable/writeable right now.");
-            return;
-        }
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA);
-        String imageName = "bm" + sdf.format(date) + ".jpg";
-        imgPath = Environment.getExternalStorageDirectory()+ "/"+ imageName;
-        File out = new File(imgPath);
-        Uri uri = Uri.fromFile(out);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        intent.putExtra("fileName", imageName);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, 0);
-    }
+//    public void getPhotoByCamera(){
+//        String sdStatus = Environment.getExternalStorageState();
+//        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+//            Log.v("TestFile","SD card is not avaiable/writeable right now.");
+//            return;
+//        }
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Date date = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA);
+//        String imageName = "bm" + sdf.format(date) + ".jpg";
+//        imgPath = Environment.getExternalStorageDirectory()+ "/"+ imageName;
+//        File out = new File(imgPath);
+//        Uri uri = Uri.fromFile(out);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//        intent.putExtra("fileName", imageName);
+//        intent.putExtra("return-data", true);
+//        startActivityForResult(intent, 0);
+//    }
 
-    public void getPhotoByFile(){
-        Intent intent2 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent2, 1);
-    }
+//    public void getPhotoByFile(){
+//        Intent intent2 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intent2, 1);
+//    }
 
     @Override
     public void onUserInfoBack(UserInfoView.Type type , String value ) {
@@ -380,6 +420,13 @@ public class UserInfoActivity extends BaseActivity
                     ToastUtils.showLongToast("返回错误数据");
                     return;
                 }
+                if(response.body().getStatus() == Constants.STATUS_70035){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(UserInfoActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus() !=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
@@ -409,7 +456,6 @@ public class UserInfoActivity extends BaseActivity
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
 
-
         Map<String, RequestBody> requestBodyMap = new HashMap<>();
         RequestBody requestBody = RequestBody.create( MediaType.parse("text/plain") , timestamp );
         requestBodyMap.put("timestamp",requestBody);
@@ -425,24 +471,43 @@ public class UserInfoActivity extends BaseActivity
         requestBody = RequestBody.create(MediaType.parse("image/*"), Util.bitmap2Bytes( bitmap ));
         requestBodyMap.put("image\"; filename=\"" + timestamp + "\"", requestBody);
 
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
-        Call<PostModel> call = apiService.UpdateFileInfo(token,requestBodyMap);
-        call.enqueue(new Callback<PostModel>() {
+        Call<AvatarOutputModel> call = apiService.UpdateFileInfo(token,requestBodyMap);
+        call.enqueue(new Callback<AvatarOutputModel>() {
             @Override
-            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+            public void onResponse(Call<AvatarOutputModel> call, Response<AvatarOutputModel> response) {
                 if(response.code() !=200){
                     ToastUtils.showLongToast(response.message());
                     return;
                 }
-                if( response.body() !=null && response.body().getStatus() == 200 ) {
-                    imgUser.setImageBitmap(cropBitmap);
+                if(response.body()==null){
+                    ToastUtils.showLongToast("服务器发生错误");
+                    return;
+                }
+                if(response.body().getStatus() == Constants.STATUS_70035){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(UserInfoActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+                if(response.body().getStatus()!=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
+
+                if( response.body().getStatus() == 200 && response.body().getData() !=null ) {
+                    String url = response.body().getData().getUrl();
+                    imgUser.setImageURI( url );
+                    BaseApplication.UserData().setUserHeadImg( url );
+                    BaseApplication.writeUserInfo( BaseApplication.UserData() );
+                    EventBus.getDefault().post(new RefreshUserDataEvent(BaseApplication.UserData()));
                 }
             }
 
             @Override
-            public void onFailure(Call<PostModel> call, Throwable t) {
-                Log.e("UpdateInfo", "error");
+            public void onFailure(Call<AvatarOutputModel> call, Throwable t) {
+                ToastUtils.showLongToast( t.getMessage()==null?"请求失败":t.getMessage() );
             }
         });
     }

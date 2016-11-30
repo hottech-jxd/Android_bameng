@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.InitOutputsModel;
@@ -70,15 +71,13 @@ public class PhoneLoginActivity extends BaseActivity {
         ButterKnife.bind(this);
         resources = this.getResources();
         initView();
-        StartApi();
-
+        BaseApplication.clearAll();
     }
 
     @Override
     protected void initView() {
         goback=false;
         titleText.setText("登录");
-
 
     }
 
@@ -116,7 +115,7 @@ public class PhoneLoginActivity extends BaseActivity {
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = application.readToken();
         Call<UserOutputsModel> call = apiService.Login(token,map);
         call.enqueue(new Callback<UserOutputsModel>() {
@@ -124,8 +123,8 @@ public class PhoneLoginActivity extends BaseActivity {
             public void onResponse(Call<UserOutputsModel> call, Response<UserOutputsModel> response) {
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200&&response.body()!=null) {
-                        application.writeUserToken(response.body().getData().getToken());
-                        application.writeUserInfo(response.body().getData());
+                        BaseApplication.writeUserToken(response.body().getData().getToken());
+                        BaseApplication.writeUserInfo(response.body().getData());
                         if (response.body().getData().getUserIdentity()==1) {
                             ActivityUtils.getInstance().skipActivity(PhoneLoginActivity.this, HomeActivity.class);
                         }else {

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.OrderDetailOutputModel;
 import com.bameng.model.OrderModel;
 import com.bameng.model.OrderOutputModel;
@@ -27,10 +28,12 @@ import com.bameng.model.UserData;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.DateUtils;
 import com.bameng.utils.DensityUtils;
+import com.bameng.utils.FileUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
@@ -38,6 +41,8 @@ import com.bameng.widgets.UserInfoView;
 import com.bameng.widgets.custom.FrescoControllerListener;
 import com.bameng.widgets.custom.FrescoDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -56,6 +61,7 @@ import static android.R.attr.bitmap;
 import static android.R.attr.cursorVisible;
 import static android.R.attr.mode;
 import static android.R.attr.order;
+import static android.R.attr.width;
 import static com.baidu.location.h.j.B;
 import static com.baidu.location.h.j.ap;
 import static com.baidu.location.h.j.t;
@@ -101,6 +107,7 @@ public class OrderDetailsActivity
     Bitmap bitmap;
 
     final  int REQUEST_CODE_UPLOAD=100;
+    String bitmapPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +115,6 @@ public class OrderDetailsActivity
         setContentView(R.layout.activity_order_details);
         ButterKnife.bind(this);
         initView();
-        application = (BaseApplication) this.getApplication();
-        resources = this.getResources();
-
         orderId = getIntent().getStringExtra("orderid");
         StartApi();
     }
@@ -127,8 +131,8 @@ public class OrderDetailsActivity
     protected void StartApi() {
         if(progressDialog==null){
             progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("正在拉取订单详情");
         }
+        progressDialog.setMessage("正在拉取订单详情");
         progressDialog.show();
 
         String timestamp = String.valueOf(System.currentTimeMillis());
@@ -153,6 +157,13 @@ public class OrderDetailsActivity
                     ToastUtils.showLongToast(response.message()==null?"error":response.message());
                     return;
                 }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(OrderDetailsActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus()!=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
@@ -173,21 +184,26 @@ public class OrderDetailsActivity
 
                 tvOrderStatus.setEnabled( orderModel.getStatus() == Constants.ORDER_NODEAL ? true : false );
 
-                btnUpload.setVisibility( orderModel.getStatus() == Constants.ORDER_DEAL || orderModel.getStatus() == Constants.ORDER_BACK ? View.GONE:View.VISIBLE );
+                btnSave.setVisibility(View.GONE);
+                btnUpload.setVisibility(View.GONE);
+                //btnUpload.setVisibility( orderModel.getStatus() == Constants.ORDER_DEAL || orderModel.getStatus() == Constants.ORDER_BACK ? View.GONE:View.VISIBLE );
                 int wpx = DensityUtils.getScreenW(OrderDetailsActivity.this);
-                FrescoDraweeController.loadImage(ivPicture , wpx , orderModel.getPictureUrl() , OrderDetailsActivity.this );
 
-                btnSave.setVisibility( orderModel.getStatus()== Constants.ORDER_NODEAL ? View.VISIBLE :View.GONE  );
+                if( orderModel.getStatus() == Constants.ORDER_DEAL){
+                    FrescoDraweeController.loadImage( ivPicture , wpx , orderModel.getSuccessUrl() , 0 , OrderDetailsActivity.this );
+                }else {
+                    FrescoDraweeController.loadImage(ivPicture, wpx, orderModel.getPictureUrl(), 0 , OrderDetailsActivity.this);
+                }
+
+                //btnSave.setVisibility( orderModel.getStatus()== Constants.ORDER_NODEAL ? View.VISIBLE :View.GONE  );
             }
 
             @Override
             public void onFailure(Call<OrderDetailOutputModel> call, Throwable t) {
                 if(progressDialog!=null)progressDialog.dismiss();
-                //ToastUtils.showLongToast("error");
                 Snackbar.make(getWindow().getDecorView(), t.getMessage()==null?"error":t.getMessage(),Snackbar.LENGTH_LONG);
             }
         });
-
     }
 
     @Override
@@ -208,7 +224,7 @@ public class OrderDetailsActivity
             if( statusstr.equals( getString(R.string.backorder)) ){
                 save();
             }else {
-                if(bitmap==null) {
+                if( bitmapPath==null || bitmapPath.isEmpty() ) {
                     ToastUtils.showLongToast("请上传成交凭证");
                     return;
                 }
@@ -248,7 +264,7 @@ public class OrderDetailsActivity
         String sign = authParamUtils.getSign(map);
         map.put("sign",sign);
         String token = BaseApplication.readToken();
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         Call<PostModel> call = apiService.orderUpdate( token , map );
         call.enqueue(new Callback<PostModel>() {
             @Override
@@ -263,6 +279,12 @@ public class OrderDetailsActivity
                 }
                 if(response.body()==null){
                     ToastUtils.showLongToast("返回数据空");
+                    return;
+                }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(OrderDetailsActivity.this, PhoneLoginActivity.class);
                     return;
                 }
 
@@ -287,8 +309,8 @@ public class OrderDetailsActivity
 
         if(progressDialog==null){
             progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("正在上传成交凭证中...");
         }
+        progressDialog.setMessage("正在上传成交凭证中...");
         progressDialog.show();
 
         String customer = orderModel.getUserName();
@@ -336,27 +358,39 @@ public class OrderDetailsActivity
         requestBody=RequestBody.create(MediaType.parse("text/plain"), sign);
         requestBodyMap.put("sign",requestBody);
 
-        if( bitmap !=null) {
-            requestBody = RequestBody.create(MediaType.parse("image/*"), Util.bitmap2Bytes(bitmap));
-            requestBodyMap.put("image\"; filename=\"" + timestamp + "\"", requestBody);
-        }
+
+        byte[] buffer = Util.File2byte( bitmapPath );
+
+        requestBody = RequestBody.create(MediaType.parse("image/*"), buffer );
+        requestBodyMap.put("image\"; filename=\"" + timestamp + "\"", requestBody);
+
 
         String token = BaseApplication.readToken();
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         Call<PostModel> call = apiService.UploadSuccessVoucher( token , requestBodyMap );
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
                 if(progressDialog!=null)progressDialog.dismiss();
+                if(response.code() !=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
                 if(response.body()==null){
                     ToastUtils.showLongToast("返回数据空");
                     return;
                 }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(OrderDetailsActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus()!=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
                 }
-
                 save();
             }
 
@@ -374,7 +408,7 @@ public class OrderDetailsActivity
         Bundle bd = new Bundle();
         bd.putSerializable("order",(Serializable) orderModel);
         intent.putExtras(bd);
-        intent.putExtra("bitmap",bitmap);
+        intent.putExtra("bitmapPath",bitmapPath);
         ActivityUtils.getInstance().showActivityForResult(this , REQUEST_CODE_UPLOAD , intent );
     }
 
@@ -398,16 +432,14 @@ public class OrderDetailsActivity
 
     }
 
-
     @Override
-    public void imageCallback(int width, int height) {
+    public void imageCallback(int position, int width, int height) {
 
         if( ivPicture==null) return;
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width,height);
         ivPicture.setLayoutParams(layoutParams);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -423,8 +455,16 @@ public class OrderDetailsActivity
             orderModel.setRemark(temp.getRemark());
             tvRemark.setText( temp.getRemark() );
             orderModel.setMoney(temp.getMoney());
-            bitmap = data.getParcelableExtra("bitmap");
-            ivPicture.setImageBitmap(bitmap);
+
+            //bitmap = data.getParcelableExtra("bitmap");
+
+            bitmapPath = data.getStringExtra("bitmapPath");
+
+            //bitmap = Util.readBitmapByPath(bitmapPath);
+
+//            ivPicture.setImageBitmap(bitmap);
+            ivPicture.setImageURI("file://"+ bitmapPath );
+
         }
     }
 }

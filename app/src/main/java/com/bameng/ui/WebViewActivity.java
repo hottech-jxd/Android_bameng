@@ -378,7 +378,9 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
                 }
                 String imageUrl = img_url;
                 if(TextUtils.isEmpty ( imageUrl )) {
-                    imageUrl = Constants.COMMON_SHARE_LOGO;
+                    //imageUrl = Constants.COMMON_SHARE_LOGO;
+                    ToastUtils.showLongToast("缺少分享图片");
+                    return;
                 }
 
                 String sLink = link;

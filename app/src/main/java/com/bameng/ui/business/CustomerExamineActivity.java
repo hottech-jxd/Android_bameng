@@ -17,12 +17,16 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.CustomDetailsAdapter;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.CustomerModel;
 import com.bameng.model.PostModel;
 import com.bameng.model.RefreshCustomerEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
@@ -74,7 +78,6 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         setContentView(R.layout.activity_customer_examine);
         ButterKnife.bind(this);
         initView();
-        StartApi();
     }
 
     @Override
@@ -160,7 +163,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.UpdateInShop(token, map);
         call.enqueue(new Callback<PostModel>() {
@@ -171,6 +174,18 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
                     ToastUtils.showLongToast( response.message() );
                     return;
                 }
+                if(response.body()==null){
+                    ToastUtils.showLongToast("服务器开小差了");
+                    return;
+                }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(CustomerExamineActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+
+
                 if( response.body() !=null && response.body().getStatus() ==200 ){
                     CustomerExamineActivity.this.finish();
                     EventBus.getDefault().post(new RefreshCustomerEvent( customerModel ,"DoneFrag"));
@@ -204,7 +219,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.audit(token, map);
         call.enqueue(new Callback<PostModel>() {

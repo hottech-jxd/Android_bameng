@@ -31,6 +31,7 @@ import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
+import com.bameng.model.SetRightVisibleEvent;
 import com.bameng.model.SlideListOutputModel;
 import com.bameng.model.SwitchFragmentEvent;
 import com.bameng.receiver.MyBroadcastReceiver;
@@ -141,7 +142,9 @@ public class HomeActivity extends BaseActivity {
 
     public ProgressPopupWindow progress;
 
-    public Handler mHandler;
+    //public Handler mHandler;
+
+    FragManager mFragManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,13 +153,10 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
-        Log.i( HomeActivity.class.getName() , " EventBus.register---" + HomeActivity.class.getName());
 
-        mHandler = new Handler(this);
-        application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
+        mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         initView();
-        StartApi();
 
     }
 
@@ -166,8 +166,7 @@ public class HomeActivity extends BaseActivity {
 
         EventBus.getDefault().unregister(this);
 
-        Log.i( HomeActivity.class.getName() , " EventBus.unregister---" + HomeActivity.class.getName());
-
+        BaseApplication.clearAll();
 
         FragManager.clear();
     }
@@ -182,7 +181,7 @@ public class HomeActivity extends BaseActivity {
         SystemTools.loadBackground(titleLeftImage, leftDraw);
         Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
         SystemTools.loadBackground(titleRightImage,rightDraw);
-        application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+        mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         initTab();
 
         //
@@ -192,8 +191,6 @@ public class HomeActivity extends BaseActivity {
     void requestBaiduLocation(){
         HomeActivityPermissionsDispatcher.baiduLocationWithCheck(this);
     }
-
-
 
     @NeedsPermission( {Manifest.permission.READ_PHONE_STATE ,
             Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
@@ -245,7 +242,6 @@ public class HomeActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-
         HomeActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
@@ -256,35 +252,36 @@ public class HomeActivity extends BaseActivity {
         if (bundle != null) {
             int data = bundle.getInt("home");
             if (100 == data) {
-                application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+                mFragManager.setCurrentFrag(FragManager.FragType.HOME);
                 //((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
                 initTab();
 
             }else if (200 == data){
-                application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+                mFragManager.setCurrentFrag(FragManager.FragType.HOME);
                 //((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
                 initTab();
             }else if (300 == data){
-                application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+                mFragManager.setCurrentFrag(FragManager.FragType.HOME);
                 //((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
                 initTab();
             }
         }
     }
+
     private void initTab() {
         Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
         SystemTools.loadBackground(homeImg, oneBuyDraw);
-        homeTxt.setTextColor(resources.getColor(R.color.chocolate));
+        homeTxt.setTextColor(ContextCompat.getColor(  this, R.color.bottomSelectedColor));
         //重置其他
         Drawable newestDraw = ContextCompat.getDrawable(this,R.mipmap.ic_zx);
         SystemTools.loadBackground(newsImg, newestDraw);
-        newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
+        newsTxt.setTextColor(ContextCompat.getColor( this, R.color.text_color_black));
         Drawable listDraw = ContextCompat.getDrawable(this,R.mipmap.ic_yw);
         SystemTools.loadBackground(businessImg, listDraw);
-        businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
+        businessTxt.setTextColor(ContextCompat.getColor( this, R.color.text_color_black));
         Drawable profileDraw = ContextCompat.getDrawable(this,R.mipmap.ic_account);
         SystemTools.loadBackground(profileImg, profileDraw);
-        profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
+        profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
     }
     @OnClick(R.id.titleRightImage)
     void onRightClick(){
@@ -302,17 +299,17 @@ public class HomeActivity extends BaseActivity {
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(resources.getColor(R.color.chocolate));
+                homeTxt.setTextColor(ContextCompat.getColor( this , R.color.bottomSelectedColor));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                newsTxt.setTextColor(ContextCompat.getColor( this,R.color.text_color_black));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
-                businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                businessTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                 Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
-                profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                 //切换内容
                 String tag = Constants.TAG_1;
                 //加载具体的页面
@@ -325,22 +322,22 @@ public class HomeActivity extends BaseActivity {
                 titleText.setText("资讯列表");
                 titleLeftImage.setVisibility(View.GONE);
                 titleLeftText.setVisibility(View.GONE);
-                titleRightImage.setVisibility(View.VISIBLE);
+                //titleRightImage.setVisibility(View.VISIBLE);
                 if(progress!=null) progress.dismissView();
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                homeTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(resources.getColor(R.color.chocolate));
+                newsTxt.setTextColor(ContextCompat.getColor(this,R.color.bottomSelectedColor));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
-                businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                businessTxt.setTextColor(ContextCompat.getColor( this, R.color.text_color_black));
                 Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
-                profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
 
                 //切换内容
                 String tag = Constants.TAG_2;
@@ -358,17 +355,17 @@ public class HomeActivity extends BaseActivity {
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                homeTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                newsTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
-                businessTxt.setTextColor(resources.getColor(R.color.chocolate));
+                businessTxt.setTextColor(ContextCompat.getColor(this,R.color.bottomSelectedColor));
                 Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
-                profileTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
 
 
                 String tag = Constants.TAG_3;
@@ -386,17 +383,17 @@ public class HomeActivity extends BaseActivity {
                 //设置选中状态
                     Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                     SystemTools.loadBackground(homeImg, oneBuyDraw);
-                    homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                    homeTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                     //重置其他
                     Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                     SystemTools.loadBackground(newsImg, newestDraw);
-                    newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                    newsTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                     Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                     SystemTools.loadBackground(businessImg, listDraw);
-                    businessTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                    businessTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
                     Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_account);
                     SystemTools.loadBackground(profileImg, profileDraw);
-                    profileTxt.setTextColor(resources.getColor(R.color.chocolate));
+                    profileTxt.setTextColor(ContextCompat.getColor(this,R.color.bottomSelectedColor));
                     //切换内容
                     String tag = Constants.TAG_4;
                     //加载具体的页面
@@ -410,7 +407,6 @@ public class HomeActivity extends BaseActivity {
     }
     @Override
     protected void StartApi() {
-
 
     }
     private long exitTime = 0l;
@@ -439,13 +435,13 @@ public class HomeActivity extends BaseActivity {
 
                 String tag = msg.obj.toString();
                 if (tag.equals(Constants.TAG_1)) {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+                    mFragManager.setCurrentFrag(FragManager.FragType.HOME);
                 } else if (tag.equals(Constants.TAG_2)) {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.NEWS);
+                    mFragManager.setCurrentFrag(FragManager.FragType.NEWS);
                 } else if (tag.equals(Constants.TAG_3)) {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.BUSINESS);
+                    mFragManager.setCurrentFrag(FragManager.FragType.BUSINESS);
                 } else if (tag.equals(Constants.TAG_4)) {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
+                    mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
                 }
             }
             break;
@@ -532,10 +528,13 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventClose(CloseEvent event){
         finish();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventRightButtomVisible(SetRightVisibleEvent event){
+        titleRightImage.setVisibility( event.isShow()? View.VISIBLE:View.GONE );
+    }
 }

@@ -62,7 +62,7 @@
                 <ImageView
                     android:id="@+id/richesImg"
                     android:layout_width="@dimen/title_image_width"
-                    android:layout_height="@dimen/title_image_height"
+                    android:layout_height="@dimen/title_image_width"
                     android:layout_centerHorizontal="true"
                     android:focusable="false"
                     android:scaleType="centerInside"/>
@@ -95,7 +95,7 @@
                 <ImageView
                     android:id="@+id/newsImg"
                     android:layout_width="@dimen/title_image_width"
-                    android:layout_height="@dimen/title_image_height"
+                    android:layout_height="@dimen/title_image_width"
                     android:layout_centerHorizontal="true"
                     android:focusable="false"
                     android:scaleType="centerInside" />

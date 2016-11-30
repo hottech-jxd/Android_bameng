@@ -35,8 +35,7 @@ import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.AddressPopWin;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,11 +55,8 @@ import retrofit2.Response;
  * 未处理的客户信息
  * Created by 47483 on 2016.11.09.
  */
-public class CustomNoDoneFrag extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener{
-
-    //@Bind(R.id.customDoneList)
-    //PullToRefreshListView customDoneList;
-
+public class CustomNoDoneFrag extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener{
 
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -86,13 +82,6 @@ public class CustomNoDoneFrag extends BaseFragment implements SwipeRefreshLayout
         type = getArguments().getInt("type");
 
         initList();
-        //loadData();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
 
     }
 
@@ -103,12 +92,6 @@ public class CustomNoDoneFrag extends BaseFragment implements SwipeRefreshLayout
         EventBus.getDefault().register(this);
 
         return super.onCreateView(inflater, container, savedInstanceState);
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
 
     }
 
@@ -155,29 +138,6 @@ public class CustomNoDoneFrag extends BaseFragment implements SwipeRefreshLayout
                 }
             }
         });
-
-//        customDoneList.setMode(PullToRefreshBase.Mode.BOTH);
-//        customDoneList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-//            @Override
-//            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//                operateType = OperateTypeEnum.REFRESH;
-//                Customers.clear();
-//                pageIndex=1;
-//                loadData();
-//            }
-//
-//            @Override
-//            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//                operateType = OperateTypeEnum.LOADMORE;
-//                loadData();
-//
-//            }
-//        });
-//        Customers = new ArrayList<CustomerModel>();
-//        adapter = new CustomDetailsAdapter(Customers, getActivity(), getActivity());
-//        customDoneList.setAdapter(adapter);
-//
-
     }
 
 
@@ -192,8 +152,7 @@ public class CustomNoDoneFrag extends BaseFragment implements SwipeRefreshLayout
         });
     }
 
-    private void loadData(int indx )
-    {
+    private void loadData(int indx ){
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -255,7 +214,7 @@ public class CustomNoDoneFrag extends BaseFragment implements SwipeRefreshLayout
 
             @Override
             public void onFailure(Call<CustomListOutput> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
             }
         });
     }

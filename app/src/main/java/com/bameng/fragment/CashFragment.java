@@ -15,7 +15,9 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.ApplyCashAdapter;
 import com.bameng.adapter.MengDataAdapter;
+import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.ConvertFlowModel;
 import com.bameng.model.ConvertFlowOutputModel;
 import com.bameng.model.MengModel;
@@ -27,6 +29,8 @@ import com.bameng.model.RefreshMengYouEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.AddressPopWin;
@@ -208,7 +212,7 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<ConvertFlowOutputModel> call = apiService.ConvertAuditList(token , map);
 
@@ -222,6 +226,13 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
                     ToastUtils.showLongToast( response.message()==null?"error": response.message() );
                     return;
                 }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity(), PhoneLoginActivity.class);
+                    return;
+                }
+
                 if( response.body().getStatus() !=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;

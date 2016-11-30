@@ -16,14 +16,18 @@ import android.view.ViewGroup;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.OrderAdapter;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.OrderModel;
 import com.bameng.model.OrderOutputModel;
 import com.bameng.model.PostModel;
+import com.bameng.model.RefreshOrderEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.ui.business.OrderDetailsActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
@@ -31,6 +35,11 @@ import com.bameng.widgets.RecycleItemDivider;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +47,8 @@ import butterknife.Bind;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.baidu.location.h.j.t;
 
 
 /**
@@ -57,7 +68,6 @@ public class OrderFragment extends BaseFragment
     View noDataView;
     View emptyView;
 
-
     OnItemClickListener onItemClickListener=new OnItemClickListener() {
         @Override
         public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -75,6 +85,15 @@ public class OrderFragment extends BaseFragment
         this.type = this.getArguments().getInt("type");
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        EventBus.getDefault().register(this);
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -88,17 +107,23 @@ public class OrderFragment extends BaseFragment
         orderAdapter = new OrderAdapter();
         orderAdapter.openLoadMore(PAGESIZE);
         orderAdapter.setOnLoadMoreListener(this);
-        orderAdapter.setEmptyView(emptyView);
+        //orderAdapter.setEmptyView(emptyView);
         recyclerView.setAdapter(orderAdapter);
 
         recyclerView.addOnItemTouchListener(onItemClickListener);
     }
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        recyclerView.removeOnItemTouchListener(onItemClickListener);
+        if(recyclerView!=null) {
+            recyclerView.removeOnItemTouchListener(onItemClickListener);
+        }
+
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -126,6 +151,7 @@ public class OrderFragment extends BaseFragment
     public void onRefresh() {
         lastId=0;
         operateType = OperateTypeEnum.REFRESH;
+        orderAdapter.setEmptyView(null);
         loadData(type , lastId);
     }
 
@@ -152,12 +178,25 @@ public class OrderFragment extends BaseFragment
             @Override
             public void onResponse(Call<OrderOutputModel> call, Response<OrderOutputModel> response) {
                 swipeRefreshLayout.setRefreshing(false);
+
                 if(response.code()!=200 || response.body()==null ){
                     ToastUtils.showLongToast( response.message()==null? "失败": response.message());
                     return;
                 }
 
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity(), PhoneLoginActivity.class);
+                    return;
+                }
+                if( response.body().getStatus() !=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
+
                 if( operateType == OperateTypeEnum.REFRESH){
+                    orderAdapter.setEmptyView(emptyView);
                     orderAdapter.setNewData( response.body().getData().getList() );
                     if(response.body().getData().getList()!=null && response.body().getData().getList().size()>0) {
                         lastId = response.body().getData().getList().get(response.body().getData().getList().size() - 1).getId();
@@ -198,5 +237,16 @@ public class OrderFragment extends BaseFragment
                 onRefresh();
             }
         });
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getArguments().getString("name");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventRefreshOrder(RefreshOrderEvent event){
+        if( !getUserVisibleHint())return;
+        loadData();
     }
 }

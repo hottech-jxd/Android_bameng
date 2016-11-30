@@ -12,7 +12,7 @@ public class BeanRecordModel {
     private int ID;
     private String remark;
     private int status;
-    private BigDecimal money;
+    private int money;
     private  long time;
 
     public int getID() {
@@ -40,11 +40,11 @@ public class BeanRecordModel {
         this.status = status;
     }
 
-    public BigDecimal getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(BigDecimal money) {
+    public void setMoney(int money) {
         this.money = money;
     }
 

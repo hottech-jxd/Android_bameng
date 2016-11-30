@@ -3,9 +3,11 @@ package com.bameng.service;
 
 import com.bameng.model.AllySummeryOutputModel;
 import com.bameng.model.ArticleListOutput;
+import com.bameng.model.AvatarOutputModel;
 import com.bameng.model.BaseModel;
 import com.bameng.model.BeanFlowOutputModel;
 import com.bameng.model.CashCouponOutputModel;
+import com.bameng.model.ConvertBeanTotalOutputModel;
 import com.bameng.model.ConvertFlowModel;
 import com.bameng.model.ConvertFlowOutputModel;
 import com.bameng.model.CustomListOutput;
@@ -99,6 +101,11 @@ public interface ApiService {
     Call<PostModel> SendSms(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
+    @POST("/sys/sendsms")
+    Call<PostModel> SendSmsForModifyPhone(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
     @POST("/sys/CheckUpdate")
     Call<InitOutputsModel> CheckUpdate(@FieldMap Map<String, String> params);
 
@@ -148,7 +155,7 @@ public interface ApiService {
      */
     @Multipart
     @POST("user/UpdateInfo")
-    Call<PostModel> UpdateFileInfo(@Header("Authorization") String token , @PartMap Map<String, RequestBody> params );
+    Call<AvatarOutputModel> UpdateFileInfo(@Header("Authorization") String token , @PartMap Map<String, RequestBody> params );
 
     /***
      * 盟友申请审核
@@ -209,7 +216,7 @@ public interface ApiService {
      */
     @FormUrlEncoded
     @POST("user/ConvertFlow")
-    Call<ScoreOutputModel> ConvertFlow(@Header("Authorization") String token , @FieldMap Map<String, String> params );
+    Call<ConvertFlowOutputModel> ConvertFlow(@Header("Authorization") String token , @FieldMap Map<String, String> params );
 
 
     /***
@@ -285,6 +292,16 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("user/SendCashCoupon")
     Call<PostModel> SendCashCoupon(@Header("Authorization") String token , @FieldMap Map<String, String> params );
+
+    /***
+     * 获得可兑换盟豆数量和已兑换盟豆数量。
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/AlreadyConvertTotal")
+    Call<ConvertBeanTotalOutputModel> AlreadyConvertTotal(@Header("Authorization") String token , @FieldMap Map<String, String> params );
 
     @Multipart
     @POST("order/create")

@@ -27,10 +27,9 @@ public class CashAdapter extends BaseQuickAdapter<CashCouponModel, BaseViewHolde
         baseViewHolder.setText( R.id.tvName , object.getName());
         baseViewHolder.setText(R.id.tvDue , "使用期限:"+ object.getDue());
 
-        baseViewHolder.addOnClickListener(R.id.ivInShare);
-        baseViewHolder.addOnClickListener(R.id.ivOutShare);
+        baseViewHolder.addOnClickListener(R.id.ivShare);
 
-        int userType = BaseApplication.UserData() ==null ? -1 : BaseApplication.UserData().getUserIdentity();
-        baseViewHolder.setVisible( R.id.ivInShare , userType == Constants.MENG_ZHU );
+//        int userType = BaseApplication.UserData() ==null ? -1 : BaseApplication.UserData().getUserIdentity();
+//        baseViewHolder.setVisible( R.id.ivInShare , userType == Constants.MENG_ZHU );
     }
 }

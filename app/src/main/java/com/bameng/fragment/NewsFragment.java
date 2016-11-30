@@ -4,6 +4,7 @@ package com.bameng.fragment;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -12,8 +13,12 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.TabPagerAdapter;
+import com.bameng.config.Constants;
+import com.bameng.model.SetRightVisibleEvent;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.utils.SystemTools;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +27,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.bameng.R.id.viewPager;
+
 /***
  * 资讯列表
  */
-public class NewsFragment extends BaseFragment {
+public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
 
     @Bind(R.id.groupLabel)
     TextView groupLabel;
@@ -35,13 +42,14 @@ public class NewsFragment extends BaseFragment {
     TextView shopLabel;
     @Bind(R.id.allyLabel)
     TextView allyLabel;
-    public Resources resources;
-    private int currentIndex = 0;
     @Bind(R.id.raidersViewPager)
     ViewPager raidersViewPager;
-    public TabPagerAdapter tabPagerAdapter;
-    private List<Fragment> mFragmentList = new ArrayList<Fragment>();
+    @Bind(R.id.tablayout)
+    TabLayout tabLayout;
 
+    public Resources resources;
+    public TabPagerAdapter tabPagerAdapter;
+    private List<BaseFragment> mFragmentList = new ArrayList<>();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -50,19 +58,32 @@ public class NewsFragment extends BaseFragment {
         resources = this.getResources();
 
         initSwitch();
+    }
 
-        if(BaseApplication.UserData().getUserIdentity() ==1){
-            allyLabel.setText(getString(R.string.tab_mengyou));
-        }else{
-            allyLabel.setText(getString(R.string.tab_mengzhu));
-        }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        raidersViewPager.setCurrentItem( tab.getPosition() );
+        int flag = tabPagerAdapter.getItem( tab.getPosition() ).getArguments().getInt("index");
+        SetRightVisibleEvent event = new SetRightVisibleEvent( flag == 3 ? true:false );
+        EventBus.getDefault().post( event );
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 
     private void initSwitch() {
         GroupFrag groupFrag = new GroupFrag();
         StoreFrag storeFrag = new StoreFrag();
-
         AllyFrag allyFrag = new AllyFrag();
+
         Bundle b = new Bundle();
         b.putInt("index", 0);
         groupFrag.setArguments(b);
@@ -73,8 +94,7 @@ public class NewsFragment extends BaseFragment {
         storeFrag.setArguments(b);
         mFragmentList.add(storeFrag);
 
-
-        if(BaseApplication.UserData().getShopType() == 2) {
+        if(BaseApplication.UserData().getShopType() == Constants.SHOP_BRANCH ) {
             b = new Bundle();
             b.putInt("index", 2);
             ShopFrag shopFrag = new ShopFrag();
@@ -90,77 +110,35 @@ public class NewsFragment extends BaseFragment {
         allyFrag.setArguments(b);
         mFragmentList.add(allyFrag);
         tabPagerAdapter = new TabPagerAdapter(getChildFragmentManager(), mFragmentList);
-        raidersViewPager.setAdapter(tabPagerAdapter);
-        raidersViewPager.setOffscreenPageLimit(4);
-        raidersViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        //raidersViewPager.setAdapter(tabPagerAdapter);
+        raidersViewPager.setOffscreenPageLimit(3);
 
-            @Override
-            public void onPageSelected(int index) {
-                 int  idx = tabPagerAdapter.getItem(index).getArguments().getInt("index");
-                changeIndex(idx);
-            }
+//        raidersViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//
+//            @Override
+//            public void onPageSelected(int index) {
+//                 int  idx = tabPagerAdapter.getItem(index).getArguments().getInt("index");
+//                changeIndex(idx);
+//            }
+//
+//
+//            @Override
+//            public void onPageScrolled(int index, float arg1, int pixes) {
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        });
+
+        //raidersViewPager.setCurrentItem(currentIndex);
+
+        //changeIndex(currentIndex);
 
 
-            @Override
-            public void onPageScrolled(int index, float arg1, int pixes) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-
-        raidersViewPager.setCurrentItem(currentIndex);
-        changeIndex(currentIndex);
-    }
-
-
-    private void changeIndex(int index) {
-        if (index == 0) {
-            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-            Drawable drawable_normal = resources.getDrawable(R.color.white);
-            SystemTools.loadBackground(groupLabel, drawable_press);
-            SystemTools.loadBackground(storeLabel, drawable_normal);
-            SystemTools.loadBackground(shopLabel, drawable_normal);
-            SystemTools.loadBackground(allyLabel, drawable_normal);
-            groupLabel.setTextColor(resources.getColor(R.color.red));
-            storeLabel.setTextColor(resources.getColor(R.color.black));
-            shopLabel.setTextColor(resources.getColor(R.color.black));
-            allyLabel.setTextColor(resources.getColor(R.color.black));
-        } else if (index == 1) {
-            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-            Drawable drawable_normal = resources.getDrawable(R.color.white);
-            SystemTools.loadBackground(groupLabel, drawable_normal);
-            SystemTools.loadBackground(storeLabel, drawable_press);
-            SystemTools.loadBackground(shopLabel, drawable_normal);
-            SystemTools.loadBackground(allyLabel, drawable_normal);
-            groupLabel.setTextColor(resources.getColor(R.color.black));
-            storeLabel.setTextColor(resources.getColor(R.color.red));
-            shopLabel.setTextColor(resources.getColor(R.color.black));
-            allyLabel.setTextColor(resources.getColor(R.color.black));
-        } else if (index == 2){
-            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-            Drawable drawable_normal = resources.getDrawable(R.color.white);
-            SystemTools.loadBackground(groupLabel, drawable_normal);
-            SystemTools.loadBackground(storeLabel, drawable_normal);
-            SystemTools.loadBackground(shopLabel, drawable_press);
-            SystemTools.loadBackground(allyLabel, drawable_normal);
-            groupLabel.setTextColor(resources.getColor(R.color.black));
-            storeLabel.setTextColor(resources.getColor(R.color.black));
-            shopLabel.setTextColor(resources.getColor(R.color.red));
-            allyLabel.setTextColor(resources.getColor(R.color.black));
-        } else if (index == 3){
-            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-            Drawable drawable_normal = resources.getDrawable(R.color.white);
-            SystemTools.loadBackground(groupLabel, drawable_normal);
-            SystemTools.loadBackground(storeLabel, drawable_normal);
-            SystemTools.loadBackground(shopLabel, drawable_normal);
-            SystemTools.loadBackground(allyLabel, drawable_press);
-            groupLabel.setTextColor(resources.getColor(R.color.black));
-            storeLabel.setTextColor(resources.getColor(R.color.black));
-            shopLabel.setTextColor(resources.getColor(R.color.black));
-            allyLabel.setTextColor(resources.getColor(R.color.red));
-        }
+        tabLayout.setupWithViewPager(raidersViewPager);
+        raidersViewPager.setAdapter( tabPagerAdapter);
+        tabLayout.addOnTabSelectedListener(this);
     }
 
     @Override
@@ -169,10 +147,13 @@ public class NewsFragment extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
-
     @Override
     public void onReshow() {
-
+        if( tabPagerAdapter.getItem( raidersViewPager.getCurrentItem()).getArguments().getInt("index") == 3 ){
+            EventBus.getDefault().post( new SetRightVisibleEvent(true) );
+        }else{
+            EventBus.getDefault().post(new SetRightVisibleEvent(false));
+        }
     }
 
     @Override
@@ -180,27 +161,6 @@ public class NewsFragment extends BaseFragment {
 
     }
 
-    @OnClick(R.id.groupLabel)
-    void groupLabel() {
-        raidersViewPager.setCurrentItem(0);
-        changeIndex(0);
-    }
-
-    @OnClick(R.id.storeLabel)
-    void storeLabel() {
-        raidersViewPager.setCurrentItem(1);
-        changeIndex(1);
-    }
-    @OnClick(R.id.shopLabel)
-    void shopLabel() {
-        raidersViewPager.setCurrentItem(2);
-        changeIndex(2);
-    }
-    @OnClick(R.id.allyLabel)
-    void allyLabel() {
-        raidersViewPager.setCurrentItem(3);
-        changeIndex(3);
-    }
     @Override
     public void onClick(View view) {
 

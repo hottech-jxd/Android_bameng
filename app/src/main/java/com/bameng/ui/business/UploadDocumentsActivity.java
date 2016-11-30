@@ -1,20 +1,13 @@
 package com.bameng.ui.business;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Message;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,50 +16,36 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.model.OrderModel;
-import com.bameng.model.PostModel;
-import com.bameng.service.ApiService;
-import com.bameng.service.ZRetrofitUtil;
-import com.bameng.ui.base.BaseActivity;
-import com.bameng.utils.AuthParamUtils;
+import com.bameng.ui.base.PhoteActivity;
 import com.bameng.utils.DensityUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
-import com.bameng.widgets.CropperView;
 import com.bameng.widgets.PhotoSelectView;
+import com.bameng.widgets.custom.FrescoControllerListener;
 import com.bameng.widgets.custom.FrescoDraweeController;
+import com.bumptech.glide.Glide;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.huotu.android.library.libedittext.EditText;
+import com.jph.takephoto.model.TImage;
+import com.jph.takephoto.model.TResult;
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static com.baidu.location.h.j.D;
-import static com.baidu.location.h.j.O;
-import static com.bameng.R.id.ivImage;
-import static com.bameng.R.id.layAddImage;
-import static com.bameng.R.id.layImage;
-import static com.bameng.R.id.txtCustomer;
-import static com.bameng.service.LocationService.address;
+import static android.R.attr.bitmap;
+import static com.baidu.location.h.j.v;
 
 /***
  * 上传成交凭证 界面
  */
-public class UploadDocumentsActivity extends BaseActivity implements  CropperView.OnCropperBackListener,  PhotoSelectView.OnPhotoSelectBackListener{
+public class UploadDocumentsActivity
+        extends PhoteActivity
+        implements PhotoSelectView.OnPhotoSelectBackListener , FrescoControllerListener.ImageCallback{
 
     @Bind(R.id.titleText)
     TextView titleText;
@@ -81,7 +60,7 @@ public class UploadDocumentsActivity extends BaseActivity implements  CropperVie
     @Bind(R.id.txtRemark)
     EditText etRemarks;
     @Bind(R.id.ivPicture)
-    ImageView ivPicture;
+    SimpleDraweeView ivPicture;
     @Bind(R.id.ivAddPic)
     ImageView ivAddPic;
     @Bind(R.id.tvAddPic)
@@ -101,9 +80,10 @@ public class UploadDocumentsActivity extends BaseActivity implements  CropperVie
 
     private String imgPath;
 
-    private Bitmap cropBitmap;
+    //private Bitmap cropBitmap;
 
-    private CropperView cropperView;
+    boolean hasImage=false;
+    String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +91,16 @@ public class UploadDocumentsActivity extends BaseActivity implements  CropperVie
         setContentView(R.layout.activity_upload_documents);
         ButterKnife.bind(this);
         initView();
-        application = (BaseApplication) this.getApplication();
-        resources = this.getResources();
-        //StartApi();
     }
 
     @Override
+    public void imageCallback(int position, int width, int height) {
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width,height);
+
+        ivPicture.setLayoutParams(layoutParams);
+    }
+
     protected void initView() {
         titleText.setText("上传成交凭证");
         titleLeftImage.setVisibility(View.VISIBLE);
@@ -128,28 +112,21 @@ public class UploadDocumentsActivity extends BaseActivity implements  CropperVie
         etCustomer.setText( orderModel.getUserName() );
         etPhone.setText( orderModel.getMobile());
         etPrice.setText( orderModel.getMoney() );
-        Bitmap bitmap = getIntent().getParcelableExtra("bitmap");
-
-        if( bitmap!=null){
+        String bitmapPath = getIntent().getStringExtra("bitmapPath");
+        //Bitmap bitmap = getIntent().getParcelableExtra("bitmap");
+        if(bitmapPath!=null && !bitmapPath.isEmpty()){
             ivAddPic.setVisibility(View.GONE);
             tvAddPic.setVisibility(View.GONE);
             ivPicture.setVisibility(View.VISIBLE);
-            ivPicture.setImageBitmap(bitmap);
+            hasImage=true;
+            int swid= DensityUtils.dip2px(this, 20);
+            int wid = DensityUtils.getScreenW(this)-swid;
+            FrescoDraweeController.loadImage( ivPicture , wid , "file://"+ bitmapPath , 0 , this );
         }else{
             ivAddPic.setVisibility(View.VISIBLE);
             tvAddPic.setVisibility(View.VISIBLE);
             ivPicture.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    protected void StartApi() {
-
-    }
-
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
     }
 
     @OnClick(R.id.llAddPic)
@@ -164,121 +141,172 @@ public class UploadDocumentsActivity extends BaseActivity implements  CropperVie
 
         switch (type) {
             case Camera:
-                getPhotoByCamera();
+                //getPhotoByCamera();
+                selectPhotoByCamera();
                 break;
             case File:
-                getPhotoByFile();
+                //getPhotoByFile();
+                selectPhotoByFile();
                 break;
             default:
                 break;
         }
     }
 
-    public void getPhotoByFile(){
-        Intent intent2 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent2, 1);
+    void selectPhotoByCamera(){
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+
+        selectByCamera(imageUri);
     }
 
+    void selectPhotoByFile(){
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
 
-    public void getPhotoByCamera(){
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-            Log.v("TestFile","SD card is not avaiable/writeable right now.");
-            return;
-        }
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA);
-        String imageName = "bm" + sdf.format(date) + ".jpg";
-        imgPath = Environment.getExternalStorageDirectory()+ "/"+ imageName;
-        File out = new File(imgPath);
-        Uri uri = Uri.fromFile(out);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        intent.putExtra("fileName", imageName);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, 0);
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+        selectByFile(imageUri);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) return;
-
-        if (requestCode == 0) {// camera back
-            cropBitmap = Util.readBitmapByPath(imgPath);
-            if (cropBitmap == null) {
-                ToastUtils.showLongToast( "未获取到图片!");
-                return;
-            }
-            if (null == cropperView)  cropperView = new CropperView(this, this);
-            cropperView.cropper(cropBitmap);
-        } else if (requestCode == 1) {// file back
-            if (data != null) {
-                Bitmap bitmap = null;
-                Uri uri = data.getData();
-                // url是content开头的格式
-                if (uri.toString().startsWith("content://")) {
-                    String path = null;
-                    String[] pojo = { MediaStore.Images.Media.DATA };
-                    Cursor cursor = this.getContentResolver().query(uri, pojo, null, null, null);
-                    // managedQuery(uri, pojo, null, null, null);
-
-                    if (cursor != null) {
-                        // ContentResolver cr = this.getContentResolver();
-                        int colunm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        cursor.moveToFirst();
-                        path = cursor.getString(colunm_index);
-
-                        cropBitmap = Util.readBitmapByPath(path);
-                        cursor.close();
-                    }
-
-                    if (cropBitmap == null) {
-                        ToastUtils.showLongToast("未获取到图片!");
-                        return;
-                    }
-
-                } else if (uri.toString().startsWith("file:///")) {
-                    String path = uri.toString().substring(8, uri.toString().length());
-                    cropBitmap = Util.readBitmapByPath(path);
-                    if (cropBitmap == null) {
-                        ToastUtils.showLongToast("未获取到图片!");
-                        return;
-                    }
-
-                    //cropperView.cropper( bitmap );
-
-                }
-                if (null == cropperView)
-                    cropperView = new CropperView(this, this);
-                cropperView.cropper(cropBitmap);
-            }
-
-        }
-
+    public void takeCancel() {
+        super.takeCancel();
     }
 
     @Override
-    public void OnCropperBack(Bitmap bitmap) {
-        if(null == bitmap) {
-            if(cropBitmap !=null){
-                cropBitmap.recycle();
-                cropBitmap=null;
-            }
-            return;
-        }
-        currentBitmap = bitmap;
+    public void takeFail(TResult result, String msg) {
+        super.takeFail(result, msg);
+    }
 
+    @Override
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        hasImage=true;
+        showImg(result.getImages());
+    }
+
+    private void showImg( ArrayList<TImage> images) {
         ivPicture.setVisibility(View.VISIBLE);
         ivAddPic.setVisibility(View.GONE);
         tvAddPic.setVisibility(View.GONE);
-        ivPicture.setImageBitmap(currentBitmap);
+        //ivPicture.setImageBitmap(currentBitmap);
 
-        if(cropBitmap !=null){
-            cropBitmap.recycle();
-            cropBitmap=null;
-        }
+        imagePath = images.get(0).getPath();
+
+        int wid = DensityUtils.getScreenW(this);
+        int swid = DensityUtils.dip2px(this,20);
+        //Glide.with(this).load(new File(images.get(0).getPath())).into(ivPicture);
+        FrescoDraweeController.loadImage( ivPicture , wid-swid , "file://"+ imagePath , 0 , this );
+
     }
+
+//    public void getPhotoByFile(){
+//        Intent intent2 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intent2, 1);
+//    }
+
+
+//    public void getPhotoByCamera(){
+//        String sdStatus = Environment.getExternalStorageState();
+//        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+//            Log.v("TestFile","SD card is not avaiable/writeable right now.");
+//            return;
+//        }
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Date date = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA);
+//        String imageName = "bm" + sdf.format(date) + ".jpg";
+//        imgPath = Environment.getExternalStorageDirectory()+ "/"+ imageName;
+//        File out = new File(imgPath);
+//        Uri uri = Uri.fromFile(out);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//        intent.putExtra("fileName", imageName);
+//        intent.putExtra("return-data", true);
+//        startActivityForResult(intent, 0);
+//    }
+//
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode != Activity.RESULT_OK) return;
+//
+//        if (requestCode == 0) {// camera back
+//            cropBitmap = Util.readBitmapByPath(imgPath);
+//            if (cropBitmap == null) {
+//                ToastUtils.showLongToast( "未获取到图片!");
+//                return;
+//            }
+//            if (null == cropperView)  cropperView = new CropperView(this, this);
+//            cropperView.cropper(cropBitmap);
+//        } else if (requestCode == 1) {// file back
+//            if (data != null) {
+//                Bitmap bitmap = null;
+//                Uri uri = data.getData();
+//                // url是content开头的格式
+//                if (uri.toString().startsWith("content://")) {
+//                    String path = null;
+//                    String[] pojo = { MediaStore.Images.Media.DATA };
+//                    Cursor cursor = this.getContentResolver().query(uri, pojo, null, null, null);
+//                    // managedQuery(uri, pojo, null, null, null);
+//
+//                    if (cursor != null) {
+//                        // ContentResolver cr = this.getContentResolver();
+//                        int colunm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        cursor.moveToFirst();
+//                        path = cursor.getString(colunm_index);
+//
+//                        cropBitmap = Util.readBitmapByPath(path);
+//                        cursor.close();
+//                    }
+//
+//                    if (cropBitmap == null) {
+//                        ToastUtils.showLongToast("未获取到图片!");
+//                        return;
+//                    }
+//
+//                } else if (uri.toString().startsWith("file:///")) {
+//                    String path = uri.toString().substring(8, uri.toString().length());
+//                    cropBitmap = Util.readBitmapByPath(path);
+//                    if (cropBitmap == null) {
+//                        ToastUtils.showLongToast("未获取到图片!");
+//                        return;
+//                    }
+//
+//                    //cropperView.cropper( bitmap );
+//
+//                }
+//                if (null == cropperView)
+//                    cropperView = new CropperView(this, this);
+//                cropperView.cropper(cropBitmap);
+//            }
+//
+//        }
+//
+//    }
+
+//    @Override
+//    public void OnCropperBack(Bitmap bitmap) {
+//        if(null == bitmap) {
+//            if(cropBitmap !=null){
+//                cropBitmap.recycle();
+//                cropBitmap=null;
+//            }
+//            return;
+//        }
+//        currentBitmap = bitmap;
+//
+//        ivPicture.setVisibility(View.VISIBLE);
+//        ivAddPic.setVisibility(View.GONE);
+//        tvAddPic.setVisibility(View.GONE);
+//        ivPicture.setImageBitmap(currentBitmap);
+//
+//        if(cropBitmap !=null){
+//            cropBitmap.recycle();
+//            cropBitmap=null;
+//        }
+//    }
 
     @OnClick(R.id.btnSubmit)
     void onSubmit(View v){
@@ -300,7 +328,7 @@ public class UploadDocumentsActivity extends BaseActivity implements  CropperVie
             etPrice.setError("请输入最多3位小数的价格");
             return;
         }
-        if(currentBitmap==null) {
+        if( !hasImage) {
             ToastUtils.showLongToast("请上传图片");
             isok=false;
             return;
@@ -317,7 +345,15 @@ public class UploadDocumentsActivity extends BaseActivity implements  CropperVie
         bd.putSerializable("order", orderModel);
 
         data.putExtras(bd);
-        data.putExtra("bitmap", currentBitmap);
+
+
+
+        //ivPicture.setDrawingCacheEnabled(true);
+        //Bitmap bitmap = null;// ivPicture.getDrawingCache();
+        //data.putExtra("bitmap", bitmap);
+
+        data.putExtra("bitmapPath", imagePath);
+
         setResult(RESULT_OK, data);
         finish();
     }

@@ -40,6 +40,7 @@ import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.WindowUtils;
+import com.bameng.widgets.BMShareView;
 import com.bameng.widgets.SharePopupWindow;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -66,7 +67,8 @@ import static com.baidu.location.h.j.ad;
 /***
  * 我的现金劵列表
  */
-public class MyCashCardActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MyCashCardActivity extends BaseActivity
+        implements SwipeRefreshLayout.OnRefreshListener , View.OnClickListener {
 
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
@@ -80,6 +82,8 @@ public class MyCashCardActivity extends BaseActivity implements SwipeRefreshLayo
     View emptyView;
     final int REQUEST_CODE_SEND_INSHARE=100;
     ProgressDialog progressDialog;
+    BMShareView bmShareView;
+    CashCouponModel currentModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,15 @@ public class MyCashCardActivity extends BaseActivity implements SwipeRefreshLayo
                 loadData();
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if( view.getId() == R.id.layShareCustomer){
+            outShare( currentModel );
+        }else if(view.getId() == R.id.layShareMY){
+            inShare( currentModel );
+        }
     }
 
     @Override
@@ -118,12 +131,13 @@ public class MyCashCardActivity extends BaseActivity implements SwipeRefreshLayo
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 super.onItemChildClick(adapter, view, position);
-                if( view.getId() == R.id.ivInShare){
-                    inShare( ((CashCouponModel)adapter.getItem(position)).getID() );
-                }else if(view.getId() == R.id.ivOutShare){
-                    CashCouponModel model = (CashCouponModel) adapter.getItem(position);
-                    outShare(model);
+                if( view.getId() == R.id.ivShare){
+                    share( ((CashCouponModel)adapter.getItem(position)) );
                 }
+// else if(view.getId() == R.id.ivOutShare){
+//                    CashCouponModel model = (CashCouponModel) adapter.getItem(position);
+//                    outShare(model);
+//                }
             }
         });
 
@@ -194,10 +208,24 @@ public class MyCashCardActivity extends BaseActivity implements SwipeRefreshLayo
 
     }
 
-    void inShare( int couponId ){
+    void share( CashCouponModel model ){
+        int type = BaseApplication.UserData() ==null ? -1 : BaseApplication.UserData().getUserIdentity();
+        if( type != Constants.MENG_ZHU){
+            outShare(model);
+            return;
+        }
+
+        if(bmShareView==null){
+            bmShareView = new BMShareView(this,this);
+        }
+        bmShareView.show();
+        currentModel = model;
+    }
+
+    void inShare( CashCouponModel model ){
         Intent intent =new Intent( MyCashCardActivity.this , ChooseObjectActivity.class);
         intent.putExtra("select",true);
-        intent.putExtra("couponId",couponId);
+        intent.putExtra("couponId", model.getID() );
         ActivityUtils.getInstance().showActivityForResult( MyCashCardActivity.this , REQUEST_CODE_SEND_INSHARE , intent);
     }
 
@@ -279,7 +307,7 @@ public class MyCashCardActivity extends BaseActivity implements SwipeRefreshLayo
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
                 }
-                ToastUtils.showLongToast(response.body().getStatusText());
+                //ToastUtils.showLongToast(response.body().getStatusText());
                 onRefresh();
                 if(shareListener!=null){
                     shareListener.share(couponId,uid);

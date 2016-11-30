@@ -42,6 +42,13 @@
             android:id="@+id/tvOrderNo"
             android:gravity="left"/>
     </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_gray"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,6 +68,13 @@
             android:maxLines="1"
             android:gravity="left"/>
     </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_gray"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,6 +94,12 @@
             android:id="@+id/tvName"
             android:gravity="left"/>
     </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_gray"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -99,6 +119,12 @@
             android:maxLines="1"
             android:gravity="left"/>
     </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_gray"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -121,18 +147,22 @@
             android:gravity="left"
             />
     </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_gray"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
         <TextView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="备注"/>
+            android:text="备       注 "/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -143,6 +173,11 @@
             android:gravity="left"
             />
     </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_gray"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -154,7 +189,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="订单说明"/>
+            android:text="订单状态"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -165,6 +200,7 @@
             />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -179,6 +215,7 @@
             app:placeholderImage="@mipmap/ic_on_yw"/>
 
     </LinearLayout>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -194,9 +231,11 @@
         android:background="@drawable/btn_pink_back"
         android:layout_margin="10dp"
         android:textColor="@color/pink"
+        android:visibility="gone"
         android:textSize="16sp"
         android:id="@+id/btnUpload"
         android:text="上传成交凭证"/>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

@@ -241,7 +241,11 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
                 }
 
                 if(operateTypeEnum ==OperateTypeEnum.REFRESH) {
-                    adapter.setNewData(response.body().getData().getRows());
+                    if( response.body().getData().getTotal() <1 ){
+                        adapter.setNewData(null);
+                    }else {
+                        adapter.setNewData(response.body().getData().getRows());
+                    }
                     if ( response.body().getData().getRows() !=null && response.body().getData().getRows().size()>0) {
                         pageIndex++;
                     }
@@ -264,7 +268,7 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
 
             @Override
             public void onFailure(Call<CustomListOutput> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
             }
         });
 

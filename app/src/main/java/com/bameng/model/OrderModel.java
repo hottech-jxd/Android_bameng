@@ -20,8 +20,8 @@ public class OrderModel  implements Serializable{
     private long orderTime;
     private String address;
     private String remark;
-    //private String price;
-    //private Bitmap bitmap;
+    private String successUrl;
+    private String mengbeans;
 
     public long getId() {
         return id;
@@ -111,13 +111,19 @@ public class OrderModel  implements Serializable{
         this.remark = remark;
     }
 
+    public String getSuccessUrl() {
+        return successUrl;
+    }
 
-//
-//    public Bitmap getBitmap() {
-//        return bitmap;
-//    }
-//
-//    public void setBitmap(Bitmap bitmap) {
-//        this.bitmap = bitmap;
-//    }
+    public void setSuccessUrl(String successUrl) {
+        this.successUrl = successUrl;
+    }
+
+    public String getMengbeans() {
+        return mengbeans;
+    }
+
+    public void setMengbeans(String mengbeans) {
+        this.mengbeans = mengbeans;
+    }
 }

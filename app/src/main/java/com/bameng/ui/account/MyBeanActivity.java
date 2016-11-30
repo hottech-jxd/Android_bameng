@@ -16,18 +16,24 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.MBeanFlowAdapter;
+import com.bameng.config.Constants;
 import com.bameng.model.BeanFlowOutputModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 //import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -131,7 +137,7 @@ public class MyBeanActivity extends BaseActivity implements SwipeRefreshLayout.O
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<BeanFlowOutputModel> call = apiService.BeanFlowList(token,map);
         call.enqueue(new Callback<BeanFlowOutputModel>() {
@@ -146,17 +152,43 @@ public class MyBeanActivity extends BaseActivity implements SwipeRefreshLayout.O
                     ToastUtils.showLongToast("服务端返回空数据");
                     return;
                 }
+                if(response.body().getStatus() == Constants.STATUS_70035){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(MyBeanActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
                 if(response.body().getStatus()!=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
                 }
+                if( response.body().getData()==null){
+                    return;
+                }
+
+                txtIncome.setText( String.valueOf( response.body().getData().getIncome() ));
+                txtOutbean.setText( String.valueOf( response.body().getData().getOutcome() ) );
 
                 if(operateTypeEnum == OperateTypeEnum.REFRESH){
 
-                    //adapter.setNewData(  );
-
+                    adapter.setNewData( response.body().getData().getList() );
+                    if( response.body().getData().getList().size()>0){
+                        lastId = response.body().getData().getList().get( response.body().getData().getList().size()-1 ).getID();
+                    }
                 }else{
+                    if (response.body().getData().getList() == null || response.body().getData().getList().size()<1) {
+                        if (noDataView == null) {
+                            noDataView = MyBeanActivity.this.getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
+                        }
+                        adapter.removeAllFooterView();
+                        adapter.addFooterView(noDataView);
+                        adapter.loadComplete();
+                        return;
+                    }
 
+                    adapter.addData( response.body().getData().getList());
+
+                    lastId = response.body().getData().getList().get( response.body().getData().getList().size()-1 ).getID();
                 }
 
             }

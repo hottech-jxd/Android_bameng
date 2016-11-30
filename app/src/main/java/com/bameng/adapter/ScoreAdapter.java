@@ -27,8 +27,7 @@ public class ScoreAdapter extends BaseQuickAdapter<ScoreModel, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder baseViewHolder, ScoreModel scoreModel) {
         baseViewHolder.setText(R.id.tvname , scoreModel.getRemark());
-        baseViewHolder.setText( R.id.tvTime , DateUtils.formatDate( scoreModel.getTime() ));
-
+        baseViewHolder.setText( R.id.tvTime , DateUtils.formatDate( scoreModel.getTime() ,"yyyy.MM.dd HH:mm" ));
 
         if( scoreModel.getMoney()>=0){
             baseViewHolder.setText(R.id.tvBeans , "+"+String.valueOf( scoreModel.getMoney()));

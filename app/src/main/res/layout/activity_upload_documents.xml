@@ -2,8 +2,7 @@
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -24,12 +23,13 @@
     <LinearLayout
         android:id="@+id/llAddPic"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="10dp"
         android:gravity="center"
         android:background="@drawable/btn_lightgray">
         <ImageView
+            android:layout_marginTop="10dp"
             android:id="@+id/ivAddPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,11 +38,12 @@
             android:id="@+id/tvAddPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:textSize="16sp"
             android:text="上传成交凭证照片"/>
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/ivPicture"
             android:visibility="gone"
             android:scaleType="fitCenter"
@@ -147,6 +148,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:textColor="@color/white"
         android:id="@+id/btnSubmit"
         android:textSize="18sp"

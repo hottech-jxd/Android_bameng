@@ -28,8 +28,7 @@
             android:background="@color/dimgray"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/imgUser1"
                 android:layout_marginTop="10dp"
@@ -123,7 +122,7 @@
         android:layout_margin="20dp"
         android:layout_below="@+id/loginLay"
         android:background="@drawable/btn_login"
-        android:text="登录"
+        android:text="立即登录"
         android:textSize="15sp"
         android:textColor="@color/white"
         android:layout_width="match_parent"

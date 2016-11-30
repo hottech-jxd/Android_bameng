@@ -12,12 +12,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.HomeActivity;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.business.AlliesDetailsActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.EncryptUtil;
@@ -25,6 +29,8 @@ import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.CountDownTimerButton;
 import com.huotu.android.library.libedittext.EditText;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +42,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.baidu.location.h.j.t;
 
 
+/***
+ * 忘记密码
+ */
 public class ForgetPasswordActivity extends BaseActivity implements CountDownTimerButton.CountDownFinishListener {
 
     @Bind(R.id.edtPhone)
@@ -106,39 +116,53 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
             return;
         }
             Map<String, String> map = new HashMap<>();
-            map.put("version", application.getAppVersion());
+            map.put("version", BaseApplication.getAppVersion());
             map.put("timestamp", String.valueOf(System.currentTimeMillis()));
             map.put("os", "android");
+            map.put("type", "1");
             map.put("mobile",edtPhone.getText().toString());
             AuthParamUtils authParamUtils = new AuthParamUtils();
             String sign = authParamUtils.getSign(map);
             map.put("sign", sign);
-            ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-            Call<PostModel> call = apiService.SendSms(application.readToken(),map);
+            ApiService apiService = ZRetrofitUtil.getApiService();
+            Call<PostModel> call = apiService.SendSms(BaseApplication.readToken(),map);
             call.enqueue(new Callback<PostModel>() {
                 @Override
                 public void onResponse(Call<PostModel> call, Response<PostModel> response) {
-                    if (response.body() != null) {
-
-
-                        if (response.body().getStatus() == 200&&response.body()!=null) {
-
-                            if( countDownBtn ==null ) {
-                                countDownBtn = new CountDownTimerButton( btn_code, "%dS", "获取验证码", 60000,ForgetPasswordActivity.this , 60000);
-                            }
-                            countDownBtn.start();
-                            ToastUtils.showLongToast("成功");
-                        } else {
-                            ToastUtils.showLongToast(response.body().getStatusText());
-                        }
-
+                    if (response.code() != 200) {
+                        ToastUtils.showLongToast(response.message());
+                        return;
+                    }
+                    if (response.body() == null) {
+                        ToastUtils.showLongToast("服务器发送错误");
+                        return;
                     }
 
-                    return;
+                    if (response.body().getStatus() == Constants.STATUS_70035) {
+                        ToastUtils.showLongToast(response.body().getStatusText());
+                        EventBus.getDefault().post(new CloseEvent());
+                        ActivityUtils.getInstance().skipActivity(ForgetPasswordActivity.this, PhoneLoginActivity.class);
+                        return;
+                    }
+
+                    if (response.body().getStatus() != 200) {
+                        ToastUtils.showLongToast(response.body().getStatusText());
+                        return;
+                    }
 
 
+                    if (response.body().getStatus() == 200 && response.body() != null) {
 
+                        if (countDownBtn == null) {
+                            countDownBtn = new CountDownTimerButton(btn_code, "%dS", "获取验证码", 60000, ForgetPasswordActivity.this, 60000);
+                        }
+                        countDownBtn.start();
+                        ToastUtils.showLongToast("成功");
+                    } else {
+                        ToastUtils.showLongToast(response.body().getStatusText());
+                    }
                 }
+
 
 
                 @Override

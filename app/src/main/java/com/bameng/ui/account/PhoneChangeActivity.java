@@ -15,15 +15,21 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.biz.SendSmsUtil;
+import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.huotu.android.library.libedittext.EditText;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -146,7 +152,7 @@ public class PhoneChangeActivity extends BaseActivity implements CountdownView.O
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         Call<PostModel> call = apiService.ChanageMobile( BaseApplication.readToken(),map);
 
         call.enqueue(new Callback<PostModel>() {
@@ -160,6 +166,14 @@ public class PhoneChangeActivity extends BaseActivity implements CountdownView.O
                     ToastUtils.showLongToast("error");
                     return;
                 }
+
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(PhoneChangeActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus()!=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;

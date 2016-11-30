@@ -83,6 +83,8 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroyView();
         isViewInited=false;
         isDataLoaded = false;
+
+        ButterKnife.unbind(this);
     }
 
 
@@ -96,4 +98,9 @@ public abstract class BaseFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         preLoadData();
     }
+
+    public String getPageTitle(){
+        return this.getClass().getName();
+    }
+
 }

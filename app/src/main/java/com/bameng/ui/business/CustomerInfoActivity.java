@@ -17,6 +17,7 @@ import com.bameng.adapter.TabPagerAdapter;
 import com.bameng.fragment.CustomDoneFrag;
 import com.bameng.fragment.CustomNoDoneFrag;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.base.BaseFragment;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
 
@@ -46,7 +47,7 @@ public class CustomerInfoActivity extends BaseActivity {
     @Bind(R.id.customViewPager)
     ViewPager customViewPager;
     public TabPagerAdapter tabPagerAdapter;
-    private List<Fragment> mFragmentList = new ArrayList<Fragment>();
+    private List<BaseFragment> mFragmentList = new ArrayList<>();
     public Resources resources;
 
     @Override

@@ -13,16 +13,23 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.MBeanFlowAdapter;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
+import com.bameng.model.ConvertBeanTotalOutputModel;
 import com.bameng.model.PostModel;
+import com.bameng.model.RefreshUserDataEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
 import com.huotu.android.library.libedittext.EditText;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +44,7 @@ import retrofit2.Response;
 import static android.R.attr.recognitionService;
 import static android.R.attr.type;
 import static com.baidu.location.h.j.B;
+import static com.bameng.R.id.beam;
 
 /***
  * 兑换确认 界面
@@ -55,8 +63,6 @@ public class ExchangeConfirmActivity extends BaseActivity {
     TextView tvIn;
     @Bind(R.id.txt_outbean)
     TextView tvOut;
-
-
 
     ProgressDialog progressDialog;
 
@@ -79,12 +85,9 @@ public class ExchangeConfirmActivity extends BaseActivity {
         //tvOut.setText( BaseApplication.UserData().get );
 
 
-
-
     }
     @OnClick(R.id.tv_record) void ontvrecord()  {
         ActivityUtils.getInstance().showActivity(ExchangeConfirmActivity.this,ExchangeRecordActivity.class);
-
 
     }
 
@@ -106,6 +109,57 @@ public class ExchangeConfirmActivity extends BaseActivity {
 
     @Override
     protected void StartApi( ) {
+        if(progressDialog==null){
+            progressDialog=new ProgressDialog(this);
+        }
+        progressDialog.setMessage("正在获取数据...");
+        progressDialog.show();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("version", BaseApplication.getAppVersion());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("os", "android");
+        AuthParamUtils authParamUtils = new AuthParamUtils();
+        String sign = authParamUtils.getSign(map);
+        map.put("sign", sign);
+        ApiService apiService = ZRetrofitUtil.getApiService();
+        String token = BaseApplication.readToken();
+        Call<ConvertBeanTotalOutputModel> call = apiService.AlreadyConvertTotal(token,map);
+        call.enqueue(new Callback<ConvertBeanTotalOutputModel>() {
+            @Override
+            public void onResponse(Call<ConvertBeanTotalOutputModel> call, Response<ConvertBeanTotalOutputModel> response) {
+                if(progressDialog!=null) progressDialog.dismiss();
+                if(response.code()!=200 || response.body()==null){
+                    ToastUtils.showLongToast( response.message()==null ? "请求发生错误": response.message());
+                    return;
+                }
+
+                if(response.body().getStatus() == Constants.STATUS_70035){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(ExchangeConfirmActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
+
+                if( response.body().getStatus()!=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
+                if(response.body().getData() == null ){
+                    ToastUtils.showLongToast("服务器发送错误");
+                    return;
+                }
+
+                tvIn.setText( String.valueOf( response.body().getData().getMengBeansCount()));
+                tvOut.setText( String.valueOf( response.body().getData().getAlreadyConverCount() ));
+            }
+
+            @Override
+            public void onFailure(Call<ConvertBeanTotalOutputModel> call, Throwable t) {
+                if(progressDialog!=null) progressDialog.dismiss();
+                ToastUtils.showLongToast( "请求失败"+  (t.getMessage()==null ? "": t.getMessage()) );
+            }
+        });
     }
 
     protected void cash(final int beam ) {
@@ -123,7 +177,7 @@ public class ExchangeConfirmActivity extends BaseActivity {
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.ConvertToBean(token,map);
 
@@ -135,20 +189,31 @@ public class ExchangeConfirmActivity extends BaseActivity {
                     ToastUtils.showLongToast( response.message()==null ? "请求发生错误": response.message());
                     return;
                 }
+
+                if(response.body().getStatus() == Constants.STATUS_70035){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(ExchangeConfirmActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
+
                 if( response.body().getStatus()!=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
                 }
 
                 BaseApplication.UserData().setMengBeans( BaseApplication.UserData().getMengBeans() - beam );
-                ToastUtils.showShortToast(response.body().getStatusText());
+                BaseApplication.writeUserInfo( BaseApplication.UserData() );
+                //ToastUtils.showShortToast(response.body().getStatusText());
+                EventBus.getDefault().post(new RefreshUserDataEvent(BaseApplication.UserData() ));
+                ExchangeConfirmActivity.this.setResult(RESULT_OK);
                 ExchangeConfirmActivity.this.finish();
             }
 
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
                 if(progressDialog!=null) progressDialog.dismiss();
-                ToastUtils.showLongToast( "请求失败"+ t.getMessage()==null ? "": t.getMessage() );
+                ToastUtils.showLongToast( "请求失败"+ (t.getMessage()==null ? "": t.getMessage() ));
             }
         });
 

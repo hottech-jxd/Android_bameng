@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.MengModel;
 import com.bameng.model.MengOutputModel;
 import com.bameng.model.PostModel;
@@ -19,6 +21,8 @@ import com.bameng.model.RefreshMengYouEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
@@ -65,7 +69,6 @@ public class AlliesExamineActivity extends BaseActivity {
         setContentView(R.layout.activity_allies_examine);
         ButterKnife.bind(this);
         initView();
-        //StartApi();
     }
 
     @Override
@@ -136,6 +139,13 @@ public class AlliesExamineActivity extends BaseActivity {
                     ToastUtils.showLongToast("返回数据空");
                     return;
                 }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity( AlliesExamineActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus() != 200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;

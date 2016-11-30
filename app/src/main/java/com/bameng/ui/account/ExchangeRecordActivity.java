@@ -15,16 +15,24 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.adapter.ConvertCashAdapter;
 import com.bameng.adapter.ScoreAdapter;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
+import com.bameng.model.ConvertFlowOutputModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.ScoreOutputModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,8 +61,8 @@ public class ExchangeRecordActivity extends BaseActivity implements SwipeRefresh
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recycleView)
     RecyclerView recyclerView;
-    long lastId=1;
-    ScoreAdapter adapter;
+    long lastId=0;
+    ConvertCashAdapter adapter;
     OperateTypeEnum operateTypeEnum=OperateTypeEnum.REFRESH;
     View noDataView;
     View emptyView ;
@@ -77,7 +85,7 @@ public class ExchangeRecordActivity extends BaseActivity implements SwipeRefresh
 
         swipeRefreshLayout.setOnRefreshListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter=new ScoreAdapter();
+        adapter=new ConvertCashAdapter();
         adapter.setOnLoadMoreListener(this);
 
         emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty ,  (ViewGroup) recyclerView.getParent(),false);
@@ -105,7 +113,7 @@ public class ExchangeRecordActivity extends BaseActivity implements SwipeRefresh
     @Override
     public void onRefresh() {
         operateTypeEnum = OperateTypeEnum.REFRESH;
-        lastId=1;
+        lastId=0;
         loadData(lastId);
     }
 
@@ -125,12 +133,12 @@ public class ExchangeRecordActivity extends BaseActivity implements SwipeRefresh
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
-        Call<ScoreOutputModel> call= apiService.ConvertFlow(token, map);
-        call.enqueue(new Callback<ScoreOutputModel>() {
+        Call<ConvertFlowOutputModel> call= apiService.ConvertFlow(token, map);
+        call.enqueue(new Callback<ConvertFlowOutputModel>() {
             @Override
-            public void onResponse(Call<ScoreOutputModel> call, Response<ScoreOutputModel> response) {
+            public void onResponse(Call<ConvertFlowOutputModel> call, Response<ConvertFlowOutputModel> response) {
                 swipeRefreshLayout.setRefreshing(false);
                 if (response.code() != 200) {
                     ToastUtils.showLongToast(response.message());
@@ -141,6 +149,13 @@ public class ExchangeRecordActivity extends BaseActivity implements SwipeRefresh
                     ToastUtils.showLongToast("返回错误数据");
                     return;
                 }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(ExchangeRecordActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus()!=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
@@ -171,7 +186,7 @@ public class ExchangeRecordActivity extends BaseActivity implements SwipeRefresh
             }
 
             @Override
-            public void onFailure(Call<ScoreOutputModel> call, Throwable t) {
+            public void onFailure(Call<ConvertFlowOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
                 ToastUtils.showLongToast( t.getMessage()==null?"请求失败":t.getMessage() );
             }

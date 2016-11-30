@@ -1,24 +1,17 @@
 package com.bameng.ui.business;
 
 import android.Manifest;
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Message;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,29 +21,28 @@ import android.widget.Toast;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
-import com.bameng.config.Constants;
 import com.bameng.model.PostModel;
+import com.bameng.model.RefreshOrderEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
-import com.bameng.ui.account.UserInfoActivity;
-import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.base.PhoteActivity;
 import com.bameng.utils.AuthParamUtils;
-import com.bameng.utils.DensityUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
-import com.bameng.widgets.CropperView;
-import com.bameng.widgets.ImageCropperView;
+
 import com.bameng.widgets.PhotoSelectView;
+import com.bumptech.glide.Glide;
 import com.huotu.android.library.libedittext.EditText;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.jph.takephoto.model.TImage;
+import com.jph.takephoto.model.TResult;
+
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -68,16 +60,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.bitmap;
-import static android.R.attr.type;
-import static com.baidu.location.h.j.s;
-import static com.baidu.location.h.j.v;
-import static com.baidu.location.h.j.w;
-import static com.bameng.ui.account.UserInfoActivity.RESULT_CODE_CHNAGEPHONE;
 
+/***
+ * 新增订单 界面
+ */
 @RuntimePermissions
-public class NewOrderActivity extends BaseActivity
-        implements CropperView.OnCropperBackListener, PhotoSelectView.OnPhotoSelectBackListener{
+public class NewOrderActivity extends PhoteActivity
+        implements PhotoSelectView.OnPhotoSelectBackListener{
 
     @Bind(R.id.titleText)
     TextView titleText;
@@ -101,37 +90,30 @@ public class NewOrderActivity extends BaseActivity
     LinearLayout layAddImage;
     @Bind(R.id.layImage)
     FrameLayout layImage;
-    @Bind(R.id.tvClose)
-    TextView tvClose;
+
     private PhotoSelectView pop;
     private String imgPath;
     public Resources resources;
-    private CropperView cropperView;
-    //private ImageCropperView imageCropperView;
-
     private Bitmap cropBitmap;
     private Bitmap currentBitmap;
+    boolean hasImage=false;
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_order);
         ButterKnife.bind(this);
         initView();
-        application = (BaseApplication) this.getApplication();
-        resources = this.getResources();
-        //StartApi();
     }
 
-    @Override
     protected void initView() {
         titleText.setText("新增订单");
         titleLeftImage.setVisibility(View.VISIBLE);
         Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
-
         layAddImage.setVisibility(View.VISIBLE);
         layImage.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -145,9 +127,10 @@ public class NewOrderActivity extends BaseActivity
             currentBitmap.recycle();
             currentBitmap = null;
         }
+        ivImage.setDrawingCacheEnabled(false);
     }
 
-    @Override
+
     protected void StartApi() {
         String name = etName.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
@@ -169,7 +152,7 @@ public class NewOrderActivity extends BaseActivity
             isok=false;
         }
 
-        if(currentBitmap==null){
+        if(!hasImage ){
             ToastUtils.showLongToast("请上传订单图片");
             isok=false;
         }
@@ -216,23 +199,35 @@ public class NewOrderActivity extends BaseActivity
         requestBody=RequestBody.create(MediaType.parse("text/plain"), sign);
         requestBodyMap.put("sign",requestBody);
 
-        if( currentBitmap !=null) {
-            requestBody = RequestBody.create(MediaType.parse("image/*"), Util.bitmap2Bytes(currentBitmap));
+        ivImage.setDrawingCacheEnabled(true);
+        Bitmap tempBitmap = ivImage.getDrawingCache();
+
+        if( tempBitmap !=null) {
+            requestBody = RequestBody.create(MediaType.parse("image/*"), Util.bitmap2Bytes(tempBitmap));
             requestBodyMap.put("image\"; filename=\"" + timestamp + "\"", requestBody);
         }
 
+        if(progressDialog==null){
+            progressDialog=new ProgressDialog(this);
+        }
+        progressDialog.setMessage("上传订单中...");
+        progressDialog.show();
+
         String token = BaseApplication.readToken();
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         Call<PostModel> call = apiService.ordercreate( token , requestBodyMap );
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if(progressDialog !=null) progressDialog.dismiss();
+
                 if(response.code()!=200){
                     ToastUtils.showLongToast( response.message());
                     return;
                 }
                 if( response.body() !=null && response.body().getStatus() == 200 ){
                     ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new RefreshOrderEvent());
                     NewOrderActivity.this.finish();
                 }else if( response.body() !=null ){
                     ToastUtils.showLongToast(response.body().getStatusText());
@@ -241,14 +236,10 @@ public class NewOrderActivity extends BaseActivity
 
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
-                ToastUtils.showLongToast("error");
+                if(progressDialog!=null) progressDialog.dismiss();
+                ToastUtils.showLongToast(t.getMessage()==null? "请求失败":t.getMessage());
             }
         });
-    }
-
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
     }
 
     @OnClick(R.id.btncreate)
@@ -257,11 +248,8 @@ public class NewOrderActivity extends BaseActivity
     }
 
 
-
     @OnClick(R.id.layAddImage)
     public void onUploadFile(){
-//        if(null == pop) pop = new PhotoSelectView(this, this);
-//        pop.show();
         NewOrderActivityPermissionsDispatcher.uploadFileWithCheck(this);
     }
 
@@ -306,52 +294,109 @@ public class NewOrderActivity extends BaseActivity
                 .show();
     }
 
-
     @Override
     public void onPhotoSelectBack(PhotoSelectView.SelectType type) {
         if(null == type) return;
 
         switch (type) {
             case Camera:
-                getPhotoByCamera();
+                //getPhotoByCamera();
+                selectPhotoByCamera();
                 break;
             case File:
-                getPhotoByFile();
+                //getPhotoByFile();
+                selectPhotoByFile();
                 break;
             default:
                 break;
         }
     }
 
+    void selectPhotoByCamera(){
+        //File file=new File(Environment.getExternalStorageDirectory(), "/temp/"+System.currentTimeMillis() + ".jpg");
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
 
-    public void getPhotoByCamera(){
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-            Log.v("TestFile","SD card is not avaiable/writeable right now.");
-            return;
-        }
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA);
-        String imageName = "bm" + sdf.format(date) + ".jpg";
-        imgPath = Environment.getExternalStorageDirectory()+ "/"+ imageName;
-        File out = new File(imgPath);
-        Uri uri = Uri.fromFile(out);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        intent.putExtra("fileName", imageName);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, 0);
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+
+        selectByCamera(imageUri);
     }
 
-    public void getPhotoByFile(){
-        Intent intent2 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent2, 1);
+    void selectPhotoByFile(){
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
+
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+        selectByFile(imageUri);
     }
 
-//    private void cropperImage( Bitmap bitmap  ){
-//        //Uri uri = Uri.parse(path);
-//        if( null == imageCropperView ) imageCropperView = new ImageCropperView(this, this);
-//        imageCropperView.cropper(  bitmap  );
+
+    @Override
+    public void takeCancel() {
+        super.takeCancel();
+    }
+
+    @Override
+    public void takeFail(TResult result, String msg) {
+        super.takeFail(result, msg);
+    }
+
+    @Override
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        hasImage=true;
+        showImg(result.getImages());
+    }
+
+
+    private void showImg( ArrayList<TImage> images) {
+
+        layAddImage.setVisibility(View.GONE);
+        layImage.setVisibility(View.VISIBLE);
+
+
+        Glide.with(this).load(new File(images.get(0).getPath())).into(ivImage);
+
+//            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.llImages);
+//            for (int i = 0, j = images.size(); i < j - 1; i += 2) {
+//                View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
+//                ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
+//                ImageView imageView2 = (ImageView) view.findViewById(R.id.imgShow2);
+//                Glide.with(this).load(new File(images.get(i).getPath())).into(imageView1);
+//                Glide.with(this).load(new File(images.get(i + 1).getPath())).into(imageView2);
+//                linearLayout.addView(view);
+//            }
+//            if (images.size() % 2 == 1) {
+//                View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
+//                ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
+//                Glide.with(this).load(new File(images.get(images.size() - 1).getPath())).into(imageView1);
+//                linearLayout.addView(view);
+//            }
+
+    }
+
+//    public void getPhotoByCamera(){
+//        String sdStatus = Environment.getExternalStorageState();
+//        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+//            Log.v("TestFile","SD card is not avaiable/writeable right now.");
+//            return;
+//        }
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Date date = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA);
+//        String imageName = "bm" + sdf.format(date) + ".jpg";
+//        imgPath = Environment.getExternalStorageDirectory()+ "/"+ imageName;
+//        File out = new File(imgPath);
+//        Uri uri = Uri.fromFile(out);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//        intent.putExtra("fileName", imageName);
+//        intent.putExtra("return-data", true);
+//        startActivityForResult(intent, 0);
+//    }
+//
+//    public void getPhotoByFile(){
+//        Intent intent2 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intent2, 1);
 //    }
 
 
@@ -362,112 +407,114 @@ public class NewOrderActivity extends BaseActivity
         NewOrderActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) return;
-
-        if (requestCode == 0) {// camera back
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode != Activity.RESULT_OK) return;
+//
+//        if (requestCode == 0) {// camera back
+////            cropBitmap = Util.readBitmapByPath(imgPath);
+////            cropperImage( cropBitmap );
+//
 //            cropBitmap = Util.readBitmapByPath(imgPath);
-//            cropperImage( cropBitmap );
+//            if (cropBitmap == null) {
+//                ToastUtils.showLongToast( "未获取到图片!");
+//                return;
+//            }
+//            if (null == cropperView)  cropperView = new CropperView(this, this);
+//            cropperView.cropper(cropBitmap);
+//        } else if (requestCode == 1) {// file back
+//            if (data != null) {
+//                Bitmap bitmap = null;
+//                Uri uri = data.getData();
+//                // url是content开头的格式
+//                if (uri.toString().startsWith("content://")) {
+//                    String path = null;
+//                    String[] pojo = { MediaStore.Images.Media.DATA };
+//                    Cursor cursor = this.getContentResolver().query(uri, pojo, null, null, null);
+//                    // managedQuery(uri, pojo, null, null, null);
+//
+//                    if (cursor != null) {
+//                        // ContentResolver cr = this.getContentResolver();
+//                        int colunm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        cursor.moveToFirst();
+//                        path = cursor.getString(colunm_index);
+//
+//                        cropBitmap = Util.readBitmapByPath(path);
+//                        cursor.close();
+//                    }
+//
+//                    if (cropBitmap == null) {
+//                        ToastUtils.showLongToast("未获取到图片!");
+//                        return;
+//                    }
+//
+//                } else if (uri.toString().startsWith("file:///")) {
+//                    String path = uri.toString().substring(8, uri.toString().length());
+//                    cropBitmap = Util.readBitmapByPath(path);
+//                    if (cropBitmap == null) {
+//                        ToastUtils.showLongToast("未获取到图片!");
+//                        return;
+//                    }
+//
+//                }
+//                if (null == cropperView)
+//                    cropperView = new CropperView(this, this);
+//                cropperView.cropper(cropBitmap);
+//            }
+//
+//        }else if( requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//
+//        }
+//
+//    }
 
-            cropBitmap = Util.readBitmapByPath(imgPath);
-            if (cropBitmap == null) {
-                ToastUtils.showLongToast( "未获取到图片!");
-                return;
-            }
-            if (null == cropperView)  cropperView = new CropperView(this, this);
-            cropperView.cropper(cropBitmap);
-        } else if (requestCode == 1) {// file back
-            if (data != null) {
-                Bitmap bitmap = null;
-                Uri uri = data.getData();
-                // url是content开头的格式
-                if (uri.toString().startsWith("content://")) {
-                    String path = null;
-                    String[] pojo = { MediaStore.Images.Media.DATA };
-                    Cursor cursor = this.getContentResolver().query(uri, pojo, null, null, null);
-                    // managedQuery(uri, pojo, null, null, null);
+//    @Override
+//    public void OnCropperBack(Bitmap bitmap) {
+//        if(null == bitmap) {
+//            if(cropBitmap !=null){
+//                cropBitmap.recycle();
+//                cropBitmap=null;
+//            }
+//            return;
+//        }
+//        currentBitmap = bitmap;
+//
+//        layAddImage.setVisibility(View.GONE);
+//        layImage.setVisibility(View.VISIBLE);
+//        setWidthHeight(ivImage,bitmap);
+//        ivImage.setImageBitmap(bitmap);
+//
+//        if(cropBitmap !=null){
+//            cropBitmap.recycle();
+//            cropBitmap=null;
+//        }
+//    }
 
-                    if (cursor != null) {
-                        // ContentResolver cr = this.getContentResolver();
-                        int colunm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        cursor.moveToFirst();
-                        path = cursor.getString(colunm_index);
-
-                        cropBitmap = Util.readBitmapByPath(path);
-                        cursor.close();
-                    }
-
-                    if (cropBitmap == null) {
-                        ToastUtils.showLongToast("未获取到图片!");
-                        return;
-                    }
-
-                } else if (uri.toString().startsWith("file:///")) {
-                    String path = uri.toString().substring(8, uri.toString().length());
-                    cropBitmap = Util.readBitmapByPath(path);
-                    if (cropBitmap == null) {
-                        ToastUtils.showLongToast("未获取到图片!");
-                        return;
-                    }
-
-                }
-                if (null == cropperView)
-                    cropperView = new CropperView(this, this);
-                cropperView.cropper(cropBitmap);
-            }
-
-        }else if( requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-        }
-
-    }
-
-    @Override
-    public void OnCropperBack(Bitmap bitmap) {
-        if(null == bitmap) {
-            if(cropBitmap !=null){
-                cropBitmap.recycle();
-                cropBitmap=null;
-            }
-            return;
-        }
-        currentBitmap = bitmap;
-
-        layAddImage.setVisibility(View.GONE);
-        layImage.setVisibility(View.VISIBLE);
-        setWidthHeight(ivImage,bitmap);
-        ivImage.setImageBitmap(bitmap);
-
-        if(cropBitmap !=null){
-            cropBitmap.recycle();
-            cropBitmap=null;
-        }
-    }
-
-    void setWidthHeight( ImageView iv , Bitmap bitmap){
-        int width = bitmap.getWidth();
-        int height =bitmap.getHeight();
-        int sw = DensityUtils.getScreenW(this);
-        int sh = DensityUtils.getScreenH(this);
-        int tw;
-        int th;
-        if( width <= sw && height <= sh  ){
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width,height);
-            layoutParams.gravity = Gravity.CENTER;
-            iv.setLayoutParams(layoutParams);
-        }else  {
-            tw = sw * height / sh;
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
-            layoutParams.gravity = Gravity.CENTER;
-            iv.setLayoutParams(layoutParams);
-        }
-    }
+//    void setWidthHeight( ImageView iv , Bitmap bitmap){
+//        int width = bitmap.getWidth();
+//        int height =bitmap.getHeight();
+//        int sw = DensityUtils.getScreenW(this);
+//        int sh = DensityUtils.getScreenH(this);
+//        int tw;
+//        int th;
+//        if( width <= sw && height <= sh  ){
+//            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width,height);
+//            layoutParams.gravity = Gravity.CENTER;
+//            iv.setLayoutParams(layoutParams);
+//        }else  {
+//            tw = sw * height / sh;
+//            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+//            layoutParams.gravity = Gravity.CENTER;
+//            iv.setLayoutParams(layoutParams);
+//        }
+//    }
 
     @OnClick(R.id.tvClose)
     void closeImage() {
+        hasImage = false;
+
 
         ivImage.setImageBitmap(null);
         if (cropBitmap != null) {

@@ -14,7 +14,6 @@ import android.widget.ScrollView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
-import com.bameng.adapter.ArticleAdapter;
 import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
@@ -22,6 +21,7 @@ import com.bameng.model.AdBannerConfig;
 import com.bameng.model.AdImageBean;
 import com.bameng.model.AdlistModel;
 import com.bameng.model.ArticleListOutput;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.ListModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.SlideListModel;
@@ -31,6 +31,7 @@ import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.WebViewActivity;
 import com.bameng.ui.base.BaseFragment;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
@@ -41,9 +42,10 @@ import com.bameng.widgets.RecycleItemDivider;
 import com.bameng.widgets.custom.AdBannerWidget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +58,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.baidu.location.h.j.ad;
+import static com.baidu.location.h.j.t;
+import static com.bameng.R.id.adbannerWidget;
 import static com.bameng.R.id.dot;
 import static com.bameng.R.id.homePullRefresh;
 import static com.bameng.R.id.homeViewPager;
@@ -66,7 +70,8 @@ import static com.bameng.R.id.recycleView;
  * 集团资讯
  * Created by 47483 on 2016.11.01.
  */
-public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener , BaseQuickAdapter.RequestLoadMoreListener {
+public class GroupFrag extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener , BaseQuickAdapter.RequestLoadMoreListener {
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recycleView)
@@ -78,21 +83,15 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
     List<SlideListModel> adDataList;
     View noDataView;
 
+    AdBannerWidget adBannerWidget;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
     }
-    public void initView() {
-        initlist();
 
-        initBanner();
-
-        loadData(pageIndex);
-    }
-
-
-    public void initlist(){
+    public void initView(){
         swipeRefreshLayout.setOnRefreshListener(this);
         adapter = new StoreAdapter(R.layout.article_item);
         adapter.openLoadMore(PAGESIZE);
@@ -100,11 +99,7 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
         recyclerView.setLayoutManager( new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        //recyclerView.addItemDecoration( new RecycleItemDivider( this.getContext() , LinearLayoutManager.VERTICAL));
-
-
         adDataList = new ArrayList<>();
-
 
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
@@ -116,49 +111,23 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
             }
         });
 
-        //View header = LayoutInflater.from(getContext()).inflate(R.layout.layout_group_header,null);
-//        AdBannerConfig config = new AdBannerConfig();
-//        config.setAutoPlay(true);
-//        View header = new  AdBannerWidget(getContext(), config);
-
-//        dot = (LinearLayout) header.findViewById(R.id.dot);
-//        homeViewPager = (ViewPager) header.findViewById(R.id.homeViewPager);
-//
-//        adapter.addHeaderView(header);
-
-
-        //Articles = new ArrayList<ListModel>();
-        //TopArticles = new ArrayList<ListModel>();
-        //adapter = new ArticleAdapter(Articles,TopArticles, getActivity(), getActivity());
-        //listL.setAdapter(adapter);
-        //homePullRefresh.setMode(PullToRefreshBase.Mode.BOTH);
-        //homePullRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
-        //    @Override
-        //    public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-        //        operateType = OperateTypeEnum.REFRESH;
-        //        pageIndex=1;
-        //        Articles.clear();
-        //        loadData();
-        //        initSwitchImg();
-        //    }
-
-//            @Override
-//            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-//                operateType = OperateTypeEnum.LOADMORE;
-//                pageIndex= pageIndex+1;
-//                loadData();
-//
-//            }
-//        });
+        adBannerWidget = new AdBannerWidget(getContext());
+        adapter.addHeaderView(adBannerWidget);
     }
 
     @Override
     protected void loadData() {
-        onRefresh();
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
+
     }
 
     private void loadData(int idx ) {
-
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -169,7 +138,7 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<ArticleListOutput> call = apiService.list(token,map);
         call.enqueue(new Callback<ArticleListOutput>() {
@@ -177,47 +146,60 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
             public void onResponse(Call<ArticleListOutput> call, Response<ArticleListOutput> response) {
                 swipeRefreshLayout.setRefreshing(false);
 
-                if(response.code() !=200){
+                if (response.code() != 200) {
                     ToastUtils.showLongToast(response.message());
                     return;
                 }
+                if (response.body() == null) {
+                    ToastUtils.showLongToast("服务器发生错误");
+                    return;
+                }
 
-                if (response.body() != null) {
-                    //homePullRefresh.onRefreshComplete();
-                    ArticleListOutput articleListOutput = new ArticleListOutput();
-                    articleListOutput.setData(response.body().getData());
-                    if (response.body().getStatus() == 200 &&response.body().getData() !=null) {
-                        if (operateType == OperateTypeEnum.REFRESH) {
-                            List<ListModel> Articles = new ArrayList<>();
-                            List<ListModel> topList = response.body().getData().getTop();
-                            if( topList !=null){
-                                for(ListModel item : topList){
-                                    item.setTop(true);
-                                }
-                                Articles.addAll(topList);
-                            }
-                            if(response.body().getData().getList()!=null && response.body().getData().getList().getRows()!=null){
-                                Articles.addAll(response.body().getData().getList().getRows());
-                            }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity(), PhoneLoginActivity.class);
+                    return;
+                }
+                if(response.body().getStatus() !=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
 
-                            adapter.setNewData( Articles );
 
-                        } else if (operateType == OperateTypeEnum.LOADMORE) {
-                            if (response.body().getData().getList().getRows().size()==0){
-                                if(noDataView==null){
-                                    noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
-                                }
-                                adapter.removeAllFooterView();
-                                adapter.addFooterView(noDataView);
-                                adapter.loadComplete();
-                            }else{
-                                adapter.addData( response.body().getData().getList().getRows());
-                                pageIndex=pageIndex+1;
+                //ArticleListOutput articleListOutput = new ArticleListOutput();
+                //articleListOutput.setData(response.body().getData());
+                if (response.body().getStatus() == 200 && response.body().getData() != null) {
+                    if (operateType == OperateTypeEnum.REFRESH) {
+                        List<ListModel> Articles = new ArrayList<>();
+                        List<ListModel> topList = response.body().getData().getTop();
+                        if (topList != null) {
+                            for (ListModel item : topList) {
+                                item.setTop(true);
                             }
+                            Articles.addAll(topList);
                         }
-                    } else {
-                        ToastUtils.showLongToast(response.body().getStatusText());
+                        if (response.body().getData().getList() != null && response.body().getData().getList().getRows() != null) {
+                            Articles.addAll(response.body().getData().getList().getRows());
+                        }
+
+                        adapter.setNewData(Articles);
+
+                    } else if (operateType == OperateTypeEnum.LOADMORE) {
+                        if (response.body().getData().getList().getRows().size() == 0) {
+                            if (noDataView == null) {
+                                noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
+                            }
+                            adapter.removeAllFooterView();
+                            adapter.addFooterView(noDataView);
+                            adapter.loadComplete();
+                        } else {
+                            adapter.addData(response.body().getData().getList().getRows());
+                            pageIndex = pageIndex + 1;
+                        }
                     }
+                } else {
+                    ToastUtils.showLongToast(response.body().getStatusText());
                 }
             }
 
@@ -225,7 +207,7 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
             @Override
             public void onFailure(Call<ArticleListOutput> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
             }
         });
     }
@@ -259,9 +241,12 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
                         config.setImages(adDataList);
                         config.setWidth(DensityUtils.getDialogW(getActivity()));
 
-                        AdBannerWidget adBannerWidget = new AdBannerWidget(getContext(),config);
-                        adapter.removeAllHeaderView();
-                        adapter.addHeaderView(adBannerWidget);
+//                        AdBannerWidget adBannerWidget = new AdBannerWidget(getContext(),config);
+//                        adapter.removeAllHeaderView();
+//                        adapter.addHeaderView(adBannerWidget);
+
+                        adBannerWidget.setAdBannerConfig( config );
+
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
@@ -305,5 +290,10 @@ public class GroupFrag extends BaseFragment implements SwipeRefreshLayout.OnRefr
     public void onLoadMoreRequested() {
         operateType = OperateTypeEnum.LOADMORE;
         loadData(pageIndex+1);
+    }
+
+    @Override
+    public String getPageTitle() {
+        return "集团资讯";
     }
 }

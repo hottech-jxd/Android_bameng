@@ -33,6 +33,6 @@ public class FrescoHolderView implements Holder<SlideListModel> {
     public void UpdateUI(Context context, int position, SlideListModel data) {
 
         String imageUrl =data.getPicUrl();
-        FrescoDraweeController.loadImage(iv, width,  imageUrl , imageCallback );
+        FrescoDraweeController.loadImage(iv, width,  imageUrl , position , imageCallback );
     }
 }

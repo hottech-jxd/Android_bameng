@@ -25,11 +25,11 @@ public class FrescoDraweeController {
 //                .setControllerListener( new FrescoControllerListener(simpleDraweeView , width))
 //                .build();
 //        simpleDraweeView.setController( draweeController);
-        loadImage(simpleDraweeView, width, url , null);
+        loadImage(simpleDraweeView, width, url , 0, null);
     }
 
-    public static void loadImage(SimpleDraweeView simpleDraweeView , int width , String url , FrescoControllerListener.ImageCallback imageCallback){
-        FrescoControllerListener listener =  new FrescoControllerListener(simpleDraweeView , width);
+    public static void loadImage(SimpleDraweeView simpleDraweeView , int width , String url , int position , FrescoControllerListener.ImageCallback imageCallback){
+        FrescoControllerListener listener =  new FrescoControllerListener(simpleDraweeView , width , position );
         listener.setImageCallback(imageCallback);
         DraweeController draweeController = Fresco
                 .newDraweeControllerBuilder()

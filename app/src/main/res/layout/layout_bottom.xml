@@ -30,7 +30,7 @@
                 <ImageView
                     android:id="@+id/homeImg"
                     android:layout_width="@dimen/title_image_width"
-                    android:layout_height="@dimen/title_image_width"
+                    android:layout_height="@dimen/bottom_image_height"
                     android:layout_centerHorizontal="true"
                     android:background="@mipmap/ic_launcher"
                     android:focusable="false"
@@ -64,7 +64,7 @@
                 <ImageView
                     android:id="@+id/newsImg"
                     android:layout_width="@dimen/title_image_width"
-                    android:layout_height="@dimen/title_image_height"
+                    android:layout_height="@dimen/bottom_image_height"
                     android:layout_centerHorizontal="true"
                     android:background="@mipmap/ic_launcher"
                     android:focusable="false"
@@ -98,7 +98,7 @@
                 <ImageView
                     android:id="@+id/businessImg"
                     android:layout_width="@dimen/title_image_width"
-                    android:layout_height="@dimen/title_image_height"
+                    android:layout_height="@dimen/bottom_image_height"
                     android:layout_centerHorizontal="true"
                     android:background="@mipmap/ic_launcher"
                     android:focusable="false"
@@ -130,7 +130,7 @@
             <ImageView
                 android:id="@+id/profileImg"
                 android:layout_width="@dimen/title_image_width"
-                android:layout_height="@dimen/title_image_height"
+                android:layout_height="@dimen/bottom_image_height"
                 android:layout_centerHorizontal="true"
                 android:background="@mipmap/ic_launcher"
                 android:focusable="false"

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.MyBusinessOutputModel;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
@@ -21,9 +23,12 @@ import com.bameng.ui.business.MyAlliesActivity;
 import com.bameng.ui.business.MyCashCardActivity;
 import com.bameng.ui.business.OrderListActivity;
 import com.bameng.ui.business.RwordActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +39,8 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.baidu.location.h.j.t;
 
 /**
  * 我的业务
@@ -58,7 +65,7 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        initView();
+        //initView();
     }
 
     public void initView(){//******数据为空
@@ -69,38 +76,42 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<MyBusinessOutputModel> call = apiService.MyBusiness(token,map);
         call.enqueue(new Callback<MyBusinessOutputModel>() {
             @Override
             public void onResponse(Call<MyBusinessOutputModel> call, Response<MyBusinessOutputModel> response) {
                 swipeRefreshLayout.setRefreshing(false);
-                if(response.code() !=200){
+                if (response.code() != 200) {
                     ToastUtils.showLongToast(response.message());
                     return;
                 }
-                if (response.body() != null) {
-//
-                    if (response.body().getStatus() == 200&&response.body().getData()!=null) {
-                        //ToastUtils.showLongToast("提交成功");
-                        txtOrder.setText( String.valueOf( response.body().getData().getOrderAmount() ));
-                        txtCustomer.setText( String.valueOf( response.body().getData().getCustomerAmount() ) );
-                        txtCash.setText( String.valueOf( response.body().getData().getCashCouponAmount()) );
-                        txtExchange.setText(String.valueOf( response.body().getData().getExchangeAmount() ));
-//
-                    } else {
-                        ToastUtils.showLongToast(response.body().getStatusText());
-                    }
+                if (response.body() == null) {
+                    ToastUtils.showLongToast("服务器发生错误");
+                    return;
+                }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity(), PhoneLoginActivity.class);
+                    return;
+                }
 
+                if (response.body().getStatus() == 200 && response.body().getData() != null) {
+                    txtOrder.setText(String.valueOf(response.body().getData().getOrderAmount()));
+                    txtCustomer.setText(String.valueOf(response.body().getData().getCustomerAmount()));
+                    txtCash.setText(String.valueOf(response.body().getData().getCashCouponAmount()));
+                    txtExchange.setText(String.valueOf(response.body().getData().getExchangeAmount()));
+                } else {
+                    ToastUtils.showLongToast(response.body().getStatusText());
                 }
             }
-
 
             @Override
             public void onFailure(Call<MyBusinessOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
             }
         });
 
@@ -110,6 +121,17 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    protected void loadData() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 
     @Override

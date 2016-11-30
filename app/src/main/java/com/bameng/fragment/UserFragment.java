@@ -28,6 +28,7 @@ import com.bameng.model.UserOutputsModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.WebViewActivity;
+import com.bameng.ui.account.ExchangeConfirmActivity;
 import com.bameng.ui.account.MDouCountActivity;
 import com.bameng.ui.account.MyAccountActivity;
 import com.bameng.ui.account.MyBeanActivity;
@@ -43,9 +44,6 @@ import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshHorizontalScrollView;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,18 +59,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.id;
-import static com.baidu.location.h.j.t;
-import static com.baidu.location.h.j.v;
-import static com.bameng.R.id.screen;
-import static com.bameng.R.id.status;
-import static com.bameng.R.id.txt_jifen;
+import static com.bameng.R.id.layroot;
 
 /***
  * 盟主 个人中心
  */
-public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class UserFragment extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener , View.OnClickListener {
 
     @Bind(R.id.homePullRefresh)
     SwipeRefreshLayout homePullRefresh;
@@ -92,15 +85,13 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     TextView txtNosettlembean;
     @Bind(R.id.txt_integral)
     TextView txtIntegral;
-    @Bind(R.id.laysign)
     LinearLayout laysign;
-    @Bind(R.id.layuserinfo)
     LinearLayout layuserinfo;
-    @Bind(R.id.laycode)
     LinearLayout laycode;
-
-    @Bind(R.id.tvuserinfo) TextView tvuserinfo;
-    @Bind(R.id.tvbarcode) TextView tvbarcode;
+    LinearLayout laymyorder;
+    LinearLayout laymycash;
+    @Bind(R.id.laymenus)
+    LinearLayout laymenus;
 
     UserData userData;
     ProgressDialog progressDialog;
@@ -108,11 +99,9 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        userData = new UserData();
+
         initView();
-
         homePullRefresh.setOnRefreshListener(this);
-
     }
 
     @Override
@@ -132,20 +121,52 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             txtNosettlembean.setText(String.valueOf(userData.getTempMengBeans()));
             txtIntegral.setText(String.valueOf(userData.getScore()));
 
-            if( BaseApplication.BaseData() !=null ) {
-                laysign.setVisibility(BaseApplication.BaseData().getEnableSignIn()==1 ? View.VISIBLE:View.GONE);
-            }else{
-            }
 
             if( userData.getUserIdentity() == Constants.MENG_ZHU ){
-                tvuserinfo.setText("个人信息");
-                tvbarcode.setText("推广二维码");
+               initMengZhu();
             }else{
-                tvuserinfo.setText("我的现金劵");
-                tvbarcode.setText("我的客户订单");
+              initAlly();
             }
         }
+    }
 
+    void initMengZhu(){
+        View view = LayoutInflater.from(getContext()).inflate( R.layout.layout_meng_menu ,null );
+        laymenus.removeAllViews();
+        laymenus.addView( view );
+
+        laysign = (LinearLayout) laymenus.findViewById(R.id.laysign);
+        laysign.setOnClickListener(this);
+        layuserinfo = (LinearLayout)laymenus.findViewById(R.id.layuserinfo);
+        layuserinfo.setOnClickListener(this);
+        laycode = (LinearLayout)laymenus.findViewById(R.id.laycode);
+        laycode.setOnClickListener(this);
+        if( BaseApplication.BaseData() !=null && BaseApplication.BaseData().getEnableSignIn() == 1 ){
+            laysign.setVisibility(View.VISIBLE);
+        }else{
+            laysign.setVisibility(View.GONE);
+        }
+    }
+
+    void initAlly(){
+        View view = LayoutInflater.from(getContext()).inflate( R.layout.layout_ally_menu ,null );
+        laymenus.removeAllViews();
+        laymenus.addView( view );
+
+        laymyorder = (LinearLayout) laymenus.findViewById(R.id.laymyorder);
+        laymyorder.setOnClickListener(this);
+        laymycash = (LinearLayout)laymenus.findViewById(R.id.laymycash);
+        laymycash.setOnClickListener(this);
+        laysign = (LinearLayout)laymenus.findViewById(R.id.laysign);
+        laysign.setOnClickListener(this);
+        layuserinfo = (LinearLayout)laymenus.findViewById(R.id.laymyuserinfo);
+        layuserinfo.setOnClickListener(this);
+
+        if( BaseApplication.BaseData() !=null && BaseApplication.BaseData().getEnableSignIn() == 1 ){
+            laysign.setVisibility(View.VISIBLE);
+        }else{
+            laysign.setVisibility(View.GONE);
+        }
     }
 
     public void initData(){
@@ -156,7 +177,7 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<UserOutputsModel> call = apiService.myinfo(token, map);
         call.enqueue(new Callback<UserOutputsModel>() {
@@ -210,13 +231,14 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     }
 
+
+
+//    @OnClick({R.id.img_setting,R.id.img_user,R.id.layuserinfo,R.id.layaccount,
+//            R.id.laycode,R.id.laysign , R.id.layBean,R.id.laywaitbean,R.id.layscore,R.id.layName})
+
+    @OnClick({R.id.layaccount,R.id.img_setting,R.id.img_user,R.id.layBean,R.id.laywaitbean,R.id.layscore,R.id.layName})
     @Override
     public void onClick(View view) {
-
-    }
-
-    @OnClick({R.id.img_setting,R.id.img_user,R.id.layuserinfo,R.id.layaccount,R.id.laycode,R.id.laysign , R.id.layBean,R.id.laywaitbean,R.id.layscore})
-    void onclick(View view) {
         switch (view.getId()) {
             case R.id.layaccount:
                 ActivityUtils.getInstance().showActivity(getActivity(), MyAccountActivity.class);
@@ -228,6 +250,7 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 goto_one();
                 break;
             case R.id.img_user:
+            case R.id.layName:
                 ActivityUtils.getInstance().showActivity(getActivity(), UserInfoActivity.class);
                 break;
             case R.id.laycode:
@@ -245,6 +268,12 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             case R.id.layscore:
                 ActivityUtils.getInstance().showActivity(getActivity(),ScoreActivity.class);
                 break;
+            case R.id.laymycash:
+                ActivityUtils.getInstance().showActivity(getActivity(), MyCashCardActivity.class);
+                break;
+            case R.id.laymyorder:
+                ActivityUtils.getInstance().showActivity(getActivity(), OrderListActivity.class);
+                break;
             default:
                 break;
         }
@@ -252,11 +281,11 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     void goto_one(){
-        if(BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU){
+        //if(BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU){
             ActivityUtils.getInstance().showActivity(getActivity(), UserInfoActivity.class );
-        }else{
-            ActivityUtils.getInstance().showActivity(getActivity(), MyCashCardActivity.class);
-        }
+        //}else{
+        //    ActivityUtils.getInstance().showActivity(getActivity(), MyCashCardActivity.class);
+        //}
     }
 
     void goto_two(){
@@ -283,7 +312,7 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<SignOutputModel> call = apiService.signin(token, map);
         call.enqueue(new Callback<SignOutputModel>() {
@@ -300,6 +329,13 @@ public class UserFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     ToastUtils.showLongToast("返回数据空");
                     return;
                 }
+                if(response.body().getStatus() == Constants.STATUS_70035){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity() , PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus() != 200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;

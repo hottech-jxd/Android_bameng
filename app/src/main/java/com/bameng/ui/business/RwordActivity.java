@@ -14,16 +14,22 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
 import com.bameng.model.ArticleListOutput;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.huotu.android.library.libedittext.EditText;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +108,7 @@ public class RwordActivity extends BaseActivity {
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.setallyRaward(token,map);
         call.enqueue(new Callback<PostModel>() {
@@ -112,6 +118,17 @@ public class RwordActivity extends BaseActivity {
                     ToastUtils.showLongToast(response.message()==null? String.valueOf( response.code()) : response.message());
                     return;
                 }
+                if(response.body()==null){
+                    ToastUtils.showLongToast("服务器开小差了");
+                    return;
+                }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity( RwordActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
+
 
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200 ) {
@@ -120,8 +137,6 @@ public class RwordActivity extends BaseActivity {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
                 }
-
-                return;
             }
 
             @Override
@@ -135,33 +150,46 @@ public class RwordActivity extends BaseActivity {
     @Override
     protected void StartApi() {
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
+        ApiService apiService = ZRetrofitUtil.getApiService();
+        String token = BaseApplication.readToken();
         Call<GetRewardOutput> call = apiService.GetAllyReward(token,map);
         call.enqueue(new Callback<GetRewardOutput>() {
             @Override
             public void onResponse(Call<GetRewardOutput> call, Response<GetRewardOutput> response) {
-                if (response.body() != null) {
-
-
-                    if (response.body().getStatus() == 200&&response.body().getData() !=null) {
-                        CustomReward.setText(String.valueOf(response.body().getData().getCustomerReward()));
-                        orderReword.setText(String.valueOf(response.body().getData().getOrderReward()));
-                        shopReword.setText(String.valueOf(response.body().getData().getShopReward()));
-                    } else {
-                        ToastUtils.showLongToast(response.body().getStatusText());
-                    }
+                if (response.code() != 200) {
+                    ToastUtils.showLongToast(response.message());
+                    return;
                 }
-                return;
+                if (response.body() == null) {
+                    ToastUtils.showLongToast("服务器开小差了");
+                    return;
+                }
 
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(RwordActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+
+                if(response.body().getStatus() !=200){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    return;
+                }
+
+                if (response.body().getStatus() == 200 && response.body().getData() != null) {
+                    CustomReward.setText(String.valueOf(response.body().getData().getCustomerReward()));
+                    orderReword.setText(String.valueOf(response.body().getData().getOrderReward()));
+                    shopReword.setText(String.valueOf(response.body().getData().getShopReward()));
+                }
             }
+
 
             @Override
             public void onFailure(Call<GetRewardOutput> call, Throwable t) {

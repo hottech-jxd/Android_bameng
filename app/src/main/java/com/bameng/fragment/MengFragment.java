@@ -20,7 +20,9 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.CustomDetailsAdapter;
 import com.bameng.adapter.MengDataAdapter;
+import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.MengModel;
 import com.bameng.model.MyOutputModel;
 import com.bameng.model.MyPageModel;
@@ -32,6 +34,7 @@ import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.ui.business.AlliesDetailsActivity;
 import com.bameng.ui.business.AlliesExamineActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
@@ -266,6 +269,14 @@ public class MengFragment extends BaseFragment
                     ToastUtils.showLongToast( response.message()==null?"error": response.message() );
                     return;
                 }
+
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(getActivity(), PhoneLoginActivity.class);
+                    return;
+                }
+
                 if( response.body().getStatus() !=200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;

@@ -11,16 +11,22 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.MengModel;
 import com.bameng.model.MengOutputModel;
 import com.bameng.model.PostModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.UserInfoView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -103,7 +109,7 @@ public class AlliesDetailsActivity extends BaseActivity {
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<MengOutputModel> call = apiService.AllyInfo(token, map);
         call.enqueue(new Callback<MengOutputModel>() {
@@ -120,6 +126,13 @@ public class AlliesDetailsActivity extends BaseActivity {
                     ToastUtils.showLongToast("返回数据空");
                     return;
                 }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(AlliesDetailsActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+
                 if(response.body().getStatus() != 200){
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;

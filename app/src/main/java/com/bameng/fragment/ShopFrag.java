@@ -12,8 +12,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.bameng.R;
-import com.bameng.adapter.ArticleAdapter;
 import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.model.ArticleListOutput;
@@ -30,9 +28,6 @@ import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.MyListView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -200,4 +195,10 @@ public class ShopFrag extends StoreFrag {
 //    public int getLayoutRes() {
 //        return R.layout.frag_shop;
 //    }
+
+
+    @Override
+    public String getPageTitle() {
+        return "分店资讯";
+    }
 }

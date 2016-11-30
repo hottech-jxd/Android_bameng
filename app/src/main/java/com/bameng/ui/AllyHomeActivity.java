@@ -5,18 +5,21 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.PostModel;
+import com.bameng.model.SetRightVisibleEvent;
 import com.bameng.receiver.MyBroadcastReceiver;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
@@ -88,7 +91,10 @@ public class AllyHomeActivity extends BaseActivity {
     public Resources resources;
     public ProgressPopupWindow progress;
 
+    FragManager mFragManager;
+
     String currentTab="";
+    long exitTime = 0l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +104,7 @@ public class AllyHomeActivity extends BaseActivity {
 
         EventBus.getDefault().register(this);
 
-        application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
+        mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         initView();
         StartApi();
@@ -109,6 +115,7 @@ public class AllyHomeActivity extends BaseActivity {
         super.onDestroy();
         FragManager.clear();
         EventBus.getDefault().unregister(this);
+        BaseApplication.clearAll();
     }
 
     @Override
@@ -120,7 +127,7 @@ public class AllyHomeActivity extends BaseActivity {
         SystemTools.loadBackground(titleLeftImage, leftDraw);
         Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
         SystemTools.loadBackground(titleRightImage,rightDraw);
-        application.mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
+        mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
         initTab();
     }
 
@@ -158,35 +165,35 @@ public class AllyHomeActivity extends BaseActivity {
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(resources.getColor(R.color.chocolate));
+                homeTxt.setTextColor( ContextCompat.getColor( this ,  R.color.bottomSelectedColor));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                newsTxt.setTextColor(ContextCompat.getColor( this ,R.color.text_color_black));
                 Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_riches);
                 SystemTools.loadBackground(richesImg, profileDraw);
-                richesTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                application.mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
+                richesTxt.setTextColor(ContextCompat.getColor( this , R.color.text_color_black));
+                mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
             }
             break;
             case R.id.newsPage: {
                 currentTab="资讯列表";
                 titleText.setText("资讯列表");
                 titleLeftImage.setVisibility(View.GONE);
-                titleRightImage.setVisibility(View.VISIBLE);
+                //titleRightImage.setVisibility(View.VISIBLE);
                 if (progress != null) progress.dismissView();
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                homeTxt.setTextColor( ContextCompat.getColor(this , R.color.text_color_black));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(resources.getColor(R.color.chocolate));
+                newsTxt.setTextColor(ContextCompat.getColor( this , R.color.bottomSelectedColor));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_riches);
                 SystemTools.loadBackground(richesImg, listDraw);
-                richesTxt.setTextColor(resources.getColor(R.color.text_color_black));
-                application.mFragManager.setCurrentFrag(FragManager.FragType.NEWS);
+                richesTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
+                mFragManager.setCurrentFrag(FragManager.FragType.NEWS);
 
 
             }
@@ -200,15 +207,15 @@ public class AllyHomeActivity extends BaseActivity {
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                homeTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
+                newsTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_riches);
                 SystemTools.loadBackground(richesImg, listDraw);
-                richesTxt.setTextColor(resources.getColor(R.color.chocolate));
-                application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE );
+                richesTxt.setTextColor(ContextCompat.getColor(this, R.color.bottomSelectedColor ));
+                mFragManager.setCurrentFrag(FragManager.FragType.PROFILE );
 
             }
             break;
@@ -252,9 +259,32 @@ public class AllyHomeActivity extends BaseActivity {
         return false;
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 2秒以内按两次推出程序
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                ToastUtils.showLongToast("再按一次退出程序");
+                exitTime = System.currentTimeMillis();
+            } else {
+                closeSelf(this);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventClose(CloseEvent event){
         finish();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventRightButtomVisible(SetRightVisibleEvent event){
+        titleRightImage.setVisibility( event.isShow()? View.VISIBLE:View.GONE );
     }
 
 }

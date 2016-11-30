@@ -10,9 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.bameng.widgets.custom.AdBannerWidget
+            android:id="@+id/adbannerWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
     <LinearLayout
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:background="#ffffff"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -137,7 +144,7 @@
         android:id="@+id/layMore"
         android:orientation="horizontal"
         android:background="#FFFFFF"
-        android:paddingLeft="5dp"
+        android:paddingLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -154,7 +161,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="center_vertical"
-            android:paddingRight="5dp"
+            android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="10dp"
             android:layout_width="wrap_content"

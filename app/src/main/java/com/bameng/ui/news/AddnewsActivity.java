@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.CustomListOutput;
 import com.bameng.model.CustomerModel;
 import com.bameng.model.OperateTypeEnum;
@@ -23,11 +25,14 @@ import com.bameng.model.UserData;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.huotu.android.library.libedittext.EditText;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -128,6 +133,17 @@ public class AddnewsActivity extends BaseActivity {
                     ToastUtils.showLongToast(response.message());
                     return;
                 }
+                if(response.body()==null){
+                    ToastUtils.showLongToast("服务器出问题了");
+                    return;
+                }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(AddnewsActivity.this , PhoneLoginActivity.class);
+                    return;
+                }
+
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200 ) {
                         ToastUtils.showLongToast(response.body().getStatusText());

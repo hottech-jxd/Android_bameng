@@ -5,17 +5,17 @@
     android:layout_height="match_parent" >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height"
-        >
-        <include layout="@layout/title_index"></include>
+        android:layout_height="@dimen/act_title_height">
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/sandybrown"
+        android:background="#c3b6a5"
         android:orientation="vertical">
         <TextView
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="剩余待结算盟豆"
@@ -31,12 +31,16 @@
     </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="流水记录"
-            android:textSize="@dimen/medium_text_size"
+            android:textSize="16sp"
             android:textColor="@color/black"
-            android:layout_margin="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:background="#f2f2f2"
             />
     <RelativeLayout
         android:layout_width="match_parent"

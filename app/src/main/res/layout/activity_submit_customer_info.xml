@@ -2,13 +2,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="match_parent">
 
 <LinearLayout
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@color/white">
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -133,17 +133,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-        android:text="1.每条成功提交的信息可获得1盟豆奖励"
+            android:paddingTop="5dp"
+            android:id="@+id/tvDes1"
+        android:text="1.每条成功提交的信息可获得0盟豆奖励"
         android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
         <TextView
-            android:text="2.每笔成交的订单可获得100盟豆奖励"
+            android:paddingTop="5dp"
+            android:id="@+id/tvDes2"
+            android:text="2.每笔成交的订单可获得0盟豆奖励"
             android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:text="3.客户上门20盟豆奖励"
+            android:paddingTop="5dp"
+            android:id="@+id/tvDes3"
+            android:text="3.客户上门0盟豆奖励"
             android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -154,7 +160,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_cancel"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
         android:textColor="@color/white"
         android:text="提交"/>

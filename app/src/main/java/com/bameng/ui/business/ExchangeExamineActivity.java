@@ -61,10 +61,7 @@ public class ExchangeExamineActivity extends BaseActivity {
         setContentView(R.layout.activity_exchange_examine);
         ButterKnife.bind(this);
         initView();
-        //application = (BaseApplication) this.getApplication();
         resources = this.getResources();
-        StartApi();
-        //changeIndex(currentIndex);
     }
 
     @Override
@@ -109,40 +106,28 @@ public class ExchangeExamineActivity extends BaseActivity {
        });
     }
 
-    private void changeIndex(int index) {
-        if (index == 0) {
-            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-            Drawable drawable_normal = resources.getDrawable(R.color.white);
-            SystemTools.loadBackground(nodoneLabel, drawable_press);
-            SystemTools.loadBackground(doneLabel, drawable_normal);
-            nodoneLabel.setTextColor(resources.getColor(R.color.red));
-            doneLabel.setTextColor(resources.getColor(R.color.black));
-        } else if (index == 1) {
-            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-            Drawable drawable_normal = resources.getDrawable(R.color.white);
-            SystemTools.loadBackground(nodoneLabel, drawable_normal);
-            SystemTools.loadBackground(doneLabel, drawable_press);
-            nodoneLabel.setTextColor(resources.getColor(R.color.black));
-            doneLabel.setTextColor(resources.getColor(R.color.red));
-        }
-    }
+//    private void changeIndex(int index) {
+//        if (index == 0) {
+//            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
+//            Drawable drawable_normal = resources.getDrawable(R.color.white);
+//            SystemTools.loadBackground(nodoneLabel, drawable_press);
+//            SystemTools.loadBackground(doneLabel, drawable_normal);
+//            nodoneLabel.setTextColor(resources.getColor(R.color.red));
+//            doneLabel.setTextColor(resources.getColor(R.color.black));
+//        } else if (index == 1) {
+//            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
+//            Drawable drawable_normal = resources.getDrawable(R.color.white);
+//            SystemTools.loadBackground(nodoneLabel, drawable_normal);
+//            SystemTools.loadBackground(doneLabel, drawable_press);
+//            nodoneLabel.setTextColor(resources.getColor(R.color.black));
+//            doneLabel.setTextColor(resources.getColor(R.color.red));
+//        }
+//    }
 
     @Override
     protected void StartApi() {
 
     }
-
-//    @OnClick(R.id.nodoneLabel)
-//    void clickDoing() {
-//        // raidersViewPager.setCurrentItem(1);
-//        changeIndex(0);
-//    }
-
-//    @OnClick(R.id.doneLabel)
-//    void clickDone() {
-//        //raidersViewPager.setCurrentItem(2);
-//        changeIndex(1);
-//    }
 
     @Override
     public boolean handleMessage(Message msg) {

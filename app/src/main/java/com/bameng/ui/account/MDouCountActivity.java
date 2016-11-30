@@ -17,17 +17,24 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.adapter.ApplyCashAdapter;
 import com.bameng.adapter.MBeanFlowAdapter;
+import com.bameng.adapter.WaitMBeanFlowAdapter;
+import com.bameng.config.Constants;
 import com.bameng.model.BeanFlowOutputModel;
+import com.bameng.model.CloseEvent;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.UserOutputsModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +44,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.homePullRefresh;
 
 /***
  * 待结算盟豆
@@ -57,7 +61,7 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
     @Bind(R.id.recycleView)
     RecyclerView recyclerView;
 
-    MBeanFlowAdapter adapter;
+    WaitMBeanFlowAdapter adapter;
     View noDataView;
     View emptyView;
     OperateTypeEnum operateTypeEnum = OperateTypeEnum.REFRESH;
@@ -69,7 +73,6 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_mdou_count);
         ButterKnife.bind(this);
         initView();
-        //StartApi();
     }
 
     @Override
@@ -81,7 +84,7 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
         mdou_count.setText( String.valueOf( BaseApplication.UserData().getTempMengBeans() ));
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        adapter = new MBeanFlowAdapter();
+        adapter = new WaitMBeanFlowAdapter();
         adapter.setOnLoadMoreListener(this);
 
         emptyView = LayoutInflater.from(this).inflate(R.layout.layout_empty ,  (ViewGroup) recyclerView.getParent(),false);
@@ -134,7 +137,7 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<BeanFlowOutputModel> call = apiService.tempsettlebeanlist(token, map);
         call.enqueue(new Callback<BeanFlowOutputModel>() {
@@ -148,6 +151,12 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
                 }
                 if(response.body()==null){
                     ToastUtils.showLongToast("返回空数据");
+                    return;
+                }
+                if(response.body().getStatus() == Constants.STATUS_70035){
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(MDouCountActivity.this , PhoneLoginActivity.class);
                     return;
                 }
                 if(response.body().getStatus()!=200){

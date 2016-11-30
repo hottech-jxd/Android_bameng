@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/titleLeftImage"
             android:layout_width="25dp"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_height="@dimen/title_image_width"
             android:onClick="onGoBackButton"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
@@ -33,14 +33,14 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:maxEms="10"
-            android:singleLine="true"
+            android:maxLines="1"
             android:ellipsize="end"/>
 
 
         <ImageView
             android:id="@+id/titleRightLeftImage"
             android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_height="@dimen/title_image_width"
             android:layout_toLeftOf="@+id/titleRightImage"
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
@@ -50,7 +50,7 @@
         <ImageView
             android:id="@+id/titleRightImage"
             android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_height="@dimen/title_image_width"
             android:layout_toLeftOf="@+id/titleRightText"
             android:layout_marginRight="2dp"
             android:layout_centerVertical="true"
@@ -62,7 +62,7 @@
             android:layout_alignParentRight="true"
             android:textSize="15sp"
             android:textColor="@color/black"
-            android:singleLine="true"
+            android:maxLines="1"
             android:layout_centerVertical="true"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"

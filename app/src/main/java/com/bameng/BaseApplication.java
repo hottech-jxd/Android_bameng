@@ -23,11 +23,14 @@ import com.bameng.model.LocalAddressModel;
 import com.bameng.model.UserData;
 import com.bameng.model.VersionData;
 import com.bameng.service.BaiduLocationService;
+import com.bameng.utils.AppBlockCanaryContext;
 import com.bameng.utils.AssetsUtils;
 import com.bameng.utils.CrashHandler;
 import com.bameng.utils.JSONUtil;
 import com.bameng.utils.PreferenceHelper;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.github.moduth.blockcanary.BlockCanary;
+import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,16 +47,10 @@ import static com.bameng.service.LocationService.latitude;
  * Application
  */
 public class BaseApplication extends Application {
-    //定位类型
-    //public int localType;
+
     public BaiduLocation baiduLocation;
-    //地址
-    //public String address;
-    //纬度
-    //public double latitude;
-    //经度
-    //public double Longitude;
-    public FragManager mFragManager;
+
+    //public FragManager mFragManager;
 
     protected  static UserData userData;
 
@@ -61,13 +58,10 @@ public class BaseApplication extends Application {
 
     public LocalAddressModel localAddress;
     //是否有网络连接
-    public boolean isConn = false;
-    //城市
-    //public String city;
-    //public LocationClient mLocationClient;
+    //public boolean isConn = false;
+
     public MyLocationListener mMyLocationListener;//地址从这开始
-    //底部菜单是否隐藏 true显示， false隐藏
-    //public boolean isMenuHide = false;
+
     //百度定位服务
     public BaiduLocationService baiduLocationService;
 
@@ -111,6 +105,7 @@ public class BaseApplication extends Application {
         // JPushInterface.setDebugMode(true);// 日志，生产环境关闭
         //JPushInterface.init ( this );
         //初始化shareSDK参数
+
         ShareSDK.initSDK(getApplicationContext());
 
         // 极光初始化
@@ -118,14 +113,23 @@ public class BaseApplication extends Application {
 
         //初始化 fresco
         Fresco.initialize(this);
+
+        if ( LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
     }
 
     void setStrictMode(){
         if(BuildConfig.DEBUG){
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectAll().penaltyLog().build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectAll().build());
+//            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                    .detectAll().penaltyLog().build());
+//            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                    .detectAll().build());
         }
     }
 //
@@ -288,11 +292,11 @@ public class BaseApplication extends Application {
 
 
     //加载基础信息
-    public void loadBaseData(BaseData baseData) {
-        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "about", baseData.getAboutUrl());
-        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "Agreement", baseData.getAgreementUrl());
-        PreferenceHelper.writeInt(getApplicationContext(), "Base_info", "userStatus", baseData.getUserStatus());
-    }
+//    public void loadBaseData(BaseData baseData) {
+//        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "about", baseData.getAboutUrl());
+//        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "Agreement", baseData.getAgreementUrl());
+//        PreferenceHelper.writeInt(getApplicationContext(), "Base_info", "userStatus", baseData.getUserStatus());
+//    }
     //加载版本信息
     public void loadUpdate(VersionData update) {
         PreferenceHelper.writeString(getApplicationContext(), "update_info", "serverVersion", update.getServerVersion());
@@ -301,8 +305,8 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeInt(getApplicationContext(), "update_info", "updateType", update.getUpdateType());
     }
 
-    public void writeUserToken(String token) {
-        PreferenceHelper.writeString(getApplicationContext(), "token", "token", token);
+    public static void writeUserToken(String token) {
+        PreferenceHelper.writeString( single , "token", "token", token);
     }
     public static String readToken(){
         return PreferenceHelper.readString( single ,"token" ,"token","");
@@ -334,8 +338,14 @@ public class BaseApplication extends Application {
         return JSONUtil.getGson().fromJson(json, BaseData.class);
     }
 
-    public void clearAllCookies(){
+    public static void clearAllCookies(){
         CookieManager.getInstance().removeAllCookie();
+    }
+
+    public static void clearAll(){
+        clearAllCookies();
+        userData = null;
+        baseData = null;
     }
 
 }

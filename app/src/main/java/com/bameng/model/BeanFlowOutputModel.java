@@ -21,6 +21,8 @@ public class BeanFlowOutputModel extends BaseModel {
 
     public class BeanFlowList{
         private List<BeanRecordModel> list;
+        private int income;
+        private int outcome;
 
         public List<BeanRecordModel> getList() {
             return list;
@@ -28,6 +30,22 @@ public class BeanFlowOutputModel extends BaseModel {
 
         public void setList(List<BeanRecordModel> list) {
             this.list = list;
+        }
+
+        public int getIncome() {
+            return income;
+        }
+
+        public void setIncome(int income) {
+            this.income = income;
+        }
+
+        public int getOutcome() {
+            return outcome;
+        }
+
+        public void setOutcome(int outcome) {
+            this.outcome = outcome;
         }
     }
 }

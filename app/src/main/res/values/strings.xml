@@ -8,7 +8,7 @@
     <string name="home_reward">奖励设置</string>
     <string name="home_groupinfo">集团资讯</string>
     <string name="text_more">更多 ></string>
-    <string name="hint_username2">手机号码</string>
+    <string name="hint_username2">手机号码/用户名</string>
     <string name="hint_oldpws">请输入当前使用的密码</string>
     <string name="hint_newpws1">请设置6位数以上的新密码</string>
     <string name="hint_newpws2">请再次输入</string>

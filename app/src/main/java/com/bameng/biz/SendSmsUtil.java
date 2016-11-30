@@ -35,28 +35,17 @@ public class SendSmsUtil {
 
     public void sendSms(String phone , final SendSmsCallbackListener listener){
 
-//        if( TextUtils.isEmpty( phone ) ){
-//            edtPhone.setError("请输入手机号");
-//            ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(edtCode, 0);
-//            return;
-//        }
-//        if( phone.length()<11 ){
-//            edtPhone.setError("请输入合法的手机号");
-//            edtPhone.setFocusable(true);
-//            return;
-//        }
-
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("mobile", phone );
-        map.put("type", "1");
+        //map.put("type", "1");
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        Call<PostModel> call = apiService.SendSms( BaseApplication.readToken(),map);
+        Call<PostModel> call = apiService.SendSmsForModifyPhone( BaseApplication.readToken(),map);
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {

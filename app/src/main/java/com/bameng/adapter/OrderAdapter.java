@@ -36,7 +36,7 @@ public class OrderAdapter extends BaseQuickAdapter<OrderModel, BaseViewHolder> {
 
         baseViewHolder.setText(R.id.tvname, orderModel.getUserName());
         baseViewHolder.setText(R.id.tvphone, orderModel.getMobile());
-        baseViewHolder.setText(R.id.tvBeans , orderModel.getMoney());
+        baseViewHolder.setText(R.id.tvBeans , orderModel.getMengbeans());
         baseViewHolder.setText(R.id.status , orderModel.getStatusName());
     }
 }

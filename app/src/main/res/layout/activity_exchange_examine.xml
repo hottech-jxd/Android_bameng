@@ -8,8 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/act_title_height">
-
-        <include layout="@layout/title_index"></include>
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -18,8 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:padding="10dp"
@@ -31,7 +29,6 @@
             android:text="未处理申请"
             android:textColor="@color/black"
             android:textSize="14sp" />
-
 
         <TextView
             android:padding="10dp"

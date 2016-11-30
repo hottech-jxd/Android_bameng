@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/sandybrown"
+        android:background="#c3b6a5"
         android:orientation="horizontal">
         <LinearLayout
             android:layout_weight="1"
@@ -29,11 +29,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:paddingTop="4dp"
                 android:text="0"/>
         </LinearLayout>
-        <View android:layout_width="1dp" android:layout_marginTop="4dp" android:layout_marginBottom="4dp" android:layout_height="wrap_content" android:background="@color/line_gray"/>
+        <View android:layout_width="1dp" android:layout_marginTop="4dp"
+              android:layout_marginBottom="4dp"
+              android:layout_height="wrap_content" android:background="@color/white"/>
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="wrap_content"
@@ -50,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:paddingTop="4dp"
                 android:text="0"/>
         </LinearLayout>
@@ -93,7 +95,7 @@
         android:layout_marginLeft="20dp"
         android:text="1.盟豆大于100时才可申请兑现"/>
     <TextView
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -103,6 +105,7 @@
         android:id="@+id/tv_record"
         android:layout_marginTop="20dp"
         android:gravity="center"
+        android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="兑换记录"/>

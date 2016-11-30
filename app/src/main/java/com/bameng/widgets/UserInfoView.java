@@ -109,6 +109,7 @@ public class UserInfoView {
 				 dialog.dismiss();
 			}
 		});
+
 		mainView.findViewById(R.id.btn_Cancel2).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

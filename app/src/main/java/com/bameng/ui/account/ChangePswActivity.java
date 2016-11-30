@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.PostModel;
@@ -93,11 +95,23 @@ public class ChangePswActivity extends BaseActivity {
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if(response.code() !=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
+
                 if (response.body() != null) {
+
+                    if(response.body().getStatus() == Constants.STATUS_70035){
+                        ToastUtils.showLongToast(response.body().getStatusText());
+                        EventBus.getDefault().post(new CloseEvent());
+                        ActivityUtils.getInstance().skipActivity(ChangePswActivity.this , PhoneLoginActivity.class);
+                        return;
+                    }
 
 
                     if (response.body().getStatus() == 200&&response.body()!=null) {
-                        application.writeUserToken("");
+                        BaseApplication.writeUserToken("");
                         EventBus.getDefault().post(new CloseEvent());
                         ActivityUtils.getInstance().skipActivity(ChangePswActivity.this, PhoneLoginActivity.class);
                     } else {
@@ -105,11 +119,6 @@ public class ChangePswActivity extends BaseActivity {
                     }
 
                 }
-
-                return;
-
-
-
             }
 
 
