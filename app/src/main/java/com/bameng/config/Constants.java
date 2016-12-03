@@ -85,6 +85,8 @@ public class Constants {
 	public static final String INTENT_URL   = "INTENT_URL";
 	public static final String INTENT_TITLE = "INTENT_TITLE";
 
+	public static final String CAPTURE_SCREEN = "CAPTURE_SCREEN";
+
 
 	/**
 	 * 基本信息

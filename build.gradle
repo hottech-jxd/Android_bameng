@@ -24,6 +24,12 @@ allprojects {
     }
 }
 
+buildscript{
+    dependencies {
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.4.0'
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

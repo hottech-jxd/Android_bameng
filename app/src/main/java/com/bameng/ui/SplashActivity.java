@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.VersionData;
@@ -31,7 +32,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -40,13 +41,13 @@ import retrofit2.Response;
 
 public class SplashActivity extends BaseActivity implements DownloadUtil.ProgressListener {
 
-    @Bind(R.id.splashL)
+    @BindView(R2.id.splashL)
     RelativeLayout splashL;
-    @Bind(R.id.tvVersion)
+    @BindView(R2.id.tvVersion)
     TextView tvVersion;
-    @Bind(R.id.tvClick)
+    @BindView(R2.id.tvClick)
     TextView tvClick;
-    @Bind(R.id.progressBar)
+    @BindView(R2.id.progressBar)
     ProgressBar progressBar;
 
     boolean isConnection = false;
@@ -171,7 +172,7 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
             @Override
             public void onFailure(Call<InitOutputsModel> call, Throwable t) {
                 tvClick.setVisibility(View.VISIBLE);
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast("服务器开小差了，请重试");
             }
         });
     }
@@ -212,7 +213,7 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
 
     void callback(InitOutputsModel data ){
 
-        if( data.getData() !=null && data.getData().getVersionData() !=null && data.getData().getVersionData().getUpdateType() == 1 ){
+        if( data.getData() !=null && data.getData().getVersionData() !=null && data.getData().getVersionData().getUpdateType() > 0 ){
             checkAppUpdate( data );
         }else{
             gotoHome(data);
@@ -227,6 +228,11 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
 
 
     private void checkAppUpdate( final InitOutputsModel data  ) {
+        if( data.getData().getVersionData().getUpdateType() == 2 ){//强制更新
+            updataApp(data.getData().getVersionData());
+            return;
+        }
+
         AlertDialog alertDialog = new AlertDialog.Builder(SplashActivity.this)
                 .setIcon(R.mipmap.ic_launcher)
                 .setMessage(data.getData().getVersionData().getUpdateTip())

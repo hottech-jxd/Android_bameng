@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.MBeanFlowAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
@@ -34,7 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -51,17 +52,17 @@ import static com.bameng.R.id.beam;
  */
 public class ExchangeConfirmActivity extends BaseActivity {
 
-    @Bind(R.id.tv_record)
+    @BindView(R2.id.tv_record)
     TextView tv_record;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.etBean)
+    @BindView(R2.id.etBean)
     EditText etBean;
-    @Bind(R.id.txt_income)
+    @BindView(R2.id.txt_income)
     TextView tvIn;
-    @Bind(R.id.txt_outbean)
+    @BindView(R2.id.txt_outbean)
     TextView tvOut;
 
     ProgressDialog progressDialog;
@@ -78,8 +79,10 @@ public class ExchangeConfirmActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("兑换确认");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         tvIn.setText( String.valueOf( BaseApplication.UserData().getMengBeans()));
         //tvOut.setText( BaseApplication.UserData().get );

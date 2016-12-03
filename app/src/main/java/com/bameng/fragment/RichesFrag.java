@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.ui.account.MyAccountActivity;
 import com.bameng.ui.account.SettingActivity;
 import com.bameng.ui.account.UserInfoActivity;
@@ -16,7 +17,7 @@ import com.bameng.ui.business.OrderListActivity;
 import com.bameng.utils.ActivityUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -26,27 +27,27 @@ import butterknife.OnClick;
 public class RichesFrag extends BaseFragment {
 
 
-    @Bind(R.id.img_user)
+    @BindView(R2.id.img_user)
     SimpleDraweeView img_user;
-    @Bind(R.id.txt_name)
+    @BindView(R2.id.txt_name)
     TextView txtName;
-    @Bind(R.id.txt_Points)
+    @BindView(R2.id.txt_Points)
     TextView txtPoints;
-    @Bind(R.id.img_setting)
+    @BindView(R2.id.img_setting)
     ImageView imgSetting;
-    @Bind(R.id.layaccount)
+    @BindView(R2.id.layaccount)
     LinearLayout layaccount;
-    @Bind(R.id.txt_mbean)
+    @BindView(R2.id.txt_mbean)
     TextView txtMbean;
-    @Bind(R.id.txt_nosettlembean)
+    @BindView(R2.id.txt_nosettlembean)
     TextView txtNosettlembean;
-    @Bind(R.id.txt_integral)
+    @BindView(R2.id.txt_integral)
     TextView txtIntegral;
-    @Bind(R.id.laysign)
+    @BindView(R2.id.laysign)
     LinearLayout laysign;
-    @Bind(R.id.laymoneycard)
+    @BindView(R2.id.laymoneycard)
     LinearLayout laymoneycard;
-    @Bind(R.id.layorder)
+    @BindView(R2.id.layorder)
     LinearLayout layorder;
 
     @Override
@@ -98,7 +99,7 @@ public class RichesFrag extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
     }
     @Override
     public int getLayoutRes() {

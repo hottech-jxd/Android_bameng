@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.MYFragmentAdapter;
 import com.bameng.fragment.CashFragment;
 import com.bameng.ui.base.BaseActivity;
@@ -23,7 +24,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -33,20 +34,20 @@ import static android.R.attr.fragment;
  * 兑换审核 界面
  */
 public class ExchangeExamineActivity extends BaseActivity {
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
     private int currentIndex = 0;
-    @Bind(R.id.nodoneLabel)
+    @BindView(R2.id.nodoneLabel)
     TextView nodoneLabel;
-    @Bind(R.id.doneLabel)
+    @BindView(R2.id.doneLabel)
     TextView doneLabel;
 
-    @Bind(R.id.tablayout)
+    @BindView(R2.id.tablayout)
     TabLayout tabLayout;
 
-    @Bind(R.id.viewPager)
+    @BindView(R2.id.viewPager)
     ViewPager viewPager;
 
     public Resources resources;
@@ -67,8 +68,10 @@ public class ExchangeExamineActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("兑换审核");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         titles = new String[]{"未处理申请","已处理审核"};
         fragments = new ArrayList<>();

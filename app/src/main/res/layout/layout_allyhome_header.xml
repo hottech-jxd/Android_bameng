@@ -24,7 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/chocolate"/>
+                android:textSize="22sp"
+                android:textColor="#c3b6a5"/>
             <TextView
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/chocolate"/>
+                android:textSize="22sp"
+                android:textColor="#c3b6a5"/>
             <TextView
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
@@ -62,7 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/chocolate"/>
+                android:textSize="22sp"
+                android:textColor="#c3b6a5"/>
             <TextView
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
@@ -81,7 +84,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/chocolate"/>
+                android:textSize="22sp"
+                android:textColor="#c3b6a5"/>
             <TextView
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
@@ -100,7 +104,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/chocolate"/>
+                android:textSize="22sp"
+                android:textColor="#c3b6a5"/>
             <TextView
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"

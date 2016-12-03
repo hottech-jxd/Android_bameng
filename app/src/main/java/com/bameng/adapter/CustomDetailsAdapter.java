@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.CustomListOutput;
 import com.bameng.model.CustomerModel;
 import com.bameng.model.PostModel;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -113,23 +114,23 @@ public class CustomDetailsAdapter extends BaseAdapter implements View.OnClickLis
     }
 
     class ViewHolder {
-        @Bind(R.id.img)
+        @BindView(R2.id.img)
         SimpleDraweeView img;
-        @Bind(R.id.name)
+        @BindView(R2.id.name)
         TextView name;
-        @Bind(R.id.moblie)
+        @BindView(R2.id.moblie)
         TextView moblie;
-        @Bind(R.id.lay_btn)
+        @BindView(R2.id.lay_btn)
         LinearLayout layBtn;
-        @Bind(R.id.status)
+        @BindView(R2.id.status)
         TextView status;
-        @Bind(R.id.btnAgree)
+        @BindView(R2.id.btnAgree)
         Button agress;
-        @Bind(R.id.btnReject)
+        @BindView(R2.id.btnReject)
         Button reject;
-        @Bind(R.id.progressBar)
+        @BindView(R2.id.progressBar)
         ProgressBar progressBar;
-        @Bind(R.id.llItem)
+        @BindView(R2.id.llItem)
         LinearLayout llItem;
 
         public ViewHolder(View view) {

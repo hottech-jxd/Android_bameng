@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.listener.PoponDismissListener;
 import com.bameng.model.ArticleListOutput;
@@ -61,7 +62,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
@@ -69,16 +70,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.baselineAlignBottom;
-import static android.R.attr.bitmap;
-import static android.R.attr.data;
-import static com.baidu.location.h.j.ar;
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.add;
-import static com.bameng.R.id.provinceL;
 import static com.bameng.R.id.txt_nationality;
-import static com.bameng.service.LocationService.city;
 
 /***
  * 个人信息
@@ -87,33 +79,33 @@ public class UserInfoActivity extends PhoteActivity
         implements PhotoSelectView.OnPhotoSelectBackListener,
         UserInfoView.OnUserInfoBackListener ,Handler.Callback {
 
-    @Bind(R.id.layImg)
+    @BindView(R2.id.layImg)
     LinearLayout layImg;
-    @Bind(R.id.img_user)
+    @BindView(R2.id.img_user)
     SimpleDraweeView imgUser;
-    @Bind(R.id.layname)
+    @BindView(R2.id.layname)
     LinearLayout layname;
-    @Bind(R.id.txt_name)
+    @BindView(R2.id.txt_name)
     TextView txtName;
-    @Bind(R.id.layphone)
+    @BindView(R2.id.layphone)
     LinearLayout layphone;
-    @Bind(R.id.txt_phone)
+    @BindView(R2.id.txt_phone)
     TextView txtPhone;
-    @Bind(R.id.layrealname)
+    @BindView(R2.id.layrealname)
     LinearLayout layrealname;
-    @Bind(R.id.txt_realname)
+    @BindView(R2.id.txt_realname)
     TextView txtRealname;
-    @Bind(R.id.laysex)
+    @BindView(R2.id.laysex)
     LinearLayout laysex;
-    @Bind(R.id.txt_sex)
+    @BindView(R2.id.txt_sex)
     TextView txtSex;
-    @Bind(R.id.laynationality)
+    @BindView(R2.id.laynationality)
     LinearLayout laynationality;
-    @Bind(txt_nationality)
+    @BindView(txt_nationality)
     TextView txtNationality;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
     public Resources resources;
     private PhotoSelectView pop;
@@ -145,9 +137,12 @@ public class UserInfoActivity extends PhoteActivity
         mHandler= new Handler(this);
 
         titleText.setText("个人信息");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
-        userData= application.readUserInfo();
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
+        userData= BaseApplication.readUserInfo();
         imgUser.setImageURI(userData.getUserHeadImg());
         txtName.setText(userData.getNickName());
         txtRealname.setText(userData.getRealName());

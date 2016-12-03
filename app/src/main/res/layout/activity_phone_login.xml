@@ -4,16 +4,13 @@
     android:layout_height="match_parent"
     android:id="@+id/loginL"
     xmlns:cy="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
     <RelativeLayout
         android:id="@+id/titleLayoutL"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <include
-            layout="@layout/title_index"/>
-
+        <include  layout="@layout/title_index"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -25,16 +22,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/dimgray"/>
+            android:background="@color/line_gray"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/imgUser1"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/icon_username"/>
@@ -42,6 +39,7 @@
                 android:layout_margin="10dp"
                 android:id="@+id/edtUserName"
                 cy:style="transparent"
+                style="@style/CyEditTextStyle"
                 android:focusable="true"
                 android:layout_gravity="center_vertical"
                 android:focusableInTouchMode="true"
@@ -50,29 +48,27 @@
                 android:hint="@string/hint_username2"
                 android:imeOptions="actionNext"
                 android:inputType="textUri"
-                android:maxLength="20"
-                 />
+                android:maxLength="20"/>
         </LinearLayout>
         <TextView
-
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/dimgray"/>
+            android:background="@color/line_gray"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
             <ImageView
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/icon_psw"/>
             <com.huotu.android.library.libedittext.EditText
                 android:id="@+id/edtPwd"
                 android:layout_margin="10dp"
+                style="@style/CyEditTextStyle"
                 cy:style="transparent"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
@@ -82,40 +78,34 @@
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:maxLength="12"
-                android:text=""
-                 />
+                android:text=""/>
 
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/dimgray"/>
+            android:background="@color/line_gray"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
         <TextView
             android:id="@+id/tv_forgetpsd"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/img_forgetpsd"
             android:text="忘记密码"
-            android:gravity="end"
-            />
+            android:gravity="end"/>
             <ImageView
                 android:id="@+id/img_forgetpsd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/ic_forgetpsw"
                 android:layout_alignParentRight="true"
-                android:layout_margin="10dp"
-
-                />
+                android:layout_margin="15dp"/>
         </RelativeLayout>
-
-
     </LinearLayout>
     <Button
         android:id="@+id/btn_login"

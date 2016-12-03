@@ -6,21 +6,62 @@ import java.io.Serializable;
  * Created by 47483 on 2016.11.08.
  */
 public class CustomerModel implements Serializable {
-
+    /***
+     * 客户地址
+     */
     String Addr;
+    /***
+     * 所属盟友
+     */
     String 	BelongOne;
+    /***
+     * 盟友姓名
+     */
     String BelongOneName;
+    /***
+     * 所属盟主
+     */
     String BelongTwo;
+    /***
+     * 盟主姓名
+     */
     String BelongTwoName;
+    /***
+     * 创建时间
+     */
     String CreateTime;
     int ID;
+    /***
+     * 1进店 0未进店
+     */
     int InShop;
+    /***
+     * 是否删除
+     */
     int IsDel;
+    /***
+     * 客户手机
+     */
     String Mobile;
+    /***
+     * 客户姓名
+     */
     String Name;
+    /***
+     * 备注
+     */
     String Remark;
+    /***
+     * 所属门店ID
+     */
     int ShopId;
+    /***
+     * 门店名称
+     */
     String ShopName;
+    /***
+     * 0 审核中，1已同意 2已拒绝
+     */
     int  Status;
     boolean doing=false;
     boolean selected = false;

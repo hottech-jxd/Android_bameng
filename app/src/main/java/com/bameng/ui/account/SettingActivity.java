@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.ui.WebViewActivity;
@@ -29,32 +30,32 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.activity_setting)
+    @BindView(R2.id.activity_setting)
     LinearLayout activitySetting;
-    @Bind(R.id.titleLayoutL)
+    @BindView(R2.id.titleLayoutL)
     RelativeLayout titleLayoutL;
-    @Bind(R.id.changePswL)
+    @BindView(R2.id.changePswL)
     LinearLayout changePswL;
-    @Bind(R.id.cleanL)
+    @BindView(R2.id.cleanL)
     LinearLayout cleanL;
-    @Bind(R.id.aboutAppL)
+    @BindView(R2.id.aboutAppL)
     LinearLayout aboutAppL;
-    @Bind(R.id.agreementL)
+    @BindView(R2.id.agreementL)
     LinearLayout agreementL;
     public Resources resources;
-    @Bind(R.id.btn_signout)
+    @BindView(R2.id.btn_signout)
     Button btn_signout;
-    @Bind(R.id.txtCache)
+    @BindView(R2.id.txtCache)
     TextView tvCache;
 
     @Override
@@ -79,8 +80,10 @@ public class SettingActivity extends BaseActivity {
     protected void initView() {
 
         titleText.setText("设置");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         try {
             tvCache.setText(DataCleanManager.getTotalCacheSize(this));

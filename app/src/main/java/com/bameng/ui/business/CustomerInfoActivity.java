@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.TabPagerAdapter;
 import com.bameng.fragment.CustomDoneFrag;
 import com.bameng.fragment.CustomNoDoneFrag;
@@ -24,7 +25,7 @@ import com.bameng.utils.SystemTools;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -33,18 +34,18 @@ import butterknife.OnClick;
  */
 public class CustomerInfoActivity extends BaseActivity {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
     private int currentIndex = 0;
-    @Bind(R.id.titleRightImage)
+    @BindView(R2.id.titleRightImage)
     ImageView titleRightImage;
-    @Bind(R.id.nodoneLabel)
+    @BindView(R2.id.nodoneLabel)
     TextView nodoneLabel;
-    @Bind(R.id.doneLabel)
+    @BindView(R2.id.doneLabel)
     TextView doneLabel;
-    @Bind(R.id.customViewPager)
+    @BindView(R2.id.customViewPager)
     ViewPager customViewPager;
     public TabPagerAdapter tabPagerAdapter;
     private List<BaseFragment> mFragmentList = new ArrayList<>();
@@ -107,10 +108,16 @@ public class CustomerInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("客户信息");
-        Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleRightImage,rightDraw);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleRightImage,rightDraw);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+
+        titleRightImage.setBackgroundResource(R.drawable.title_left_back);
+        titleRightImage.setImageResource(R.mipmap.ic_newadd);
+
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
     }
 
     private void changeIndex(int index) {
@@ -154,7 +161,7 @@ public class CustomerInfoActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
     }
 
 

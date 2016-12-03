@@ -1,14 +1,11 @@
 package com.bameng.ui.business;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,69 +13,81 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.TabPagerAdapter;
+import com.bameng.config.Constants;
 import com.bameng.fragment.OrderFragment;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.baidu.location.h.j.m;
 
 /***
  * 我的订单
  */
 public class OrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener{
-    @Bind(R.id.ListSwitch)
+    @BindView(R2.id.ListSwitch)
     LinearLayout listSwitch;
-    @Bind(R.id.allLabel)
+    @BindView(R2.id.allLabel)
     TextView allLabel;
-    @Bind(R.id.nodoneLabel)
+    @BindView(R2.id.nodoneLabel)
     TextView nodoneLabel;
-    @Bind(R.id.doneLabel)
+    @BindView(R2.id.doneLabel)
     TextView doneLabel;
-    @Bind(R.id.backLabel)
+    @BindView(R2.id.backLabel)
     TextView backLabel;
-    @Bind(R.id.orderViewPager)
+    @BindView(R2.id.orderViewPager)
     ViewPager orderViewPager;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleRightText)
+    @BindView(R2.id.titleRightText)
     TextView titleRightText;
-    @Bind(R.id.titleRightImage)
+    @BindView(R2.id.titleRightImage)
     ImageView  titleRightImage;
-    @Bind(R.id.tablayout)
+    @BindView(R2.id.tablayout)
     TabLayout tabLayout;
 
     TabPagerAdapter tabPagerAdapter;
     List<BaseFragment> mFragmentList = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         initView();
     }
 
+    void visibleRightImageByUserType(){
+        if(BaseApplication.UserData() !=null && BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU){
+            titleRightImage.setVisibility(View.VISIBLE);
+            //titleRightImage.setBackgroundResource(R.mipmap.ic_newadd);
+            titleRightImage.setBackgroundResource(R.drawable.title_left_back);
+            titleRightImage.setImageResource(R.mipmap.ic_newadd);
+        }else{
+            titleRightImage.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     protected void initView() {
         titleText.setText("我的订单");
-        titleRightImage.setBackgroundResource(R.mipmap.ic_newadd);
+
         titleLeftImage.setVisibility(View.VISIBLE);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource( R.mipmap.ic_back );
+
+
+        visibleRightImageByUserType();
 
         OrderFragment orderFragment1 = new OrderFragment();
         Bundle bd = new Bundle();
@@ -139,7 +148,8 @@ public class OrderListActivity extends BaseActivity implements TabLayout.OnTabSe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
+
     }
 
     @Override

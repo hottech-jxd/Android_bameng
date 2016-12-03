@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
@@ -32,7 +33,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -44,19 +45,19 @@ import retrofit2.Response;
  */
 public class AlliesExamineActivity extends BaseActivity {
 
-    @Bind(R.id.txt_realname)
+    @BindView(R2.id.txt_realname)
     TextView txtRealname;
-    @Bind(R.id.txt_rank)
+    @BindView(R2.id.txt_rank)
     TextView txtRank;
-    @Bind(R.id.txt_sex)
+    @BindView(R2.id.txt_sex)
     TextView txtSex;
-    @Bind(R.id.txt_phone)
+    @BindView(R2.id.txt_phone)
     TextView txtPhone;
-    @Bind(R.id.txt_time)
+    @BindView(R2.id.txt_time)
     TextView txtTime;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
 
     MengModel model;
@@ -74,8 +75,10 @@ public class AlliesExamineActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("盟友审核详情");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         model = (MengModel) getIntent().getSerializableExtra("model");
         if(model==null)return;

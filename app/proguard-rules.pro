@@ -16,13 +16,14 @@
 #   public *;
 #}
 
-# 百度定位
+#-------------------------------------百度定位---------------------------------------------
 -keep class com.baidu.** {*;}
 -keep class vi.com.** {*;}
 -dontwarn com.baidu.**
-# -----------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 
-# fresco
+#-------------------------------------fresco----------------------------------------------
+
 # Keep our interfaces so they can be used by other ProGuard rules.
 # See http://sourceforge.net/p/proguard/bugs/466/
 -keep,allowobfuscation @interface com.facebook.common.internal.DoNotStrip
@@ -46,7 +47,7 @@
 
 # --------------------------------------------------------------------------------------------------
 
-# retrofit
+#----------------------------------------retrofit---------------------------------------------------
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
 # Platform used when running on RoboVM on iOS. Will not be used at runtime.
@@ -58,4 +59,75 @@
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
 
-#----------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+
+#---------------------------------------友盟统计-----------------------------------------------------
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+
+-keep public class com.bameng.R$*{
+public static final int *;
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+#---------------------------------------------------------------------------------------------------
+
+#---------------------------------------EventBus----------------------------------------------------
+
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+#---------------------------------------------------------------------------------------------------
+
+
+#------------------------------------------takephoto------------------------------------------------
+
+-keep class com.jph.takephoto.** { *; }
+-dontwarn com.jph.takephoto.**
+
+-keep class com.darsh.multipleimageselect.** { *; }
+-dontwarn com.darsh.multipleimageselect.**
+
+-keep class com.soundcloud.android.crop.** { *; }
+-dontwarn com.soundcloud.android.crop.**
+
+#---------------------------------------------------------------------------------------------------
+
+#-------------------------------------------butterknife---------------------------------------------
+
+-keep class butterknife.*
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
+
+#---------------------------------------------------------------------------------------------------
+
+#--------------------------------------------rxjava-------------------------------------------------
+-dontwarn sun.misc.**
+
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+   long producerIndex;
+   long consumerIndex;
+}
+
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+
+#---------------------------------------------------------------------------------------------------

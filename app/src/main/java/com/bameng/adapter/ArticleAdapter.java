@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.ArticleModel;
 import com.bameng.model.ListModel;
 import com.bameng.model.TopArticleIdModel;
@@ -21,7 +22,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -116,12 +117,12 @@ public class ArticleAdapter extends BaseAdapter {
     }
     class ViewHolder
     {
-        @Bind(R.id.image)
+        @BindView(R2.id.image)
         SimpleDraweeView image;
-        @Bind(R.id.articleTitle) TextView articleTitle;
-        @Bind(R.id.articleIntro) TextView articleIntro;
-        @Bind(R.id.browseAmount) TextView browseAmount;
-        @Bind(R.id.time)
+        @BindView(R2.id.articleTitle) TextView articleTitle;
+        @BindView(R2.id.articleIntro) TextView articleIntro;
+        @BindView(R2.id.browseAmount) TextView browseAmount;
+        @BindView(R2.id.time)
         TextView time;
 
 
@@ -131,11 +132,11 @@ public class ArticleAdapter extends BaseAdapter {
         }
     }
     class ViewHolderTop{
-        @Bind(R.id.Top_image) SimpleDraweeView topImage;
-        @Bind(R.id.Top_articleTitle) TextView topArticleTitle;
-        @Bind(R.id.Top_articleIntro) TextView topArticleIntro;
-        @Bind(R.id.Top_browseAmount) TextView topBrowseAmount;
-        @Bind(R.id.Top_time) TextView topTime;
+        @BindView(R2.id.Top_image) SimpleDraweeView topImage;
+        @BindView(R2.id.Top_articleTitle) TextView topArticleTitle;
+        @BindView(R2.id.Top_articleIntro) TextView topArticleIntro;
+        @BindView(R2.id.Top_browseAmount) TextView topBrowseAmount;
+        @BindView(R2.id.Top_time) TextView topTime;
         public ViewHolderTop(View view) {
             ButterKnife.bind(this, view);
         }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
@@ -52,7 +53,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -67,30 +68,30 @@ import static com.bameng.R.id.layroot;
 public class UserFragment extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener , View.OnClickListener {
 
-    @Bind(R.id.homePullRefresh)
+    @BindView(R2.id.homePullRefresh)
     SwipeRefreshLayout homePullRefresh;
-    @Bind(R.id.img_user)
+    @BindView(R2.id.img_user)
     SimpleDraweeView img_user;
-    @Bind(R.id.txt_name)
+    @BindView(R2.id.txt_name)
     TextView txtName;
-    @Bind(R.id.txt_Points)
+    @BindView(R2.id.txt_Points)
     TextView txtPoints;
-    @Bind(R.id.img_setting)
+    @BindView(R2.id.img_setting)
     ImageView imgSetting;
-    @Bind(R.id.layaccount)
+    @BindView(R2.id.layaccount)
     LinearLayout layaccount;
-    @Bind(R.id.txt_mbean)
+    @BindView(R2.id.txt_mbean)
     TextView txtMbean;
-    @Bind(R.id.txt_nosettlembean)
+    @BindView(R2.id.txt_nosettlembean)
     TextView txtNosettlembean;
-    @Bind(R.id.txt_integral)
+    @BindView(R2.id.txt_integral)
     TextView txtIntegral;
     LinearLayout laysign;
     LinearLayout layuserinfo;
     LinearLayout laycode;
     LinearLayout laymyorder;
     LinearLayout laymycash;
-    @Bind(R.id.laymenus)
+    @BindView(R2.id.laymenus)
     LinearLayout laymenus;
 
     UserData userData;
@@ -246,6 +247,7 @@ public class UserFragment extends BaseFragment
             case R.id.img_setting:
                 ActivityUtils.getInstance().showActivity(getActivity(), SettingActivity.class);
                 break;
+            case R.id.laymyuserinfo:
             case R.id.layuserinfo:
                 goto_one();
                 break;
@@ -299,6 +301,10 @@ public class UserFragment extends BaseFragment
     }
 
     private void sign(){
+
+        //ToastUtils.showSign( "积分+10");
+
+
         if(progressDialog==null){
             progressDialog = new ProgressDialog(getContext());
         }
@@ -350,10 +356,9 @@ public class UserFragment extends BaseFragment
 
                 txtIntegral.setText( String.valueOf( BaseApplication.UserData().getScore() ));
 
-                String score = "+" + String.valueOf( response.body().getData().getScore());
-                //ToastUtils.showToast( getContext() , score , R.mipmap.ic_sign , Toast.LENGTH_LONG);
-                ToastUtils.showLongToast(score);
+                //String score = "+" + String.valueOf( response.body().getData().getScore());
 
+                ToastUtils.showSign( response.body().getStatusText() );
             }
 
             @Override
@@ -375,7 +380,7 @@ public class UserFragment extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
     }
 

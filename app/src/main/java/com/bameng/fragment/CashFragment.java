@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.ApplyCashAdapter;
 import com.bameng.adapter.MengDataAdapter;
 import com.bameng.config.Constants;
@@ -44,7 +45,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,9 +56,9 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener {
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
 
     ApplyCashAdapter adapter;

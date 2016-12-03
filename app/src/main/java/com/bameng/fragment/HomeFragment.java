@@ -20,6 +20,7 @@ import android.widget.Switch;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
@@ -66,23 +67,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.baidu.location.h.j.B;
-import static com.baidu.location.h.j.ad;
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.dot;
-import static com.bameng.R.id.home;
-import static com.bameng.R.id.homeViewPager;
-import static com.bameng.R.id.layBanner;
-import static com.bameng.R.id.listL;
-import static com.bameng.R.id.swipeRefreshLayout;
-import static com.bameng.config.Constants.url;
 
 /***
  * 霸盟 首页
@@ -90,9 +80,9 @@ import static com.bameng.config.Constants.url;
 public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.OnRefreshListener
  ,BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener{
 
-    @Bind(R.id.homePullRefresh)
+    @BindView(R.id.homePullRefresh)
     SwipeRefreshLayout homePullRefresh;
-    @Bind(listL)
+    @BindView(R.id.listL)
     RecyclerView recyclerView;
 
     LinearLayout layBanner;
@@ -337,7 +327,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
     }
 
     @Override

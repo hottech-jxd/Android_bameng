@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.MyBusinessOutputModel;
@@ -33,9 +34,10 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,21 +49,22 @@ import static com.baidu.location.h.j.t;
  */
 public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    @Bind(R.id.txt_order)
+    @BindView(R2.id.txt_order)
     TextView txtOrder;
-    @Bind(R.id.txt_Customer)
+    @BindView(R2.id.txt_Customer)
     TextView txtCustomer;
-    @Bind(R.id.txt_exchange)
+    @BindView(R2.id.txt_exchange)
     TextView txtExchange;
-    @Bind(R.id.txt_cash)
+    @BindView(R2.id.txt_cash)
     TextView txtCash;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    Unbinder unbinder;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -120,7 +123,7 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
     }
 
     @Override

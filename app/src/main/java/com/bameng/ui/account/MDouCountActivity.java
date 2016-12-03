@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.ApplyCashAdapter;
 import com.bameng.adapter.MBeanFlowAdapter;
 import com.bameng.adapter.WaitMBeanFlowAdapter;
@@ -39,7 +40,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,15 +51,15 @@ import retrofit2.Response;
  */
 public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
 
-    @Bind(R.id.mdou_count)
+    @BindView(R2.id.mdou_count)
     TextView mdou_count;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
 
     WaitMBeanFlowAdapter adapter;
@@ -78,8 +79,10 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
     @Override
     protected void initView() {
         titleText.setText("待结算盟豆");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         mdou_count.setText( String.valueOf( BaseApplication.UserData().getTempMengBeans() ));
 

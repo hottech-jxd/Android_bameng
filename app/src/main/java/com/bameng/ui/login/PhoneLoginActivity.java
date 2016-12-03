@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.PostModel;
@@ -32,7 +33,7 @@ import com.huotu.android.library.libedittext.EditText;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -45,22 +46,22 @@ import retrofit2.Response;
  */
 public class PhoneLoginActivity extends BaseActivity {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
 
-    @Bind(R.id.titleLayoutL)
+    @BindView(R2.id.titleLayoutL)
     RelativeLayout titleLayoutL;
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
 
-    @Bind(R.id.edtUserName)
+    @BindView(R2.id.edtUserName)
     EditText edtPhone;
 
-    @Bind(R.id.edtPwd)
+    @BindView(R2.id.edtPwd)
     EditText edtpwd;
 
-    @Bind(R.id.btn_login)
+    @BindView(R2.id.btn_login)
     Button btnLogin;
     public Resources resources;
 

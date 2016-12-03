@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CloseEvent;
@@ -33,7 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -51,26 +52,26 @@ import static com.bameng.R.id.tvDes3;
  */
 public class SubmitCustomerInfoActivity extends BaseActivity {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
     public Resources resources;
-    @Bind(R.id.customName)
+    @BindView(R2.id.customName)
     EditText customName;
-    @Bind(R.id.customMoblie)
+    @BindView(R2.id.customMoblie)
     EditText customMoblie;
-    @Bind(R.id.customAddress)
+    @BindView(R2.id.customAddress)
     EditText customAddress;
-    @Bind(R.id.remark)
+    @BindView(R2.id.remark)
     EditText remark;
-    @Bind(R.id.layDesc)
+    @BindView(R2.id.layDesc)
     LinearLayout layDesc;
-    @Bind(R.id.tvDes1)
+    @BindView(R2.id.tvDes1)
     TextView tvDes1;
-    @Bind(R.id.tvDes2)
+    @BindView(R2.id.tvDes2)
     TextView tvDes2;
-    @Bind(R.id.tvDes3)
+    @BindView(R2.id.tvDes3)
     TextView tvDes3;
 
     @Override
@@ -85,8 +86,10 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
     protected void initView() {
         titleText.setText("提交客户信息");
         titleLeftImage.setVisibility(View.VISIBLE);
-        Drawable leftDraw = ContextCompat.getDrawable(this, R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable(this, R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         if( BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU){
             layDesc.setVisibility(View.GONE);

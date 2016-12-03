@@ -16,6 +16,7 @@ import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.LubanOptions;
 import com.jph.takephoto.model.TakePhotoOptions;
+import com.umeng.analytics.MobclickAgent;
 
 import me.shaohui.advancedluban.Luban;
 
@@ -33,6 +34,19 @@ public abstract class PhoteActivity extends TakePhotoActivity {
         super.onCreate ( savedInstanceState );
 
         application = ( BaseApplication) this.getApplication ();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

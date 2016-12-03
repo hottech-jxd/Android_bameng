@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
@@ -35,7 +36,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -50,23 +51,23 @@ import static com.baidu.location.h.j.t;
  */
 public class ForgetPasswordActivity extends BaseActivity implements CountDownTimerButton.CountDownFinishListener {
 
-    @Bind(R.id.edtPhone)
+    @BindView(R2.id.edtPhone)
     EditText edtPhone;
-    @Bind(R.id.edtCode)
+    @BindView(R2.id.edtCode)
     EditText edtCode;
-    @Bind(R.id.edtPsd)
+    @BindView(R2.id.edtPsd)
     EditText edtPsd;
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
 
-    @Bind(R.id.titleLayoutL)
+    @BindView(R2.id.titleLayoutL)
     RelativeLayout titleLayoutL;
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
 
-    @Bind(R.id.btn_code)
+    @BindView(R2.id.btn_code)
     TextView btn_code;
     CountDownTimerButton countDownBtn;
 
@@ -91,8 +92,11 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
 
     @Override
     protected void initView() {
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
         titleText.setText("忘记密码");
     }
 

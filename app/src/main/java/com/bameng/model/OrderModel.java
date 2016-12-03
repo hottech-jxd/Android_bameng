@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 
 public class OrderModel  implements Serializable{
-    private long id;
+    private long ID;
     private String mobile;
     private String money;
     private String pictureUrl;
@@ -23,12 +23,12 @@ public class OrderModel  implements Serializable{
     private String successUrl;
     private String mengbeans;
 
-    public long getId() {
-        return id;
+    public long getID() {
+        return ID;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setID(long ID) {
+        this.ID = ID;
     }
 
     public String getMobile() {

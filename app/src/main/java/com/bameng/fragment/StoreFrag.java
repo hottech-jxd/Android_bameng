@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import butterknife.Bind;
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,9 +59,9 @@ public class StoreFrag extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener , BaseQuickAdapter.RequestLoadMoreListener {
     int pageIndex=1;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
 
     BaseQuickAdapter baseAdapter;

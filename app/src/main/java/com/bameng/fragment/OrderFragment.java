@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.OrderAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
@@ -40,10 +41,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,9 +58,9 @@ import static com.baidu.location.h.j.t;
  */
 public class OrderFragment extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
     OrderAdapter orderAdapter;
     OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
@@ -83,6 +85,8 @@ public class OrderFragment extends BaseFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.type = this.getArguments().getInt("type");
+
+        //System.currentTimeMillis()
     }
 
     @Nullable
@@ -101,7 +105,7 @@ public class OrderFragment extends BaseFragment
     }
 
     public void initView() {
-        emptyView =  getActivity().getLayoutInflater().inflate(R.layout.layout_empty, (ViewGroup) recyclerView.getParent(), false);
+        emptyView =  getActivity().getLayoutInflater().inflate(R.layout.layout_empty, (ViewGroup)recyclerView.getParent() , false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout.setOnRefreshListener(this);
         orderAdapter = new OrderAdapter();
@@ -199,7 +203,7 @@ public class OrderFragment extends BaseFragment
                     orderAdapter.setEmptyView(emptyView);
                     orderAdapter.setNewData( response.body().getData().getList() );
                     if(response.body().getData().getList()!=null && response.body().getData().getList().size()>0) {
-                        lastId = response.body().getData().getList().get(response.body().getData().getList().size() - 1).getId();
+                        lastId = response.body().getData().getList().get(response.body().getData().getList().size() - 1).getID();
                     }
                 }else {
                     if (response.body().getData().getList() == null || response.body().getData().getList().size()<1) {
@@ -214,7 +218,7 @@ public class OrderFragment extends BaseFragment
 
                     orderAdapter.addData( response.body().getData().getList());
 
-                    lastId = response.body().getData().getList().get( response.body().getData().getList().size()-1 ).getId();
+                    lastId = response.body().getData().getList().get( response.body().getData().getList().size()-1 ).getID();
                 }
 
             }

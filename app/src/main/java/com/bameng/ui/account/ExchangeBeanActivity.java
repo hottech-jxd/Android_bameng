@@ -10,11 +10,12 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,13 +24,13 @@ import butterknife.OnClick;
  */
 public class ExchangeBeanActivity extends BaseActivity {
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.txt_mbean)
+    @BindView(R2.id.txt_mbean)
     TextView txtMbean;
-    @Bind(R.id.tv_record)
+    @BindView(R2.id.tv_record)
     TextView tvRecord;
 
     @Override
@@ -52,8 +53,11 @@ public class ExchangeBeanActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("兑换");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
 
         txtMbean.setText( BaseApplication.UserData().getMengBeans() );
     }

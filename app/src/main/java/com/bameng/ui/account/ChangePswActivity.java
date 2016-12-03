@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.GetRewardOutput;
@@ -32,7 +33,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -41,17 +42,17 @@ import retrofit2.Response;
 
 public class ChangePswActivity extends BaseActivity {
 
-    @Bind(R.id.titleLayoutL)
+    @BindView(R2.id.titleLayoutL)
     RelativeLayout titleLayoutL;
-    @Bind(R.id.edt_oldpsw)
+    @BindView(R2.id.edt_oldpsw)
     EditText edtOldpsw;
-    @Bind(R.id.edt_newpsw1)
+    @BindView(R2.id.edt_newpsw1)
     EditText edtNewpsw1;
-    @Bind(R.id.edt_newpsw2)
+    @BindView(R2.id.edt_newpsw2)
     EditText edtNewpsw2;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
 
     @Override
@@ -133,8 +134,10 @@ public class ChangePswActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("修改密码");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
     }
 

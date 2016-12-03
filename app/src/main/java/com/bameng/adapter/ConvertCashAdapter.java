@@ -24,5 +24,8 @@ public class ConvertCashAdapter extends BaseQuickAdapter<ConvertFlowModel , Base
         baseViewHolder.setText(R.id.tvname , convertFlowModel.getName() );
         baseViewHolder.setText( R.id.tvTime , DateUtils.formatDate( convertFlowModel.getTime() ,"yyyy.MM.dd HH:mm" ));
         baseViewHolder.setText(R.id.tvBeans , String.valueOf( convertFlowModel.getMoney()));
+
+        baseViewHolder.setText(R.id.tvStatus , convertFlowModel.getStatus()==0? "未审核": convertFlowModel.getStatus()==1?"已审核":"拒绝" );
+
     }
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.ScoreAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
@@ -43,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,15 +58,15 @@ import static android.R.id.list;
  */
 public class ScoreActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
 
-    @Bind(R.id.mdou_count)
+    @BindView(R2.id.mdou_count)
     TextView mdou_count;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
 
    ScoreAdapter adapter;
@@ -87,8 +88,11 @@ public class ScoreActivity extends BaseActivity implements SwipeRefreshLayout.On
     @Override
     protected void initView() {
         titleText.setText("积分列表");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
 
         mdou_count.setText( String.valueOf( BaseApplication.UserData().getScore() ));
 

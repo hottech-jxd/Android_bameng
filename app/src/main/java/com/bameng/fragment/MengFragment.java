@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.CustomDetailsAdapter;
 import com.bameng.adapter.MengDataAdapter;
 import com.bameng.config.Constants;
@@ -53,7 +54,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,19 +67,19 @@ public class MengFragment extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener  {
     int type=0;
     MengDataAdapter adapter;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
 
-    @Bind(R.id.llsort)
+    @BindView(R2.id.llsort)
     LinearLayout llSort;
 
-    @Bind(R.id.sortLevel)
+    @BindView(R2.id.sortLevel)
     TextView sortLevel;
-    @Bind(R.id.sortOrderCount)
+    @BindView(R2.id.sortOrderCount)
     TextView sortOrderCount;
-    @Bind(R.id.sortsubCount)
+    @BindView(R2.id.sortsubCount)
     TextView sortSubCount;
 
     int pageIndex=1;

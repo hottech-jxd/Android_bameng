@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.CashAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.CashCouponModel;
@@ -51,7 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -70,13 +71,13 @@ import static com.baidu.location.h.j.ad;
 public class MyCashCardActivity extends BaseActivity
         implements SwipeRefreshLayout.OnRefreshListener , View.OnClickListener {
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
     CashAdapter cashAdapter;
     View emptyView;
@@ -113,8 +114,10 @@ public class MyCashCardActivity extends BaseActivity
     @Override
     protected void initView() {
         titleText.setText("我的现金券");
-        Drawable leftDraw = ContextCompat.getDrawable(this, R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable(this, R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         cashAdapter = new CashAdapter();
@@ -224,20 +227,19 @@ public class MyCashCardActivity extends BaseActivity
 
     void inShare( CashCouponModel model ){
         Intent intent =new Intent( MyCashCardActivity.this , ChooseObjectActivity.class);
-        intent.putExtra("select",true);
         intent.putExtra("couponId", model.getID() );
         ActivityUtils.getInstance().showActivityForResult( MyCashCardActivity.this , REQUEST_CODE_SEND_INSHARE , intent);
     }
 
     void outShare( final CashCouponModel model ){
 
-        sendCash(model.getID(), 0, new shareListener() {
+        sendCash( 1 , model.getID(), "0", new shareListener() {
             @Override
-            public void share(int couponId, int uid) {
+            public void share(int couponId, String uid) {
                 Map<String, String> map = new HashMap<>();
                 int userid = BaseApplication.UserData().getUserId();
                 map.put("userid", String.valueOf(userid) );
-                map.put("cpid", String.valueOf( model.getID()));
+                map.put("cpid", String.valueOf(couponId ));
                 AuthParamUtils authParamUtils = new AuthParamUtils();
                 String sign = authParamUtils.getSign(map);
                 String url = model.getUrl();
@@ -245,6 +247,10 @@ public class MyCashCardActivity extends BaseActivity
 
                 Bundle bd = new Bundle();
                 bd.putString(Constants.INTENT_URL, url );
+
+                bd.putBoolean(Constants.CAPTURE_SCREEN,true);
+
+
                 ActivityUtils.getInstance().showActivity( MyCashCardActivity.this  , WebViewActivity.class , bd );
             }
         });
@@ -254,37 +260,58 @@ public class MyCashCardActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode != RESULT_OK) return;
-        if( requestCode == REQUEST_CODE_SEND_INSHARE){
-            List<UserData> users = (List<UserData>)data.getSerializableExtra("customer");
-            if( users==null || users.size()<1) return;
-            int couponId = data.getIntExtra("couponId",0);
-            sendCash( couponId , users.get(0).getUserId() ,null );
+        if( requestCode == REQUEST_CODE_SEND_INSHARE) {
+            List<UserData> users = (List<UserData>) data.getSerializableExtra("customer");
+            if (users == null || users.size() < 1) return;
+
+            String ids = "";
+
+            for (UserData item : users) {
+                if (!ids.isEmpty()) {
+                    ids += "|";
+                }
+                ids += item.getUserId();
+            }
+
+            int couponId = data.getIntExtra("couponId", 0);
+            sendCash(2, couponId, ids, null);
         }
     }
 
     /***
      *
      */
-    void sendCash(final int couponId , final int uid , final shareListener shareListener){
+    void sendCash( int type , final int couponId , final String uid , final shareListener shareListener){
         if(progressDialog==null){
             progressDialog =new ProgressDialog(this);
         }
         progressDialog.setMessage("加载中...");
         progressDialog.show();
 
-        String userid = String.valueOf(uid);
+        //String userid = String.valueOf(uid);
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("couponId",  String.valueOf(couponId) );
-        map.put("toUserId", userid );
+        if( type == 1) {
+            map.put("toUserId", uid );
+        }else {
+            map.put("ids", uid);
+        }
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
-        Call<PostModel> call = apiService.SendCashCoupon( token,map);
+
+        Call<PostModel> call;
+        if( type ==1) {
+            call = apiService.SendCashCoupon(token, map);
+        }else{
+            call = apiService.SendAllyCashCoupon(token, map);
+        }
+
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
@@ -323,6 +350,6 @@ public class MyCashCardActivity extends BaseActivity
     }
 
     public interface shareListener{
-        void share(int couponId , int uid);
+        void share(int couponId , String uid);
     }
 }

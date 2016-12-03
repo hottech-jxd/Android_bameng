@@ -64,10 +64,6 @@
         <activity android:name=".ui.login.PhoneLoginActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.WebViewActivity"/>
 
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
-
-        <activity android:name=".ui.SelectedPhotoActivity"/>
-
         <activity android:name=".wxapi.WXEntryActivity"/>
 
         <service
@@ -79,9 +75,13 @@
                 </action>
             </intent-filter>
         </service>
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="xIa1QGYszsjFs9C9kDANe7BR" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
+
+        <!-- 百度定位 -->
+        <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="aZhPTw0udqL6C8CtUPDlOTso1DGD4hG5" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
+
+        <!-- 友盟统计参数 -->
+        <meta-data android:value="583f9122734be4261b0009c6" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="huotu_bameng" android:name="UMENG_CHANNEL"/>
 
     </application>
 

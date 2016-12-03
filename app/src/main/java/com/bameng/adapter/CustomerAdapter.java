@@ -9,11 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.CustomerModel;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -66,11 +67,11 @@ public class CustomerAdapter extends BaseAdapter{
     }
 
     class ViewHolder{
-        @Bind(R.id.name)
+        @BindView(R2.id.name)
         TextView name;
-        @Bind(R.id.moblie)
+        @BindView(R2.id.moblie)
         TextView moblie;
-        @Bind(R.id.image)
+        @BindView(R2.id.image)
         ImageView image;
 
         public ViewHolder(View view) {

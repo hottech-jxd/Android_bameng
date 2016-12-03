@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.MBeanFlowAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.BeanFlowOutputModel;
@@ -38,7 +39,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,17 +50,17 @@ import retrofit2.Response;
  */
 public class MyBeanActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener{
 
-    @Bind(R.id.txt_income)
+    @BindView(R2.id.txt_income)
     TextView txtIncome;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.txt_outbean)
+    @BindView(R2.id.txt_outbean)
     TextView txtOutbean;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
     MBeanFlowAdapter adapter;
@@ -81,8 +82,10 @@ public class MyBeanActivity extends BaseActivity implements SwipeRefreshLayout.O
     @Override
     protected void initView() {
         titleText.setText("盟豆");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         adapter = new MBeanFlowAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -166,10 +169,11 @@ public class MyBeanActivity extends BaseActivity implements SwipeRefreshLayout.O
                     return;
                 }
 
-                txtIncome.setText( String.valueOf( response.body().getData().getIncome() ));
-                txtOutbean.setText( String.valueOf( response.body().getData().getOutcome() ) );
 
                 if(operateTypeEnum == OperateTypeEnum.REFRESH){
+
+                    txtIncome.setText( String.valueOf( response.body().getData().getIncome() ));
+                    txtOutbean.setText( String.valueOf( response.body().getData().getOutcome() ) );
 
                     adapter.setNewData( response.body().getData().getList() );
                     if( response.body().getData().getList().size()>0){

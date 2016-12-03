@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.fragment.HomeFragment;
@@ -50,7 +51,7 @@ import com.bameng.widgets.ProgressPopupWindow;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import permissions.dispatcher.NeedsPermission;
@@ -69,73 +70,64 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import static com.baidu.location.h.j.G;
-import static com.baidu.location.h.j.an;
-import static com.baidu.location.h.j.ap;
-import static com.baidu.location.h.j.t;
-import static com.bameng.service.LocationService.Longitude;
-import static com.bameng.service.LocationService.address;
-import static com.bameng.service.LocationService.city;
-import static com.bameng.service.LocationService.latitude;
-
 /***
  * 盟主主页
  */
 @RuntimePermissions
 public class HomeActivity extends BaseActivity {
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
 
-    @Bind(R.id.titleLeftText)
+    @BindView(R2.id.titleLeftText)
     TextView titleLeftText;
 
-    @Bind(R.id.titleRightImage)
+    @BindView(R2.id.titleRightImage)
     ImageView titleRightImage;
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
 
-    @Bind(R.id.fragment_container)
+    @BindView(R2.id.fragment_container)
     FrameLayout fragmentContainer;
 
-    @Bind(R.id.homePage)
+    @BindView(R2.id.homePage)
     RelativeLayout homePage;
 
-    @Bind(R.id.homeImg)
+    @BindView(R2.id.homeImg)
     ImageView homeImg;
 
-    @Bind(R.id.homeTxt)
+    @BindView(R2.id.homeTxt)
     TextView homeTxt;
 
-    @Bind(R.id.newsPage)
+    @BindView(R2.id.newsPage)
     RelativeLayout newsPage;
 
-    @Bind(R.id.newsImg)
+    @BindView(R2.id.newsImg)
     ImageView newsImg;
 
-    @Bind(R.id.newsTxt)
+    @BindView(R2.id.newsTxt)
     TextView newsTxt;
 
-    @Bind(R.id.businessPage)
+    @BindView(R2.id.businessPage)
     RelativeLayout businessPage;
 
-    @Bind(R.id.businessImg)
+    @BindView(R2.id.businessImg)
     ImageView businessImg;
 
-    @Bind(R.id.businessTxt)
+    @BindView(R2.id.businessTxt)
     TextView businessTxt;
 
-    @Bind(R.id.profilePage)
+    @BindView(R2.id.profilePage)
     RelativeLayout profilePage;
 
-    @Bind(R.id.profileImg)
+    @BindView(R2.id.profileImg)
     ImageView profileImg;
 
-    @Bind(R.id.profileTxt)
+    @BindView(R2.id.profileTxt)
     TextView profileTxt;
 
-    @Bind(R.id.homeBottom)
+    @BindView(R2.id.homeBottom)
     LinearLayout homeBottom;
 
     public Resources resources;
@@ -177,10 +169,16 @@ public class HomeActivity extends BaseActivity {
         titleText.setText(getString(R.string.app_name));
         titleLeftImage.setVisibility(View.VISIBLE);
         titleRightImage.setVisibility(View.GONE);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
-        Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
-        SystemTools.loadBackground(titleRightImage,rightDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setImageResource(R.mipmap.ic_location);
+
+
+        //Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
+        //SystemTools.loadBackground(titleRightImage,rightDraw);
+        titleRightImage.setBackgroundResource(R.drawable.title_left_back);
+        titleRightImage.setImageResource(R.mipmap.ic_newadd);
+
         mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         initTab();
 

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.OrderModel;
 import com.bameng.ui.base.PhoteActivity;
 import com.bameng.utils.DensityUtils;
@@ -33,7 +34,7 @@ import com.jph.takephoto.model.TResult;
 import java.io.File;
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -47,25 +48,25 @@ public class UploadDocumentsActivity
         extends PhoteActivity
         implements PhotoSelectView.OnPhotoSelectBackListener , FrescoControllerListener.ImageCallback{
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.txtCustomer)
+    @BindView(R2.id.txtCustomer)
     EditText etCustomer;
-    @Bind(R.id.txtPhone)
+    @BindView(R2.id.txtPhone)
     EditText etPhone;
-    @Bind(R.id.txtPrice)
+    @BindView(R2.id.txtPrice)
     EditText etPrice;
-    @Bind(R.id.txtRemark)
+    @BindView(R2.id.txtRemark)
     EditText etRemarks;
-    @Bind(R.id.ivPicture)
+    @BindView(R2.id.ivPicture)
     SimpleDraweeView ivPicture;
-    @Bind(R.id.ivAddPic)
+    @BindView(R2.id.ivAddPic)
     ImageView ivAddPic;
-    @Bind(R.id.tvAddPic)
+    @BindView(R2.id.tvAddPic)
     TextView tvAddPic;
-    @Bind(R.id.llAddPic)
+    @BindView(R2.id.llAddPic)
     LinearLayout llAddPic;
 
     private Bitmap currentBitmap;
@@ -104,8 +105,10 @@ public class UploadDocumentsActivity
     protected void initView() {
         titleText.setText("上传成交凭证");
         titleLeftImage.setVisibility(View.VISIBLE);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         orderModel = (OrderModel) getIntent().getSerializableExtra("order");
         etRemarks.setText( orderModel.getRemark()==null?"": orderModel.getRemark() );

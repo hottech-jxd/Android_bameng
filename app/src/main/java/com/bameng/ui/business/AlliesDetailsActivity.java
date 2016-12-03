@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.MengModel;
@@ -31,7 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,29 +47,29 @@ import static com.bameng.R.id.txt_name;
  */
 public class AlliesDetailsActivity extends BaseActivity {
 
-    @Bind(R.id.txt_user)
+    @BindView(R2.id.txt_user)
     TextView txtUser;
-    @Bind(R.id.txt_name)
+    @BindView(R2.id.txt_name)
     TextView txtName;
-    @Bind(R.id.txt_realname)
+    @BindView(R2.id.txt_realname)
     TextView txtRealname;
-    @Bind(R.id.txt_rank)
+    @BindView(R2.id.txt_rank)
     TextView txtRank;
-    @Bind(R.id.txt_sex)
+    @BindView(R2.id.txt_sex)
     TextView txtSex;
-    @Bind(R.id.txt_submitnum)
+    @BindView(R2.id.txt_submitnum)
     TextView txtSubmitnum;
-    @Bind(R.id.txt_doneorder)
+    @BindView(R2.id.txt_doneorder)
     TextView txtDoneorder;
-    @Bind(R.id.txt_phone)
+    @BindView(R2.id.txt_phone)
     TextView txtPhone;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.txt_time)
+    @BindView(R2.id.txt_time)
     TextView txtTime;
-    @Bind(R.id.image)
+    @BindView(R2.id.image)
     com.facebook.drawee.view.SimpleDraweeView image;
 
     ProgressDialog progressDialog;
@@ -87,8 +88,10 @@ public class AlliesDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("盟友详情");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
     }
 
     @Override

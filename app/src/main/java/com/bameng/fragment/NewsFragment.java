@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.TabPagerAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.SetRightVisibleEvent;
@@ -23,7 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -34,17 +35,17 @@ import static com.bameng.R.id.viewPager;
  */
 public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
 
-    @Bind(R.id.groupLabel)
+    @BindView(R2.id.groupLabel)
     TextView groupLabel;
-    @Bind(R.id.storeLabel)
+    @BindView(R2.id.storeLabel)
     TextView storeLabel;
-    @Bind(R.id.shopLabel)
+    @BindView(R2.id.shopLabel)
     TextView shopLabel;
-    @Bind(R.id.allyLabel)
+    @BindView(R2.id.allyLabel)
     TextView allyLabel;
-    @Bind(R.id.raidersViewPager)
+    @BindView(R2.id.raidersViewPager)
     ViewPager raidersViewPager;
-    @Bind(R.id.tablayout)
+    @BindView(R2.id.tablayout)
     TabLayout tabLayout;
 
     public Resources resources;
@@ -144,7 +145,7 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
     }
 
     @Override

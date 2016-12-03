@@ -84,7 +84,7 @@ public abstract class BaseFragment extends Fragment {
         isViewInited=false;
         isDataLoaded = false;
 
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
     }
 
 

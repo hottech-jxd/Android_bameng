@@ -74,6 +74,7 @@
             android:inputType="number"
             android:id="@+id/etBean"
             android:maxLines="1"
+            android:imeOptions="actionGo"
             android:layout_marginRight="20dp"/>
     </LinearLayout>
     <Button

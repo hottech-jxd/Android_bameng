@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.biz.SendSmsUtil;
 import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;
@@ -34,7 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.iwgang.countdownview.CountdownView;
@@ -50,17 +51,17 @@ import static com.baidu.location.h.j.v;
 public class PhoneChangeActivity extends BaseActivity implements CountdownView.OnCountdownEndListener,
         SendSmsUtil.SendSmsCallbackListener {
 
-    @Bind(R.id.edtPhone)
+    @BindView(R2.id.edtPhone)
     EditText edtPhone;
-    @Bind(R.id.edtCode)
+    @BindView(R2.id.edtCode)
     EditText edtCode;
-    @Bind(R.id.btn_code)
+    @BindView(R2.id.btn_code)
     TextView btnCode;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.countdown)
+    @BindView(R2.id.countdown)
     CountdownView countdownView;
 
     public Resources resources;
@@ -198,8 +199,10 @@ public class PhoneChangeActivity extends BaseActivity implements CountdownView.O
         oldPhone = getIntent().getStringExtra("oldPhone");
 
         titleText.setText("手机");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         countdownView.setOnCountdownEndListener(this);
 

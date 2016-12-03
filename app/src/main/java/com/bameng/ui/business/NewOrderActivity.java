@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.PostModel;
 import com.bameng.model.RefreshOrderEvent;
 import com.bameng.service.ApiService;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
@@ -68,27 +69,27 @@ import retrofit2.Response;
 public class NewOrderActivity extends PhoteActivity
         implements PhotoSelectView.OnPhotoSelectBackListener{
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.tvname)
+    @BindView(R2.id.tvname)
     EditText etName;
-    @Bind(R.id.tvphone)
+    @BindView(R2.id.tvphone)
     EditText etPhone;
-    @Bind(R.id.tvaddress)
+    @BindView(R2.id.tvaddress)
     EditText etAddress;
-    @Bind(R.id.tvremarks)
+    @BindView(R2.id.tvremarks)
     EditText etRemarks;
-    @Bind(R.id.tvcash)
+    @BindView(R2.id.tvcash)
     EditText etCash;
 
-    @Bind(R.id.ivImage)
+    @BindView(R2.id.ivImage)
     ImageView ivImage;
 
-    @Bind(R.id.layAddImage)
+    @BindView(R2.id.layAddImage)
     LinearLayout layAddImage;
-    @Bind(R.id.layImage)
+    @BindView(R2.id.layImage)
     FrameLayout layImage;
 
     private PhotoSelectView pop;
@@ -110,8 +111,11 @@ public class NewOrderActivity extends PhoteActivity
     protected void initView() {
         titleText.setText("新增订单");
         titleLeftImage.setVisibility(View.VISIBLE);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
         layAddImage.setVisibility(View.VISIBLE);
         layImage.setVisibility(View.GONE);
     }

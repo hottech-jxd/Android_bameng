@@ -13,6 +13,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.LocalAddressModel;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.SystemTools;
@@ -22,28 +23,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AddressActivity extends BaseActivity {
 
     public LocalAddressModel data;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.provinceL)
+    @BindView(R2.id.provinceL)
     LinearLayout provinceL;
-    @Bind(R.id.spinner_province)
+    @BindView(R2.id.spinner_province)
     Spinner spinnerProvince;
-    @Bind(R.id.cityL)
+    @BindView(R2.id.cityL)
     LinearLayout cityL;
-    @Bind(R.id.spinner_city)
+    @BindView(R2.id.spinner_city)
     Spinner spinnerCity;
-    @Bind(R.id.areaL)
+    @BindView(R2.id.areaL)
     LinearLayout areaL;
-    @Bind(R.id.spinner_area)
+    @BindView(R2.id.spinner_area)
     Spinner spinnerArea;
     public Resources resources;
 
@@ -93,8 +94,11 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("地区");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
         initProvinceDatas();
         initProvince();
 

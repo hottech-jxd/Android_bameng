@@ -18,10 +18,13 @@ import com.bameng.R;
 import com.bameng.model.CloseEvent;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import butterknife.Unbinder;
 
 
 public abstract class BaseActivity extends FragmentActivity implements Handler.Callback {
@@ -30,6 +33,7 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
     protected Handler mHandler = null;
     protected static final String NULL_NETWORK = "无网络或当前网络不可用!";
     protected boolean goback=true;
+    protected Unbinder unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +67,13 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
     protected void onDestroy() {
         super.onDestroy ( );
 
-
+      if(null != unbinder)  unbinder.unbind();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
 //        JPushInterface.onPause(this);
     }
 
@@ -81,7 +85,7 @@ public abstract class BaseActivity extends FragmentActivity implements Handler.C
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
 //        JPushInterface.onResume(this);
     }
 

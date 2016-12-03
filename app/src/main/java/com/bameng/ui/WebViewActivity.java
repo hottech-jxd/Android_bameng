@@ -1,14 +1,19 @@
 package com.bameng.ui;
 
 
+import android.Manifest;
 import android.drm.DrmStore;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,11 +29,14 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.RefreshWebViewEvent;
 import com.bameng.model.ShareModel;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.DateUtils;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.WindowUtils;
@@ -36,16 +44,26 @@ import com.bameng.widgets.SharePopupWindow;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.wechat.favorite.WechatFavorite;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
+import static android.R.attr.path;
+import static java.io.File.pathSeparator;
+import static java.lang.System.currentTimeMillis;
 
 
 /**
@@ -53,18 +71,22 @@ import cn.sharesdk.wechat.favorite.WechatFavorite;
  */
 public class WebViewActivity extends BaseActivity implements PlatformActionListener{
 
-    @Bind(R.id.main_webview)
+    @BindView(R2.id.main_webview)
     WebView viewPage;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleRightImage)
+    @BindView(R2.id.titleRightImage)
     ImageView titleRightImage;
 
     String url = "";
 
     SharePopupWindow sharePopupWindow;
+    //是否需要截屏
+    boolean needCapture=false;
+    boolean isCapture=false;
+    Runnable runnable=null;
 
 
     @Override
@@ -92,11 +114,13 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
     @Override
     protected void onDestroy() {
         super.onDestroy ( );
-        ButterKnife.unbind(this);
         if( viewPage !=null ){
             viewPage.setVisibility(View.GONE);
         }
-        //EventBus.getDefault().post(new RefreshWebViewEvent());
+        if( mHandler==null )return;
+        if(runnable==null)return;
+
+        mHandler.removeCallbacks(runnable);
     }
 
     @Override
@@ -104,11 +128,19 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
         Bundle bundle = this.getIntent().getExtras();
         url = bundle.getString ( Constants.INTENT_URL );
 
+        needCapture = bundle.getBoolean(Constants.CAPTURE_SCREEN , false);
+
         //设置左侧图标
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back );
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
-        Drawable rightDraw = ContextCompat.getDrawable( this , R.mipmap.ic_share );
-        SystemTools.loadBackground(titleRightImage, rightDraw );
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back );
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
+        //Drawable rightDraw = ContextCompat.getDrawable( this , R.mipmap.ic_share );
+        //SystemTools.loadBackground(titleRightImage, rightDraw );
+        titleRightImage.setBackgroundResource(R.drawable.title_left_back);
+        titleRightImage.setImageResource(R.mipmap.ic_share);
+
         titleRightImage.setVisibility(View.GONE);
 
         sharePopupWindow = new SharePopupWindow(this);
@@ -122,6 +154,66 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
         });
 
         loadPage();
+
+    }
+
+    void capturnScreenPost(){
+        if(!needCapture ) return;
+        if( isCapture) return;
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                captureScreen();
+            }
+        };
+        mHandler.postDelayed( runnable ,5000);
+    }
+
+    /***
+     * 截屏操作
+     */
+    void captureScreen(){
+        if(!needCapture ) return;
+        if( isCapture) return;
+
+        View view= getWindow().getDecorView();
+
+        int width = DensityUtils.getScreenW(this);
+        int height = DensityUtils.getScreenH(this);
+        Bitmap bmp = Bitmap.createBitmap(width, height , Bitmap.Config.ARGB_8888);
+
+        view.draw(new Canvas(bmp));
+
+        //bmp就是截取的图片了，可通过
+        String filename = DateUtils.formatDate( System.currentTimeMillis(),"yyyyMMddHHmmss") +".png";
+        String dir = getString(R.string.app_name);
+        String relative = dir + File.separator + filename ;
+        String path = Environment.getExternalStorageDirectory() + File.separator + relative;
+        File file;
+        FileOutputStream fileOutputStream=null;
+        try {
+            file = new File(path);
+            if( !file.getParentFile().exists()){
+                file.getParentFile().mkdirs();
+            }
+
+            fileOutputStream = new FileOutputStream(path);
+            boolean isSave =  bmp.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream );
+            if(isSave){
+                ToastUtils.showLongToast("本分享页面已经保存在"+ relative );
+                isCapture=true;
+            }
+        }catch (Exception ex){
+            Log.e(WebViewActivity.class.getName() , ex.getMessage()==null?"error": ex.getMessage());
+        }finally {
+            if(fileOutputStream!=null){
+                try {
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                }catch (Exception ex){}
+            }
+        }
     }
 
     @OnClick(R.id.titleRightImage)
@@ -210,7 +302,6 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
         viewPage.getSettings().setSaveFormData(true);
         viewPage.getSettings().setAllowFileAccess(true);
         viewPage.getSettings().setLoadWithOverviewMode(false);
-        viewPage.getSettings().setSavePassword(true);
         viewPage.getSettings().setLoadsImagesAutomatically(true);
         viewPage.getSettings().setDomStorageEnabled(true);
         viewPage.addJavascriptInterface(this, "android");
@@ -275,6 +366,10 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
+
+                if(newProgress>=100){
+                    capturnScreenPost();
+                }
             }
 
             @Override

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.MengAdapter;
 import com.bameng.fragment.MengFragment;
 import com.bameng.ui.base.BaseActivity;
@@ -23,7 +24,7 @@ import com.bameng.utils.SystemTools;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -32,19 +33,19 @@ import butterknife.OnClick;
  */
 public class MyAlliesActivity extends BaseActivity {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
     private int currentIndex = 0;
-//    @Bind(R.id.ApplyLabel)
+//    @BindView(R2.id.ApplyLabel)
 //    TextView ApplyLabel;
-//    @Bind(R.id.AlliesLabel)
+//    @BindView(R2.id.AlliesLabel)
 //    TextView AlliesLabel;
 
-    @Bind(R.id.tablayout)
+    @BindView(R2.id.tablayout)
     TabLayout tabLayout;
-    @Bind(R.id.viewerPager)
+    @BindView(R2.id.viewerPager)
     ViewPager viewPager;
 
 
@@ -71,8 +72,10 @@ public class MyAlliesActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("我的联盟");
-        Drawable leftDraw = ContextCompat.getDrawable(this, R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable(this, R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         int minW = DensityUtils.getScreenH(this)/2-20;
         //tabLayout.setMinimumWidth(maxWidth);

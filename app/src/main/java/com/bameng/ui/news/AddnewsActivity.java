@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.CustomListOutput;
@@ -39,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -54,20 +55,20 @@ import static com.bameng.R.id.swipeRefreshLayout;
 public class AddnewsActivity extends BaseActivity {
     public final  static int REQUEST_CODE_CHOOSE= 100;
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
 
-    @Bind(R.id.tvObject)
+    @BindView(R2.id.tvObject)
             TextView tvObject;
 
-    @Bind(R.id.edtTitle)
+    @BindView(R2.id.edtTitle)
     EditText etTitle;
-    @Bind(R.id.edtContent)
+    @BindView(R2.id.edtContent)
     EditText etContent;
 
-    @Bind(R.id.chooseObjectL)
+    @BindView(R2.id.chooseObjectL)
     LinearLayout llChoose;
 
     List<UserData> objects;
@@ -86,8 +87,10 @@ public class AddnewsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleText.setText("新增消息");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         if(BaseApplication.UserData().getUserIdentity() == 1){
             llChoose.setVisibility(View.VISIBLE);

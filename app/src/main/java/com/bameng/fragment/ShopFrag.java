@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +53,7 @@ public class ShopFrag extends StoreFrag {
     //public List<ListModel> TopArticles;
     //public ArticleAdapter adapter;
 
-    //@Bind(R.id.homePullRefresh)
+    //@BindView(R2.id.homePullRefresh)
     //PullToRefreshListView homePullRefresh;
     public ShopFrag(){
         this.type=2;

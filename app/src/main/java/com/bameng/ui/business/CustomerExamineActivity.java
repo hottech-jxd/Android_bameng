@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
-import com.bameng.adapter.CustomDetailsAdapter;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.CustomerModel;
@@ -38,7 +38,7 @@ import org.w3c.dom.Text;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
@@ -46,26 +46,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.baidu.location.h.j.t;
-
 public class CustomerExamineActivity extends BaseActivity implements UserInfoView.OnUserInfoBackListener  {
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.name) TextView name;
-    @Bind(R.id.moblie)
+    @BindView(R2.id.name) TextView name;
+    @BindView(R2.id.moblie)
     TextView moblie;
-    @Bind(R.id.address) TextView address;
-    @Bind(R.id.status) TextView status;
-    @Bind(R.id.remark) TextView remark;
-    @Bind(R.id.layBtn) LinearLayout laybtn;
-    @Bind(R.id.llShopStatus) LinearLayout layShopStatus;
-    @Bind(R.id.inShopStatus) TextView shopStatus;
-    @Bind(R.id.tvAgree) TextView agree;
-    @Bind(R.id.tvReject) TextView reject;
-    @Bind(R.id.btnSubmit) Button btnSubmit;
+    @BindView(R2.id.address) TextView address;
+    @BindView(R2.id.status) TextView status;
+    @BindView(R2.id.remark) TextView remark;
+    @BindView(R2.id.layBtn) LinearLayout laybtn;
+    @BindView(R2.id.llShopStatus) LinearLayout layShopStatus;
+    @BindView(R2.id.inShopStatus) TextView shopStatus;
+    @BindView(R2.id.tvAgree) TextView agree;
+    @BindView(R2.id.tvReject) TextView reject;
+    @BindView(R2.id.btnSubmit) Button btnSubmit;
+    @BindView(R2.id.belongone) TextView belongone;
 
     UserInfoView popWind;
     Bundle bundle;
@@ -83,14 +82,18 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
     @Override
     protected void initView() {
         titleText.setText("客户意向审核");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
+
         bundle = this.getIntent().getExtras();
         customerModel= (CustomerModel) bundle.getSerializable("customerinfo");
         name.setText(customerModel.getName());
         moblie.setText(customerModel.getMobile());
         address.setText(customerModel.getAddr());
         shopStatus.setText( customerModel.getInShop() ==1 ? "已进店":"未进店" );
+        belongone.setText( customerModel.getBelongOneName() );
 
         if (customerModel.getStatus()==0){
             laybtn.setVisibility(View.VISIBLE);
@@ -102,13 +105,14 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
             layShopStatus.setVisibility(View.VISIBLE);
 
 
+            btnSubmit.setVisibility(View.GONE);
             if(customerModel.getInShop() == 1){
                 btnSubmit.setVisibility(View.GONE);
                 layShopStatus.setEnabled(false);
             }else{
-                btnSubmit.setVisibility(View.VISIBLE);
+                layShopStatus.setEnabled(true);
+                //btnSubmit.setVisibility(View.VISIBLE);
             }
-
 
             status.setText("已同意");
         }else {
@@ -250,5 +254,10 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
     @Override
     public void onUserInfoBack(UserInfoView.Type type , String value ) {
         shopStatus.setText( value );
+        if( value.equals( "未进店" )){
+            btnSubmit.setVisibility(View.GONE);
+        }else{
+            btnSubmit.setVisibility(View.VISIBLE);
+        }
     }
 }

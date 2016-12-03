@@ -293,6 +293,17 @@ public interface ApiService {
     @POST("user/SendCashCoupon")
     Call<PostModel> SendCashCoupon(@Header("Authorization") String token , @FieldMap Map<String, String> params );
 
+
+    /***
+     * 给盟友发送优惠券
+     * @param token
+     * @param params 盟友ID，多个用|隔开
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/SendAllyCashCoupon")
+    Call<PostModel> SendAllyCashCoupon(@Header("Authorization") String token , @FieldMap Map<String, String> params );
+
     /***
      * 获得可兑换盟豆数量和已兑换盟豆数量。
      * @param token

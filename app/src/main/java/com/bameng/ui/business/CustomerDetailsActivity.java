@@ -12,11 +12,12 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.model.CustomerModel;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.SystemTools;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.bameng.R.id.btnSubmit;
@@ -28,18 +29,19 @@ import static com.bameng.R.id.start;
  */
 public class CustomerDetailsActivity extends BaseActivity {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
     public Resources resources;
 
-    @Bind(R.id.name) TextView name;
-    @Bind(R.id.moblie) TextView moblie;
-    @Bind(R.id.address) TextView address;
-    @Bind(R.id.status) TextView status;
-    @Bind(R.id.remark) TextView remark;
-    @Bind(R.id.inShopStatus) TextView shopStatus;
+    @BindView(R2.id.name) TextView name;
+    @BindView(R2.id.moblie) TextView moblie;
+    @BindView(R2.id.address) TextView address;
+    @BindView(R2.id.status) TextView status;
+    @BindView(R2.id.remark) TextView remark;
+    @BindView(R2.id.inShopStatus) TextView shopStatus;
+    @BindView(R.id.belongone) TextView belongone;
 
     Bundle bundle;
     CustomerModel customerModel;
@@ -59,8 +61,10 @@ public class CustomerDetailsActivity extends BaseActivity {
     protected void initView() {
         titleText.setText("客户信息详情");
         titleLeftImage.setVisibility(View.VISIBLE);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         bundle = this.getIntent().getExtras();
         customerModel= (CustomerModel) bundle.getSerializable("customerinfo");
@@ -70,6 +74,7 @@ public class CustomerDetailsActivity extends BaseActivity {
         address.setText(customerModel.getAddr());
         shopStatus.setText( customerModel.getInShop() ==1 ? "已进店":"未进店" );
         remark.setText(TextUtils.isEmpty(customerModel.getRemark())? "无":customerModel.getRemark() );
+        belongone.setText( customerModel.getBelongOneName() );
 
         if (customerModel.getStatus()==0) {
             status.setText("审核中");

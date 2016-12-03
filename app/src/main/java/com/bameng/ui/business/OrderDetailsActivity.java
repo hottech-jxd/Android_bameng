@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.OrderDetailOutputModel;
@@ -48,7 +49,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
@@ -71,41 +72,42 @@ import static com.bameng.R.id.status;
 import static com.bameng.R.id.tvname;
 import static com.bameng.service.LocationService.address;
 
-public class OrderDetailsActivity
-        extends BaseActivity implements UserInfoView.OnUserInfoBackListener, FrescoControllerListener.ImageCallback {
+/***
+ * 订单详情 界面
+ */
+public class OrderDetailsActivity extends BaseActivity
+        implements UserInfoView.OnUserInfoBackListener, FrescoControllerListener.ImageCallback {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.tvOrderNo)
+    @BindView(R2.id.tvOrderNo)
     TextView tvOrderNo;
-    @Bind(R.id.tvOrderTime)
+    @BindView(R2.id.tvOrderTime)
     TextView tvOrderTime;
-    @Bind(R.id.tvName)
+    @BindView(R2.id.tvName)
     TextView tvName;
-    @Bind(R.id.tvPhone)
+    @BindView(R2.id.tvPhone)
     TextView tvPhone;
-    @Bind(R.id.tvAddress)
+    @BindView(R2.id.tvAddress)
     TextView tvAddress;
-    @Bind(R.id.tvRemarks)
+    @BindView(R2.id.tvRemarks)
     TextView tvRemark;
-    @Bind(R.id.tvOrderStatus)
+    @BindView(R2.id.tvOrderStatus)
     TextView tvOrderStatus;
-    @Bind(R.id.ivPicture)
+    @BindView(R2.id.ivPicture)
     SimpleDraweeView ivPicture;
-    @Bind(R.id.btnSave)
+    @BindView(R2.id.btnSave)
     Button btnSave;
-    @Bind(R.id.btnUpload)
+    @BindView(R2.id.btnUpload)
     Button btnUpload;
-    Resources resources;
     ProgressDialog progressDialog;
     UserInfoView userInfoView;
 
     String orderId;
     OrderModel orderModel;
-    Bitmap bitmap;
-
+    //Bitmap bitmap;
     final  int REQUEST_CODE_UPLOAD=100;
     String bitmapPath;
 
@@ -123,8 +125,10 @@ public class OrderDetailsActivity
     protected void initView() {
         titleText.setText("订单详情");
         titleLeftImage.setVisibility(View.VISIBLE);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
     }
 
     @Override
@@ -154,7 +158,7 @@ public class OrderDetailsActivity
             public void onResponse(Call<OrderDetailOutputModel> call, Response<OrderDetailOutputModel> response) {
                 if(progressDialog!=null)progressDialog.dismiss();
                 if(response.code() !=200 || response.body()==null ){
-                    ToastUtils.showLongToast(response.message()==null?"error":response.message());
+                    ToastUtils.showLongToast(response.message()==null?"服务器开小差了":response.message());
                     return;
                 }
                 if (response.body().getStatus() == Constants.STATUS_70035) {
@@ -182,20 +186,17 @@ public class OrderDetailsActivity
                 tvRemark.setText(orderModel.getRemark());
                 tvOrderStatus.setText( orderModel.getStatus() == Constants.ORDER_DEAL ? getString(R.string.deal) : orderModel.getStatus() ==Constants.ORDER_BACK ? getString(R.string.backorder ) : getString(R.string.noDeal));
 
-                tvOrderStatus.setEnabled( orderModel.getStatus() == Constants.ORDER_NODEAL ? true : false );
+//                tvOrderStatus.setEnabled( orderModel.getStatus() == Constants.ORDER_NODEAL  );
+//                btnSave.setVisibility(View.GONE);
+//                btnUpload.setVisibility(View.GONE);
+//                int wpx = DensityUtils.getScreenW(OrderDetailsActivity.this);
+//                if( orderModel.getStatus() == Constants.ORDER_DEAL){
+//                    FrescoDraweeController.loadImage( ivPicture , wpx , orderModel.getSuccessUrl() , 0 , OrderDetailsActivity.this );
+//                }else {
+//                    FrescoDraweeController.loadImage(ivPicture, wpx, orderModel.getPictureUrl(), 0 , OrderDetailsActivity.this);
+//                }
 
-                btnSave.setVisibility(View.GONE);
-                btnUpload.setVisibility(View.GONE);
-                //btnUpload.setVisibility( orderModel.getStatus() == Constants.ORDER_DEAL || orderModel.getStatus() == Constants.ORDER_BACK ? View.GONE:View.VISIBLE );
-                int wpx = DensityUtils.getScreenW(OrderDetailsActivity.this);
-
-                if( orderModel.getStatus() == Constants.ORDER_DEAL){
-                    FrescoDraweeController.loadImage( ivPicture , wpx , orderModel.getSuccessUrl() , 0 , OrderDetailsActivity.this );
-                }else {
-                    FrescoDraweeController.loadImage(ivPicture, wpx, orderModel.getPictureUrl(), 0 , OrderDetailsActivity.this);
-                }
-
-                //btnSave.setVisibility( orderModel.getStatus()== Constants.ORDER_NODEAL ? View.VISIBLE :View.GONE  );
+                setReadMode(orderModel);
             }
 
             @Override
@@ -204,6 +205,28 @@ public class OrderDetailsActivity
                 Snackbar.make(getWindow().getDecorView(), t.getMessage()==null?"error":t.getMessage(),Snackbar.LENGTH_LONG);
             }
         });
+    }
+
+    /***
+     * 如果当前用户是盟友，则设置 订单详情 只读模式
+     */
+    void setReadMode( OrderModel orderModel ){
+        if( BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU ){
+            tvOrderStatus.setEnabled( orderModel.getStatus() == Constants.ORDER_NODEAL  );
+            btnSave.setVisibility(View.GONE);
+            btnUpload.setVisibility(View.GONE);
+            int wpx = DensityUtils.getScreenW(OrderDetailsActivity.this);
+            int swid = DensityUtils.dip2px(OrderDetailsActivity.this, 20);
+            if( orderModel.getStatus() == Constants.ORDER_DEAL){
+                FrescoDraweeController.loadImage( ivPicture , wpx - swid , orderModel.getSuccessUrl() , 0 , OrderDetailsActivity.this );
+            }else {
+                FrescoDraweeController.loadImage(ivPicture, wpx - swid , orderModel.getPictureUrl(), 0 , OrderDetailsActivity.this);
+            }
+        }else {
+            tvOrderStatus.setEnabled(false);
+            btnUpload.setVisibility(View.GONE);
+            btnSave.setVisibility(View.GONE);
+        }
     }
 
     @Override

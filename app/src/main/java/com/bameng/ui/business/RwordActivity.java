@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CloseEvent;
@@ -34,7 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -46,16 +47,16 @@ import retrofit2.Response;
  */
 public class RwordActivity extends BaseActivity {
 
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
     public Resources resources;
-    @Bind(R.id.CustomReward)
+    @BindView(R2.id.CustomReward)
     EditText CustomReward;
-    @Bind(R.id.orderReword)
+    @BindView(R2.id.orderReword)
     EditText orderReword;
-    @Bind(R.id.shopReword)
+    @BindView(R2.id.shopReword)
     EditText shopReword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +73,10 @@ public class RwordActivity extends BaseActivity {
     protected void initView() {
         titleText.setText("盟友奖励设置");
         titleLeftImage.setVisibility(View.VISIBLE);
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
     }
 
 

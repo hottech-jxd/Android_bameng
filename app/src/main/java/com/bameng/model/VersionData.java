@@ -9,6 +9,9 @@ public class VersionData {
     private String serverVersion;
     private String updateTip;
     private String updateUrl;
+    /***
+     * 0:无更新，1：整包更新，2：强制更新
+     */
     private int updateType;
 
     public String getServerVersion() {

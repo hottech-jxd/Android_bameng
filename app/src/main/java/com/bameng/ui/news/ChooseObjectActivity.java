@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
+import com.bameng.R2;
 import com.bameng.adapter.ChooseCustomerAdapter;
 import com.bameng.adapter.CustomerAdapter;
 import com.bameng.model.ArticleListOutput;
@@ -43,7 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -54,17 +56,17 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener , BaseQuickAdapter.RequestLoadMoreListener{
 
-    @Bind(R.id.titleLeftImage)
+    @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.titleText)
+    @BindView(R2.id.titleText)
     TextView titleText;
-    @Bind(R.id.recycleView)
+    @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
-    @Bind(R.id.swipeRefreshLayout)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.tvSelectAll)
+    @BindView(R2.id.tvSelectAll)
     TextView tvSelectAll;
-    @Bind(R.id.tvFinish)
+    @BindView(R2.id.tvFinish)
     TextView tvFinish;
 
     ChooseCustomerAdapter adapter;
@@ -91,6 +93,9 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
         initlist();
         StartApi();
     }
+
+
+
     public void initlist(){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -102,33 +107,30 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                adapter.getItem(i).setSelected( !adapter.getItem(i).isSelected() );
-                adapter.notifyItemChanged(i);
+                if(isRadio){
+                    setSignleSelect( adapter.getItem(i) );
+                }else {
+                    adapter.getItem(i).setSelected(!adapter.getItem(i).isSelected());
+                    adapter.notifyItemChanged(i);
+                }
             }
         });
 
         recyclerView.setAdapter(adapter);
-        //Customers = new ArrayList<CustomerModel>();
-        //adapter = new CustomerAdapter(Customers, this,this);
-        //customListView.setAdapter(adapter);
-        //customListView.setMode(PullToRefreshBase.Mode.BOTH);
-//        customListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-//            @Override
-//            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//                operateType = OperateTypeEnum.REFRESH;
-//                pageIndex=1;
-//                StartApi();
-//            }
-//
-//            @Override
-//            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//                operateType = OperateTypeEnum.LOADMORE;
-//                pageIndex= pageIndex+1;
-//                StartApi();
-//
-//            }
-//        });
 
+    }
+
+    private void setSignleSelect(UserData model ){
+        if( adapter.getData()==null|| adapter.getData().size()<1)return;
+        for(UserData item : adapter.getData()){
+            if(item.getUserId() != model.getUserId()){
+                item.setSelected(false);
+            }else{
+                item.setSelected(true);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -138,8 +140,10 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
         tvSelectAll.setVisibility( isRadio? View.GONE:View.VISIBLE);
 
         titleText.setText("选择对象");
-        Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
+        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
+        titleLeftImage.setImageResource(R.mipmap.ic_back);
 
         chooses = (List<UserData>)getIntent().getExtras().getSerializable("customer");
 
@@ -165,7 +169,7 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
+        ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
         Call<MyOutputModel<MengModel>> call = apiService.allylist(token,map);
         call.enqueue(new Callback<MyOutputModel<MengModel>>() {
