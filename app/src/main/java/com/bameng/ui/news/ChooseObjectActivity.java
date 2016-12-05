@@ -277,6 +277,7 @@ public class ChooseObjectActivity extends BaseActivity implements SwipeRefreshLa
     public void onRefresh() {
         operateType = OperateTypeEnum.REFRESH;
         pageIndex =1;
+        currentSelected=false;
         StartApi(pageIndex);
     }
 }

@@ -19,6 +19,7 @@ import com.bameng.model.CloseEvent;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
+import com.bameng.model.RefreshCustomerEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
@@ -136,6 +137,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
 
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200 ) {
+                        EventBus.getDefault().post(new RefreshCustomerEvent(null,""));
                         finish();
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());

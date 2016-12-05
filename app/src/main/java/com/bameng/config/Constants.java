@@ -46,11 +46,11 @@ public class Constants {
 
 
 	//test url
-	//public final static String url= "http://bmapi.51flashmall.com";
+	public final static String url= "http://bmapi.51flashmall.com";
 	//public final static String url= "http://bmapi.guo.fancat.cn";
 
 	//dev url
-	public final static String url= "http://bmapi.fancat.cn";
+	//public final static String url= "http://bmapi.fancat.cn";
 	//test miyao
 	public final static String APP_SECRET="BAMEENG20161021";
 	// url
@@ -192,4 +192,6 @@ public class Constants {
 	 * 总店 类型
 	 */
 	public static final  int SHOP_HEAD = 1;
+
+	public static String SERVER_ERROR="服务器开小差了";
 }

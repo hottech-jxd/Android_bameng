@@ -12,11 +12,10 @@ import com.bameng.ui.base.BaseFragment;
  */
 public class FragManager {
 
-
-
     public enum FragType{
-        HOME, NEWS, BUSINESS, PROFILE,ALLYHOME,RICHES
+        HOME, NEWS, BUSINESS, PROFILE,ALLYHOME
     }
+
     private int viewId;
     private FragmentManager fragManager;
     private FragType preFragType;
@@ -37,14 +36,14 @@ public class FragManager {
     private FragManager(FragmentActivity context, int viewId){
         this.viewId = viewId;
         this.fragManager = context.getSupportFragmentManager();
+    }
 
-    }
-    public FragType getCurrentFragType(){
-        return this.curFragType;
-    }
-    public BaseFragment getCurrentFrag(){
-        return getFragmentByType(preFragType);
-    }
+//    public FragType getCurrentFragType(){
+//        return this.curFragType;
+//    }
+//    public BaseFragment getCurrentFrag(){
+//        return getFragmentByType(preFragType);
+//    }
 
     public void setCurrentFrag(FragType type){
         if(type == preFragType)
@@ -70,9 +69,9 @@ public class FragManager {
                 case ALLYHOME:
                     frag = new AllyHomeFrag();
                     break;
-                case RICHES:
-                    frag = new RichesFrag();
-                    break;
+//                case RICHES:
+//                    frag = new RichesFrag();
+//                    break;
 //                case STORE:
 //                    frag = new StoreFrag();
 //                    break;

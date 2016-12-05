@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <com.bameng.widgets.BmSwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/recycleView"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </com.bameng.widgets.BmSwipeRefreshLayout>
 
 
     </RelativeLayout>

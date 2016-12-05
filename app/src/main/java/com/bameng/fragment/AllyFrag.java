@@ -26,7 +26,6 @@ public class AllyFrag extends StoreFrag {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //EventBus.getDefault().register(this);
     }
 
     @Override
@@ -47,18 +46,7 @@ public class AllyFrag extends StoreFrag {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //EventBus.getDefault().unregister(this);
     }
-
-    /***
-     * 刷新数据
-     * @param event
-     */
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onEventRefreshData(RefreshWebViewEvent event){
-//
-//    }
-
 
     @Override
     public String getPageTitle() {

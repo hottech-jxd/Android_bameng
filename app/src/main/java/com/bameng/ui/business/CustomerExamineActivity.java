@@ -99,7 +99,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
             laybtn.setVisibility(View.VISIBLE);
             layShopStatus.setVisibility(View.GONE);
             btnSubmit.setVisibility(View.GONE);
-            status.setText("审核中");
+            status.setText("未审核");
         }else if (customerModel.getStatus()==1){
             laybtn.setVisibility(View.GONE);
             layShopStatus.setVisibility(View.VISIBLE);

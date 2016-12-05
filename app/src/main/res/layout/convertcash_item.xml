@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/red"
             android:layout_marginTop="4dp"
-            android:text="审核中"
+            android:text=""
             android:textSize="12sp"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"/>

@@ -77,7 +77,7 @@ public class CustomerDetailsActivity extends BaseActivity {
         belongone.setText( customerModel.getBelongOneName() );
 
         if (customerModel.getStatus()==0) {
-            status.setText("审核中");
+            status.setText("未审核");
         }else if(customerModel.getStatus()==1){
             status.setText("已同意");
         }else if(customerModel.getStatus() == 2){

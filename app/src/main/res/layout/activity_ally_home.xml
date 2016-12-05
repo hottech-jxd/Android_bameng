@@ -1,18 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    <RelativeLayout
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_above="@+id/homeBottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height">
-        <include layout="@layout/title_index"/>
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:clipToPadding="true">
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:id="@+id/llheaer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include  layout="@layout/title_index"/>
+        </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
     <FrameLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/fragment_container"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     </FrameLayout>
-    <include layout="@layout/layout_ally_bottom"/>
-</LinearLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/homeBottom"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_ally_bottom" />
+    </LinearLayout>
+
+
+    </RelativeLayout>

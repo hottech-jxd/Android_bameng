@@ -65,10 +65,8 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        //initView();
     }
 
     public void initView(){//******数据为空
@@ -114,7 +112,8 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
             @Override
             public void onFailure(Call<MyBusinessOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
 
@@ -123,7 +122,6 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //ButterKnife.unbind(this);
     }
 
     @Override

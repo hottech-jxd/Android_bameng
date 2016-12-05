@@ -161,7 +161,7 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
                             countDownBtn = new CountDownTimerButton(btn_code, "%dS", "获取验证码", 60000, ForgetPasswordActivity.this, 60000);
                         }
                         countDownBtn.start();
-                        ToastUtils.showLongToast("成功");
+                        ToastUtils.showLongToast(response.body().getStatusText());
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
@@ -199,7 +199,7 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
 
         }
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("mobile",edtPhone.getText().toString());
@@ -208,31 +208,19 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        Call<PostModel> call = apiService.ForgetPwd(application.readToken(),map);
+        ApiService apiService = ZRetrofitUtil.getApiService();
+        Call<PostModel> call = apiService.ForgetPwd(BaseApplication.readToken(),map);
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
                 if (response.body() != null) {
-
-
                     if (response.body().getStatus() == 200&&response.body()!=null) {
-
-//                        if( countDownBtn ==null ) {
-//                            countDownBtn = new CountDownTimerButton( btn_code, "%dS", "获取验证码", 60000,ForgetPasswordActivity.this , 60000);
-//                        }
-//                        countDownBtn.start();
-//                        ToastUtils.showLongToast("成功");
+                        ToastUtils.showLongToast(response.body().getStatusText());
+                        ForgetPasswordActivity.this.finish();
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }
-
                 }
-
-                return;
-
-
-
             }
 
 

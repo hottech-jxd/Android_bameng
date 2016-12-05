@@ -1,33 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout
+    android:layout_above="@+id/homeBottom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true">
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <LinearLayout
+            app:layout_scrollFlags="scroll|enterAlways"
             android:id="@+id/llheaer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <include layout="@layout/title_index" />
+            <include  layout="@layout/title_index"/>
         </LinearLayout>
+</android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
-        android:layout_below="@id/llheaer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+            <!--android:id="@+id/llheaer"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+        <!--<include layout="@layout/title_index" />-->
+        <!--</LinearLayout>-->
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
         <FrameLayout
-            android:layout_above="@+id/homeBottom"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </FrameLayout>
-        <LinearLayout
-            android:id="@+id/homeBottom"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <include layout="@layout/layout_bottom" />
-       </LinearLayout>
-    </RelativeLayout>
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
+
+    <!--</RelativeLayout>-->
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/homeBottom"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_bottom" />
+    </LinearLayout>
+
+</RelativeLayout>

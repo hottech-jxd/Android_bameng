@@ -18,7 +18,7 @@
         android:layout_height="1px"
         android:background="@color/line_gray"/>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.bameng.widgets.BmSwipeRefreshLayout
         android:layout_below="@id/tvtwo"
         android:layout_above="@+id/llfour"
         android:id="@+id/swipeRefreshLayout"
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.bameng.widgets.BmSwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/llfour"

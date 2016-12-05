@@ -48,6 +48,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,7 +116,7 @@ public class AllyHomeActivity extends BaseActivity {
 
     FragManager mFragManager;
 
-    String currentTab="";
+    String currentTab = Constants.TAG_1;
     long exitTime = 0;
 
     @Override
@@ -142,7 +143,7 @@ public class AllyHomeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        goback=false;
+        goback = false;
         titleText.setText("业务客户");
         titleLeftImage.setVisibility(View.VISIBLE);
         //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
@@ -160,36 +161,36 @@ public class AllyHomeActivity extends BaseActivity {
         requestBaiduLocation();
     }
 
-    void requestBaiduLocation(){
+    void requestBaiduLocation() {
         AllyHomeActivityPermissionsDispatcher.baiduLocationWithCheck(this);
     }
 
-    @NeedsPermission( {Manifest.permission.READ_PHONE_STATE ,
-            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    protected void baiduLocation(){
+    @NeedsPermission({Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    protected void baiduLocation() {
         application.baiduLocationService.start();
     }
 
-    @OnShowRationale({Manifest.permission.READ_PHONE_STATE ,
-            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    protected void showRationaleForBaiduLocation(PermissionRequest request){
-        showRationaleDialog( R.string.permission_baiduLocation_rationale , request );
+    @OnShowRationale({Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    protected void showRationaleForBaiduLocation(PermissionRequest request) {
+        showRationaleDialog(R.string.permission_baiduLocation_rationale, request);
     }
 
-    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE ,
-            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
+    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    protected void onBaiduLocationDenied(){
-        Toast.makeText(this, R.string.permission_baiduLocation_denied , Toast.LENGTH_SHORT).show();
+    protected void onBaiduLocationDenied() {
+        Toast.makeText(this, R.string.permission_baiduLocation_denied, Toast.LENGTH_SHORT).show();
     }
 
-    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE ,
-            Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    protected void onBaiduLocationNeverAskAgain(){
-        Toast.makeText(this, R.string.permission_baiduLocation_never_asked , Toast.LENGTH_SHORT).show();
+    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    protected void onBaiduLocationNeverAskAgain() {
+        Toast.makeText(this, R.string.permission_baiduLocation_never_asked, Toast.LENGTH_SHORT).show();
     }
 
     private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
@@ -221,31 +222,37 @@ public class AllyHomeActivity extends BaseActivity {
 
 
     private void initTab() {
-        currentTab="业务客户";
+        //currentTab="业务客户";
+        currentTab = Constants.TAG_1;
+
         Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
         SystemTools.loadBackground(homeImg, oneBuyDraw);
         homeTxt.setTextColor(resources.getColor(R.color.chocolate));
         //重置其他
-        Drawable newestDraw = ContextCompat.getDrawable(this,R.mipmap.ic_zx);
+        Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
         SystemTools.loadBackground(newsImg, newestDraw);
         newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
-        Drawable listDraw = ContextCompat.getDrawable(this,R.mipmap.ic_riches);
+        Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_riches);
         SystemTools.loadBackground(richesImg, listDraw);
         richesTxt.setTextColor(resources.getColor(R.color.text_color_black));
     }
 
     @OnClick(R.id.titleRightImage)
-    void onRightClick(){
-        if( currentTab.equals("业务客户")) {
+    void onRightClick() {
+        //if( currentTab.equals("业务客户")) {
+        if (currentTab.equals(Constants.TAG_1)) {
             ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, SubmitCustomerInfoActivity.class);
-        }else if(currentTab.equals("资讯列表")){
+        } else if (currentTab.equals(Constants.TAG_2)) {
             ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, AddnewsActivity.class);
         }
     }
+
     public void onTabClicked(View view) {
         switch (view.getId()) {
             case R.id.homePage: {
-                currentTab="业务客户";
+                //currentTab="业务客户";
+                currentTab = Constants.TAG_1;
+
                 titleText.setText("业务客户");
                 titleLeftImage.setVisibility(View.VISIBLE);
                 titleLeftText.setVisibility(View.VISIBLE);
@@ -267,7 +274,9 @@ public class AllyHomeActivity extends BaseActivity {
             }
             break;
             case R.id.newsPage: {
-                currentTab="资讯列表";
+                //currentTab="资讯列表";
+                currentTab = Constants.TAG_2;
+
                 titleText.setText("资讯列表");
                 titleLeftImage.setVisibility(View.GONE);
                 titleLeftText.setVisibility(View.GONE);
@@ -290,7 +299,9 @@ public class AllyHomeActivity extends BaseActivity {
             }
             break;
             case R.id.richesPage: {
-                currentTab="财富";
+                //currentTab="财富";
+                currentTab = Constants.TAG_4;
+
                 titleText.setText("财富");
                 titleLeftImage.setVisibility(View.GONE);
                 titleLeftText.setVisibility(View.GONE);
@@ -375,7 +386,9 @@ public class AllyHomeActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventRightButtomVisible(SetRightVisibleEvent event){
-        titleRightImage.setVisibility( event.isShow()? View.VISIBLE:View.GONE );
+        if( currentTab.equals( event.getTabName() )) {
+            titleRightImage.setVisibility(event.isShow() ? View.VISIBLE : View.GONE);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN )

@@ -6,6 +6,7 @@ package com.bameng.model;
 
 public class SetRightVisibleEvent {
     private boolean show = false;
+    private String tabName="";
 
     public boolean isShow() {
         return show;
@@ -14,7 +15,16 @@ public class SetRightVisibleEvent {
     public void setShow(boolean show) {
         this.show = show;
     }
-    public SetRightVisibleEvent(boolean isShow){
+    public SetRightVisibleEvent( String tabName , boolean isShow){
+        this.tabName = tabName;
         this.show = isShow;
+    }
+
+    public String getTabName() {
+        return tabName;
+    }
+
+    public void setTabName(String tabName) {
+        this.tabName = tabName;
     }
 }

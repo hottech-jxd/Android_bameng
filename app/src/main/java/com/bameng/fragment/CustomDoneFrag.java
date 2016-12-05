@@ -44,4 +44,9 @@ public class CustomDoneFrag extends CustomNoDoneFrag {
 //            adapter.notifyDataSetChanged();
 //        }
     }
+
+    @Override
+    public String getPageTitle() {
+        return "已处理信息";
+    }
 }

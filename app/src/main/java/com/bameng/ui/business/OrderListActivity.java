@@ -31,16 +31,16 @@ import butterknife.OnClick;
  * 我的订单
  */
 public class OrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener{
-    @BindView(R2.id.ListSwitch)
-    LinearLayout listSwitch;
-    @BindView(R2.id.allLabel)
-    TextView allLabel;
-    @BindView(R2.id.nodoneLabel)
-    TextView nodoneLabel;
-    @BindView(R2.id.doneLabel)
-    TextView doneLabel;
-    @BindView(R2.id.backLabel)
-    TextView backLabel;
+    //@BindView(R2.id.ListSwitch)
+    //LinearLayout listSwitch;
+    //@BindView(R2.id.allLabel)
+    //TextView allLabel;
+    //@BindView(R2.id.nodoneLabel)
+    //TextView nodoneLabel;
+    //@BindView(R2.id.doneLabel)
+    //TextView doneLabel;
+    //@BindView(R2.id.backLabel)
+    //TextView backLabel;
     @BindView(R2.id.orderViewPager)
     ViewPager orderViewPager;
     @BindView(R2.id.titleText)

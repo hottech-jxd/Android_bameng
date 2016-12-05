@@ -14,7 +14,7 @@
     <string name="hint_newpws2">请再次输入</string>
     <string name="hint_pwd2">登录密码</string>
     <string name="test_num">111111</string>
-    <string name="test">dsadsdsadadsadsadsdadsdasdasdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssasdsadsadasd</string>
+    <string name="test">dsadsdsadadsadsadsadsadasd</string>
     <string name="permission_baiduLocation_rationale">请求允许使用此设备的定位信息</string>
     <string name="permission_baiduLocation_denied">请允许设备使用定位功能</string>
     <string name="permission_baiduLocation_never_asked">定位权限将不再询问</string>
@@ -38,4 +38,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="server_error">服务器开小差了</string>
+
 </resources>

@@ -23,6 +23,7 @@ import com.bameng.model.CustomListOutput;
 import com.bameng.model.CustomerModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
+import com.bameng.model.RefreshCustomerEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseFragment;
@@ -36,6 +37,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +82,16 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         initView();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
     }
 
     void initView(){
@@ -135,6 +147,8 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onClick(View view) {
 
     }
+
+
 
     @Override
     public int getLayoutRes() {
@@ -198,7 +212,8 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
             @Override
             public void onFailure(Call<AllySummeryOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast( t.getMessage()==null?"请求失败":t.getMessage() );
+                //ToastUtils.showLongToast( t.getMessage()==null?"请求失败":t.getMessage() );
+                ToastUtils.showLongToast( Constants.SERVER_ERROR );
             }
         });
 
@@ -269,9 +284,17 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
 
             @Override
             public void onFailure(Call<CustomListOutput> call, Throwable t) {
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventRefreshData(RefreshCustomerEvent event){
+        onRefresh();
+    }
+
 }

@@ -77,7 +77,7 @@
 
     </LinearLayout>
     <TextView
-        android:text="审核中"
+        android:text=""
         android:id="@+id/status"
         android:layout_gravity="center"
         android:paddingRight="10dp"

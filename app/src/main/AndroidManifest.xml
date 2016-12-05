@@ -37,7 +37,6 @@
         <activity android:name=".ui.account.ChangePswActivity" />
         <activity android:name=".ui.account.UserInfoActivity" />
         <activity android:name=".ui.account.PhoneChangeActivity" />
-        <activity android:name=".ui.account.AddressActivity" />
         <activity android:name=".ui.account.MyBeanActivity" />
         <activity android:name=".ui.account.ScoreActivity" />
         <activity android:name=".ui.account.ExchangeBeanActivity" />

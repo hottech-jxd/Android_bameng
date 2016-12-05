@@ -313,4 +313,8 @@ public class CustomNoDoneFrag extends BaseFragment
         });
     }
 
+    @Override
+    public String getPageTitle() {
+        return "未处理信息";
+    }
 }

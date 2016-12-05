@@ -7,6 +7,12 @@
     <color name="province_line_border">#FFC7C7C7</color>
     <color name="dividerColor">#eeeeee</color>
 
+    <color name="refreshcolor1">#ff00ddff</color>
+    <color name="refreshcolor2">#ff0099cc</color>
+    <color name="refreshcolor3">#ff99cc00</color>
+    <color name="refreshcolor4">#ffffbb33</color>
+    <color name="refreshcolor5">#ffcc0000</color>
+
     <color name="bottomSelectedColor">#D7AD72</color>
 
     <color name="leftmenu_bg_color">#ffffff</color>

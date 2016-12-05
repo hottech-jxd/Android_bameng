@@ -89,7 +89,7 @@ public class SettingActivity extends BaseActivity {
             tvCache.setText(DataCleanManager.getTotalCacheSize(this));
         }catch (Exception ex){
             Log.e( SettingActivity.class.getName() , "获得缓存大小失败" );
-            tvCache.setText("0");
+            tvCache.setText("0k");
         }
     }
     @OnClick(R.id.changePswL) void changePswLClick() {
@@ -97,7 +97,7 @@ public class SettingActivity extends BaseActivity {
     }
     @OnClick(R.id.cleanL) void cleanLClick() {
         DataCleanManager.clearAllCache(this);
-        tvCache.setText("0");
+        tvCache.setText("0k");
     }
     @OnClick(R.id.aboutAppL) void aboutAppLClick() {
         Intent intent = new Intent(this,WebViewActivity.class);

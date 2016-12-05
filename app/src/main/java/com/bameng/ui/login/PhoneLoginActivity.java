@@ -1,5 +1,6 @@
 package com.bameng.ui.login;
 
+import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
@@ -63,14 +64,15 @@ public class PhoneLoginActivity extends BaseActivity {
 
     @BindView(R2.id.btn_login)
     Button btnLogin;
-    public Resources resources;
+    //public Resources resources;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_login);
         ButterKnife.bind(this);
-        resources = this.getResources();
+        //resources = this.getResources();
         initView();
         BaseApplication.clearAll();
     }
@@ -107,8 +109,15 @@ public class PhoneLoginActivity extends BaseActivity {
         }
 
         ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+        if(progressDialog==null){
+            progressDialog=new ProgressDialog(this);
+        }
+        progressDialog.setMessage("登录中...");
+        progressDialog.show();
+
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("loginName",edtPhone.getText().toString());
@@ -117,11 +126,17 @@ public class PhoneLoginActivity extends BaseActivity {
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
-        String token = application.readToken();
+        String token = BaseApplication.readToken();
         Call<UserOutputsModel> call = apiService.Login(token,map);
         call.enqueue(new Callback<UserOutputsModel>() {
             @Override
             public void onResponse(Call<UserOutputsModel> call, Response<UserOutputsModel> response) {
+                if(progressDialog!=null)progressDialog.dismiss();
+                if(response.code()!=200){
+                    ToastUtils.showLongToast(response.message());
+                    return;
+                }
+
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200&&response.body()!=null) {
                         BaseApplication.writeUserToken(response.body().getData().getToken());
@@ -137,15 +152,12 @@ public class PhoneLoginActivity extends BaseActivity {
 
                 }
 
-                return;
-
-
-
             }
 
 
             @Override
             public void onFailure(Call<UserOutputsModel> call, Throwable t) {
+                if(progressDialog!=null)progressDialog.dismiss();
                 ToastUtils.showLongToast("失败");
             }
         });

@@ -130,13 +130,15 @@ public class HomeActivity extends BaseActivity {
     @BindView(R2.id.homeBottom)
     LinearLayout homeBottom;
 
-    public Resources resources;
+    Resources resources;
 
-    public ProgressPopupWindow progress;
-
-    //public Handler mHandler;
+    ProgressPopupWindow progress;
 
     FragManager mFragManager;
+
+    long exitTime = 0;
+
+    String currentTab = Constants.TAG_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +151,6 @@ public class HomeActivity extends BaseActivity {
         mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         initView();
-
     }
 
     @Override
@@ -165,6 +166,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        currentTab = Constants.TAG_1;
         goback=false;
         titleText.setText(getString(R.string.app_name));
         titleLeftImage.setVisibility(View.VISIBLE);
@@ -281,6 +283,7 @@ public class HomeActivity extends BaseActivity {
         SystemTools.loadBackground(profileImg, profileDraw);
         profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
     }
+
     @OnClick(R.id.titleRightImage)
     void onRightClick(){
         ActivityUtils.getInstance().showActivity(HomeActivity.this, AddnewsActivity.class);
@@ -288,26 +291,27 @@ public class HomeActivity extends BaseActivity {
     public void onTabClicked(View view) {
         switch (view.getId()) {
             case R.id.homePage: {
+                currentTab = Constants.TAG_1;
                 titleText.setText(getString(R.string.app_name));
                 titleLeftText.setVisibility(View.VISIBLE);
                 titleLeftImage.setVisibility(View.VISIBLE);
                 titleRightImage.setVisibility(View.GONE);
-                if(progress!=null) progress.dismissView();
+                if (progress != null) progress.dismissView();
 
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(ContextCompat.getColor( this , R.color.bottomSelectedColor));
+                homeTxt.setTextColor(ContextCompat.getColor(this, R.color.bottomSelectedColor));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(ContextCompat.getColor( this,R.color.text_color_black));
+                newsTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
-                businessTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
+                businessTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
-                profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
+                profileTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 //切换内容
                 String tag = Constants.TAG_1;
                 //加载具体的页面
@@ -317,25 +321,26 @@ public class HomeActivity extends BaseActivity {
             }
             break;
             case R.id.newsPage: {
+                currentTab = Constants.TAG_2;
                 titleText.setText("资讯列表");
                 titleLeftImage.setVisibility(View.GONE);
                 titleLeftText.setVisibility(View.GONE);
                 //titleRightImage.setVisibility(View.VISIBLE);
-                if(progress!=null) progress.dismissView();
+                if (progress != null) progress.dismissView();
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
+                homeTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(ContextCompat.getColor(this,R.color.bottomSelectedColor));
+                newsTxt.setTextColor(ContextCompat.getColor(this, R.color.bottomSelectedColor));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
-                businessTxt.setTextColor(ContextCompat.getColor( this, R.color.text_color_black));
+                businessTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
-                profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
+                profileTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
 
                 //切换内容
                 String tag = Constants.TAG_2;
@@ -345,25 +350,26 @@ public class HomeActivity extends BaseActivity {
             }
             break;
             case R.id.businessPage: {
+                currentTab = Constants.TAG_3;
                 titleText.setText("我的业务");
                 titleLeftText.setVisibility(View.GONE);
                 titleLeftImage.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.GONE);
-                if(progress!=null) progress.dismissView();
+                if (progress != null) progress.dismissView();
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
-                homeTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
+                homeTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 //重置其他
                 Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
                 SystemTools.loadBackground(newsImg, newestDraw);
-                newsTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
+                newsTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_yw);
                 SystemTools.loadBackground(businessImg, listDraw);
-                businessTxt.setTextColor(ContextCompat.getColor(this,R.color.bottomSelectedColor));
+                businessTxt.setTextColor(ContextCompat.getColor(this, R.color.bottomSelectedColor));
                 Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_account);
                 SystemTools.loadBackground(profileImg, profileDraw);
-                profileTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
+                profileTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
 
 
                 String tag = Constants.TAG_3;
@@ -373,41 +379,43 @@ public class HomeActivity extends BaseActivity {
             }
             break;
             case R.id.profilePage: {
+                currentTab = Constants.TAG_4;
                 titleText.setText("我的账户");
                 titleLeftText.setVisibility(View.GONE);
                 titleLeftImage.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.GONE);
-                if(progress!=null) progress.dismissView();
+                if (progress != null) progress.dismissView();
                 //设置选中状态
-                    Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
-                    SystemTools.loadBackground(homeImg, oneBuyDraw);
-                    homeTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
-                    //重置其他
-                    Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
-                    SystemTools.loadBackground(newsImg, newestDraw);
-                    newsTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
-                    Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
-                    SystemTools.loadBackground(businessImg, listDraw);
-                    businessTxt.setTextColor(ContextCompat.getColor(this,R.color.text_color_black));
-                    Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_account);
-                    SystemTools.loadBackground(profileImg, profileDraw);
-                    profileTxt.setTextColor(ContextCompat.getColor(this,R.color.bottomSelectedColor));
-                    //切换内容
-                    String tag = Constants.TAG_4;
-                    //加载具体的页面
-                    Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, tag);
-                    mHandler.sendMessage(msg);
+                Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
+                SystemTools.loadBackground(homeImg, oneBuyDraw);
+                homeTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
+                //重置其他
+                Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
+                SystemTools.loadBackground(newsImg, newestDraw);
+                newsTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
+                Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_yw);
+                SystemTools.loadBackground(businessImg, listDraw);
+                businessTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
+                Drawable profileDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_account);
+                SystemTools.loadBackground(profileImg, profileDraw);
+                profileTxt.setTextColor(ContextCompat.getColor(this, R.color.bottomSelectedColor));
+                //切换内容
+                String tag = Constants.TAG_4;
+                //加载具体的页面
+                Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, tag);
+                mHandler.sendMessage(msg);
             }
             break;
             default:
                 break;
         }
     }
+
     @Override
     protected void StartApi() {
 
     }
-    private long exitTime = 0l;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 2秒以内按两次推出程序
@@ -418,7 +426,6 @@ public class HomeActivity extends BaseActivity {
                 exitTime = System.currentTimeMillis();
             } else {
                 closeSelf(HomeActivity.this);
-                //SystemTools.killAppDestory(HomeActivity.this);
             }
             return true;
         }
@@ -533,6 +540,8 @@ public class HomeActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventRightButtomVisible(SetRightVisibleEvent event){
-        titleRightImage.setVisibility( event.isShow()? View.VISIBLE:View.GONE );
+        if(  currentTab.equals( event.getTabName() ) ) {
+            titleRightImage.setVisibility(event.isShow() ? View.VISIBLE : View.GONE);
+        }
     }
 }

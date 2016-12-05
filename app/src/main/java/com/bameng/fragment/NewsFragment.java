@@ -35,14 +35,6 @@ import static com.bameng.R.id.viewPager;
  */
 public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
 
-    @BindView(R2.id.groupLabel)
-    TextView groupLabel;
-    @BindView(R2.id.storeLabel)
-    TextView storeLabel;
-    @BindView(R2.id.shopLabel)
-    TextView shopLabel;
-    @BindView(R2.id.allyLabel)
-    TextView allyLabel;
     @BindView(R2.id.raidersViewPager)
     ViewPager raidersViewPager;
     @BindView(R2.id.tablayout)
@@ -61,12 +53,16 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
         initSwitch();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         raidersViewPager.setCurrentItem( tab.getPosition() );
         int flag = tabPagerAdapter.getItem( tab.getPosition() ).getArguments().getInt("index");
-        SetRightVisibleEvent event = new SetRightVisibleEvent( flag == 3 ? true:false );
+        SetRightVisibleEvent event = new SetRightVisibleEvent( Constants.TAG_2 , flag == 3 ? true:false );
         EventBus.getDefault().post( event );
     }
 
@@ -101,9 +97,9 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
             ShopFrag shopFrag = new ShopFrag();
             shopFrag.setArguments(b);
             mFragmentList.add(shopFrag);
-            shopLabel.setVisibility(View.VISIBLE);
+            //shopLabel.setVisibility(View.VISIBLE);
         }else{
-            shopLabel.setVisibility(View.GONE);
+            //shopLabel.setVisibility(View.GONE);
         }
 
         b = new Bundle();
@@ -145,15 +141,14 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //ButterKnife.unbind(this);
     }
 
     @Override
     public void onReshow() {
         if( tabPagerAdapter.getItem( raidersViewPager.getCurrentItem()).getArguments().getInt("index") == 3 ){
-            EventBus.getDefault().post( new SetRightVisibleEvent(true) );
+            EventBus.getDefault().post( new SetRightVisibleEvent( Constants.TAG_2 , true) );
         }else{
-            EventBus.getDefault().post(new SetRightVisibleEvent(false));
+            EventBus.getDefault().post( new SetRightVisibleEvent( Constants.TAG_2 , false));
         }
     }
 

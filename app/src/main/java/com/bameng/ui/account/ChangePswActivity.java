@@ -82,7 +82,7 @@ public class ChangePswActivity extends BaseActivity {
             return;
         }
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("oldPassword", EncryptUtil.getInstance().encryptMd532(edtOldpsw.getText().toString()));
@@ -90,8 +90,8 @@ public class ChangePswActivity extends BaseActivity {
         AuthParamUtils authParamUtils = new AuthParamUtils();
         String sign = authParamUtils.getSign(map);
         map.put("sign", sign);
-        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
+        ApiService apiService = ZRetrofitUtil.getApiService();
+        String token = BaseApplication.readToken();
         Call<PostModel> call = apiService.ChanagePassword(token,map);
         call.enqueue(new Callback<PostModel>() {
             @Override
@@ -125,7 +125,7 @@ public class ChangePswActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
-                ToastUtils.showLongToast("失败");
+                ToastUtils.showLongToast("服务器开小差了");
             }
         });
 

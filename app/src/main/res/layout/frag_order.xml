@@ -1,11 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_marginTop="0dp"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.bameng.fragment.OrderFragment">
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+             <!--xmlns:tools="http://schemas.android.com/tools"-->
+             <!--android:layout_marginTop="0dp"-->
+             <!--android:layout_width="match_parent"-->
+             <!--android:layout_height="match_parent"-->
+             <!--tools:context="com.bameng.fragment.OrderFragment">-->
 
-   <android.support.v4.widget.SwipeRefreshLayout
+   <com.bameng.widgets.BmSwipeRefreshLayout
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
        android:id="@+id/swipeRefreshLayout"
        android:layout_width="match_parent"
        android:layout_height="wrap_content">
@@ -15,6 +17,6 @@
            android:layout_width="match_parent"
            android:layout_height="match_parent"/>
 
-   </android.support.v4.widget.SwipeRefreshLayout>
+   </com.bameng.widgets.BmSwipeRefreshLayout>
 
-</FrameLayout>
+

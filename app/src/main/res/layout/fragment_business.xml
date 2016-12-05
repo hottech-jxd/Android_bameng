@@ -1,10 +1,14 @@
-<android.support.v4.widget.SwipeRefreshLayout
+<com.bameng.widgets.BmSwipeRefreshLayout
     android:id="@+id/swipeRefreshLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bameng.fragment.BusinessFragment">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
@@ -210,4 +214,6 @@
 
     </LinearLayout>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</com.bameng.widgets.BmSwipeRefreshLayout>
