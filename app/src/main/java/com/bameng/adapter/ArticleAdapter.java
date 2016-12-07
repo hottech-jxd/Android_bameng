@@ -78,9 +78,9 @@ public class ArticleAdapter extends BaseAdapter {
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
                 ListModel Article = Articles.get(position-TopArticles.size());
-                DraweeController draweeController= Fresco.newDraweeControllerBuilder()
-                        .setAutoPlayAnimations(true).build();
-                holder.image.setController(draweeController);
+                //DraweeController draweeController= Fresco.newDraweeControllerBuilder()
+                //        .setAutoPlayAnimations(true).build();
+                //holder.image.setController(draweeController);
 
                 holder.image.setImageURI(Article.getArticleCover());
                 holder.articleTitle.setText(Article.getArticleTitle());
@@ -93,9 +93,9 @@ public class ArticleAdapter extends BaseAdapter {
                 convertView.setTag(viewHolderTop);
                 ListModel topArticleIdModel = TopArticles.get(position);
 
-                DraweeController draweeController= Fresco.newDraweeControllerBuilder()
-                        .setAutoPlayAnimations(true).build();
-                viewHolderTop.topImage.setController(draweeController);
+                //DraweeController draweeController= Fresco.newDraweeControllerBuilder()
+                //        .setAutoPlayAnimations(true).build();
+                //viewHolderTop.topImage.setController(draweeController);
 
                 viewHolderTop.topImage.setImageURI(topArticleIdModel.getArticleCover());
                 viewHolderTop.topArticleTitle.setText(topArticleIdModel.getArticleTitle());
@@ -104,19 +104,11 @@ public class ArticleAdapter extends BaseAdapter {
                 viewHolderTop.topTime.setText(topArticleIdModel.getPublishTimeText());
             }
 
-        }else
-        {
-
-
         }
-
-
-
 
         return convertView;
     }
-    class ViewHolder
-    {
+    class ViewHolder {
         @BindView(R2.id.image)
         SimpleDraweeView image;
         @BindView(R2.id.articleTitle) TextView articleTitle;

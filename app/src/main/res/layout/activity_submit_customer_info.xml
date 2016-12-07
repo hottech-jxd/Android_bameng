@@ -13,8 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/act_title_height">
-
-        <include layout="@layout/title_index"></include>
+        <include layout="@layout/title_index"/>
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
@@ -26,8 +25,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="5dp"
-        android:layout_marginLeft="10dp"
-        >
+        android:layout_marginLeft="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,8 +36,9 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:maxLines="1"
-            app:style="transparent"
-            />
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            app:style="transparent"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
@@ -51,8 +50,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:padding="5dp"
-        >
+        android:padding="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,6 +61,8 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:maxLines="1"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
             app:style="transparent"
             />
     </LinearLayout>
@@ -76,8 +76,7 @@
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="5dp"
-        >
+        android:padding="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,8 +86,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            app:style="transparent"
-            />
+            android:imeOptions="actionNext"
+            app:style="transparent"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
@@ -100,8 +99,7 @@
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="5dp"
-        >
+        android:padding="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            />
+            android:imeOptions="actionNext"/>
     </LinearLayout>
     <TextView
         android:layout_marginLeft="0dp"

@@ -47,10 +47,12 @@
             android:text="  相册"
             android:textColor="@color/black" />
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/line_gray"/>
         <TextView
+            android:visibility="gone"
             android:id="@+id/btnCancel"
             android:layout_gravity="center"
             android:layout_width="120dp"

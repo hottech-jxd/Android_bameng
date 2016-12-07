@@ -215,7 +215,9 @@ public class CustomNoDoneFrag extends BaseFragment
 
             @Override
             public void onFailure(Call<CustomListOutput> call, Throwable t) {
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                swipeRefreshLayout.setRefreshing(false);
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
     }
@@ -306,7 +308,8 @@ public class CustomNoDoneFrag extends BaseFragment
 
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
-                ToastUtils.showLongToast("请求失败");
+                //ToastUtils.showLongToast("请求失败");
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
                 customerModel.setDoing(false);
                 adapter.notifyDataSetChanged();
             }

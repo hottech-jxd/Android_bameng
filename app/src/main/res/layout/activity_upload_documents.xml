@@ -140,7 +140,7 @@
             android:gravity="top"
             android:id="@+id/txtRemark"
             android:hint="请输入内容"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionNext"/>
     </LinearLayout>
     <Button
         android:layout_width="match_parent"

@@ -28,17 +28,20 @@
                 android:id="@+id/img_user"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                fresco:actualImageUri="fitCenter"
                 fresco:placeholderImage="@mipmap/ic_nickname"
+                fresco:placeholderImageScaleType="fitCenter"
                 fresco:failureImage="@mipmap/ic_nickname"
+                fresco:failureImageScaleType="fitCenter"
                 fresco:roundAsCircle="true" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/layName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:orientation="vertical"
                 android:layout_weight="1">
-
                 <TextView
                     android:id="@+id/txt_name"
                     android:layout_width="wrap_content"
@@ -46,31 +49,27 @@
                     android:text=""
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/medium_text_size" />
-
                 <TextView
                     android:id="@+id/txt_Points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txt_name"
                     android:layout_marginTop="2dp"
                     android:background="@drawable/userl_points_draw"
                     android:gravity="left|center_vertical"
                     android:paddingBottom="3dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:paddingTop="3dp"
                     android:text=""
                     android:textColor="#c3b6a5"
-                    android:textSize="@dimen/small_text_size" />
-            </RelativeLayout>
+                    android:textSize="@dimen/micro_text_size" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/img_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/icon_setting" />
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -86,18 +85,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="我的帐号" />
+                android:text="我的账号" />
 
             <ImageView
-                android:layout_width="@dimen/title_image_width"
-                android:layout_height="@dimen/title_image_height"
+                android:layout_width="@dimen/arrow_width"
+                android:layout_height="@dimen/arrow_height"
                 android:background="@mipmap/icon_go" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
             android:layout_marginBottom="10dp"
             android:background="@color/white"
             android:orientation="horizontal">

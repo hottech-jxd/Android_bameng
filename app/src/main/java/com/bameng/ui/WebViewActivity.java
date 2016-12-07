@@ -309,14 +309,14 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
 
         //设置angent
         String userAgent = viewPage.getSettings().getUserAgentString();
-        String token = application.readToken()+"(Authorization)";
+        String token = BaseApplication.readToken()+"(Authorization);(bmandroid)";
         if(null==userAgent|| TextUtils.isEmpty(userAgent)){
             userAgent = token;
         }
         else{
-            int idx = userAgent.indexOf("(Authorization)");
+            int idx = userAgent.indexOf("(Authorization);(bmandroid)");
             if(idx>=0){
-                userAgent = userAgent.substring(idx+ 15 );
+                userAgent = userAgent.substring(idx+ 27 );
 //                idx = userAgent.lastIndexOf(";");
 //                if(idx>=0){
 //                    userAgent = userAgent.substring(0,idx);

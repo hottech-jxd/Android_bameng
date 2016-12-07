@@ -219,7 +219,8 @@ public class StoreFrag extends BaseFragment
             @Override
             public void onFailure(Call<ArticleListOutput> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
     }

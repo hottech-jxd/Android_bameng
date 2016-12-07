@@ -38,4 +38,9 @@
         <item name="android:windowExitAnimation">@anim/out_to_top</item>
     </style>
 
+
+    <style name="BMAppbarLayout" parent="Widget.Design.AppBarLayout">
+        <item name="elevation">0dp</item>
+    </style>
+
 </resources>

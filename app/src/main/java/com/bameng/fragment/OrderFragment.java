@@ -226,7 +226,8 @@ public class OrderFragment extends BaseFragment
             @Override
             public void onFailure(Call<OrderOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"发送错误":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"发送错误":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
 

@@ -38,11 +38,11 @@ public class ExchangeExamineActivity extends BaseActivity {
     TextView titleText;
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    private int currentIndex = 0;
-    @BindView(R2.id.nodoneLabel)
-    TextView nodoneLabel;
-    @BindView(R2.id.doneLabel)
-    TextView doneLabel;
+    //private int currentIndex = 0;
+    //@BindView(R2.id.nodoneLabel)
+    //TextView nodoneLabel;
+    //@BindView(R2.id.doneLabel)
+    //TextView doneLabel;
 
     @BindView(R2.id.tablayout)
     TabLayout tabLayout;
@@ -50,7 +50,7 @@ public class ExchangeExamineActivity extends BaseActivity {
     @BindView(R2.id.viewPager)
     ViewPager viewPager;
 
-    public Resources resources;
+    //public Resources resources;
 
     MYFragmentAdapter<BaseFragment> fragmentAdapter;
     String[] titles;
@@ -62,7 +62,7 @@ public class ExchangeExamineActivity extends BaseActivity {
         setContentView(R.layout.activity_exchange_examine);
         ButterKnife.bind(this);
         initView();
-        resources = this.getResources();
+        //resources = this.getResources();
     }
 
     @Override

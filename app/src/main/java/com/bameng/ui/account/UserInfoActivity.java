@@ -514,7 +514,7 @@ public class UserInfoActivity extends PhoteActivity
         String city="";
         String area="";
         if( !temp.isEmpty()){
-            String[] items = temp.split("_");
+            String[] items = temp.split("-");
             if( items !=null){
                 if(items.length>0){
                     province = items[0];

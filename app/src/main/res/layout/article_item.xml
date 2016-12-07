@@ -17,7 +17,9 @@
             android:layout_gravity="center_vertical"
             android:id="@+id/image"
             app:placeholderImage="@mipmap/ic_picture"
+            app:placeholderImageScaleType="fitCenter"
             app:failureImage="@mipmap/ic_picture"
+            app:failureImageScaleType="fitCenter"
             android:layout_width="70dp"
             android:layout_height="70dp" />
         <LinearLayout
@@ -32,7 +34,7 @@
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:maxLines="1"
         android:ellipsize="end"
         android:text=""/>
@@ -42,9 +44,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="2"
+        android:textSize="12sp"
         android:ellipsize="end"
         android:text=""/>
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_gravity="right"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
@@ -52,7 +56,7 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content" />
             <ImageView
                 android:layout_width="20dp"
@@ -62,18 +66,20 @@
                 android:id="@+id/browseAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="10sp"
+                android:paddingLeft="5dp"
                 android:text=""/>
             <ImageView
                 android:layout_marginLeft="10dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:background="@mipmap/ic_time"/>
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="10sp"
+                android:paddingLeft="5dp"
                 android:text=""/>
         </LinearLayout>
     </LinearLayout>

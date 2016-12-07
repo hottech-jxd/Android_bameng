@@ -27,8 +27,7 @@
                 android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textColor="@color/black"/>
 
         <com.huotu.android.library.libedittext.EditText
             android:layout_toRightOf="@+id/txtTitle"
@@ -67,8 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="center">
-
+                android:gravity="right">
 
 
             <TextView
@@ -82,6 +80,7 @@
                 android:textColor="@color/white" />
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
                 android:padding="10dp"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
@@ -96,6 +95,7 @@
                 android:background="@drawable/btn_gray"
                 android:gravity="center"
                 android:padding="8dp"
+                android:visibility="gone"
                 android:text="取消"
                 android:textColor="@color/white" />
             </LinearLayout>

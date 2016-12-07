@@ -4,16 +4,22 @@
               android:layout_height="match_parent"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height">
+        android:layout_height="wrap_content">
         <include layout="@layout/title_index"/>
-    </RelativeLayout>
+    </LinearLayout>
 
     <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingTop="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:paddingBottom="0dp"
+        app:tabPaddingBottom="0dp"
+        app:tabPaddingTop="0dp"
         app:tabSelectedTextColor="@color/red"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/red"
@@ -21,12 +27,10 @@
         app:tabMode="fixed"
         app:tabTextColor="@color/black"
         android:id="@+id/tablayout">
-
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewerPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
 </LinearLayout>

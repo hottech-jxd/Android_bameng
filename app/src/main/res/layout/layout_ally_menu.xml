@@ -12,11 +12,14 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/ic_zx" />
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@mipmap/ic_order" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,8 +28,8 @@
             android:text="我的订单" />
 
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_width"
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
@@ -41,11 +44,14 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/ic_user" />
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@mipmap/ic_userinfo" />
         <TextView
             android:id="@+id/tvmycash"
             android:layout_width="wrap_content"
@@ -55,8 +61,8 @@
             android:text="我的现金劵" />
 
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_width"
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
@@ -72,11 +78,14 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@mipmap/icon_sign" />
 
         <TextView
@@ -88,8 +97,8 @@
             android:text="签到" />
 
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
@@ -105,11 +114,14 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@mipmap/ic_user" />
 
         <TextView
@@ -121,8 +133,8 @@
             android:text="个人信息" />
 
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_width"
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 

@@ -310,7 +310,8 @@ public class MengFragment extends BaseFragment
             @Override
             public void onFailure(Call<MyOutputModel<MengModel>> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
 
@@ -361,7 +362,8 @@ public class MengFragment extends BaseFragment
 
             @Override
             public void onFailure(Call<BaseModel> call, Throwable t) {
-                ToastUtils.showLongToast("请求失败");
+                //ToastUtils.showLongToast("请求失败");
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
                 model.setDoing(false);
                 adapter.notifyDataSetChanged();
             }

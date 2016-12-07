@@ -36,8 +36,8 @@
             android:text="修改密码"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
@@ -66,8 +66,8 @@
             android:layout_marginRight="5dp"
             android:layout_height="wrap_content"/>
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
@@ -92,8 +92,8 @@
             android:text="关于APP"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
@@ -117,8 +117,8 @@
             android:text="用户使用协议"
             android:layout_weight="1"/>
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView

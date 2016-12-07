@@ -218,7 +218,8 @@ public class UserFragment extends BaseFragment
             @Override
             public void onFailure(Call<UserOutputsModel> call, Throwable t) {
                 homePullRefresh.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"请求发生异常":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求发生异常":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
     }
@@ -328,7 +329,7 @@ public class UserFragment extends BaseFragment
                     progressDialog.dismiss();
                 }
                 if( response.code() !=200){
-                    ToastUtils.showLongToast( response.message() );
+                    ToastUtils.showLongToast( Constants.SERVER_ERROR );
                     return;
                 }
                 if(response.body()==null){

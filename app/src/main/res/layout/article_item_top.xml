@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
               android:background="#FFFFFF"
-    android:padding="10dp">
+              android:padding="10dp">
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/Top_image"
+        app:placeholderImage="@mipmap/ic_picture"
+        app:placeholderImageScaleType="fitCenter"
+        app:failureImage="@mipmap/ic_picture"
+        app:failureImageScaleType="fitCenter"
         android:layout_width="80dp"
         android:layout_height="80dp" />
     <LinearLayout
@@ -18,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            android:textSize="14sp"
             android:text=""/>
         <TextView
             android:layout_marginTop="5dp"
@@ -25,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lines="2"
+            android:textSize="12sp"
             android:text=""/>
         <LinearLayout
             android:layout_gravity="right"
@@ -42,18 +50,22 @@
                 android:background="@mipmap/ic_look"/>
             <TextView
                 android:id="@+id/Top_browseAmount"
+                android:paddingLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="10sp"
                 android:text=""/>
             <ImageView
                 android:layout_marginLeft="10dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:background="@mipmap/ic_time"/>
             <TextView
                 android:id="@+id/Top_time"
+                android:paddingLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="10sp"
                 android:text=""/>
         </LinearLayout>
     </LinearLayout>

@@ -22,12 +22,13 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/line_gray" />-->
 
     <LinearLayout
+        android:padding="5dp"
         android:id="@+id/layMbean"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -36,8 +37,8 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="10dp"
             android:background="@mipmap/ic_mybean"/>
         <TextView
@@ -52,8 +53,8 @@
             android:text=""/>
         <ImageView
             android:layout_margin="10dp"
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:background="@mipmap/icon_go"/>
     </LinearLayout>
     <TextView
@@ -62,6 +63,7 @@
         android:background="@color/line_gray" />
 
     <LinearLayout
+        android:padding="5dp"
         android:id="@+id/layjifen"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -70,8 +72,8 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="10dp"
             android:background="@mipmap/icon_jifen"/>
         <TextView
@@ -85,8 +87,8 @@
             android:layout_height="wrap_content"
             android:text=""/>
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:layout_margin="10dp"
             android:background="@mipmap/icon_go"/>
     </LinearLayout>
@@ -96,6 +98,7 @@
         android:background="@color/line_gray" />
 
     <LinearLayout
+        android:padding="5dp"
         android:id="@+id/laydjsmd"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -104,8 +107,8 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="10dp"
             android:background="@mipmap/icon_djsmd"/>
         <TextView
@@ -119,8 +122,8 @@
             android:layout_height="wrap_content"
             android:text=""/>
         <ImageView
-            android:layout_width="@dimen/title_image_width"
-            android:layout_height="@dimen/title_image_height"
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_height"
             android:layout_margin="10dp"
             android:background="@mipmap/icon_go"/>
     </LinearLayout>

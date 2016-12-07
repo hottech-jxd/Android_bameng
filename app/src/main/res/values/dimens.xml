@@ -17,9 +17,15 @@
 
     <!-- 主界面title高度/功能界面标题高度/界面上边距 -->
     <dimen name="act_title_height">50dp</dimen>
+
+    <dimen name="act_bottom_height">60dp</dimen>
+
     <!--首页扫描图标-->
     <dimen name="title_image_width">25dp</dimen>
     <dimen name="title_image_height">20dp</dimen>
+    <!-- 箭头图标大小-->
+    <dimen name="arrow_width">15dp</dimen>
+    <dimen name="arrow_height">15dp</dimen>
 
     <dimen name="bottom_image_height">25dp</dimen>
 

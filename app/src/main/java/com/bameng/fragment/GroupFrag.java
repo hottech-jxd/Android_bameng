@@ -113,6 +113,10 @@ public class GroupFrag extends BaseFragment
         });
 
         adBannerWidget = new AdBannerWidget(getContext());
+        int width = DensityUtils.getScreenW(getContext());
+        int height = width/2;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width,height);
+        adBannerWidget.setLayoutParams(layoutParams);
         adapter.addHeaderView(adBannerWidget);
     }
 
@@ -208,7 +212,8 @@ public class GroupFrag extends BaseFragment
             @Override
             public void onFailure(Call<ArticleListOutput> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
     }

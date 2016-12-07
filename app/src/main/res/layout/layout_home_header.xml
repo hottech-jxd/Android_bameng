@@ -19,6 +19,7 @@
 
     <LinearLayout
         android:paddingLeft="5dp"
+        android:paddingTop="10dp"
         android:paddingRight="5dp"
         android:background="#ffffff"
         android:orientation="horizontal"
@@ -145,13 +146,14 @@
         android:orientation="horizontal"
         android:background="#FFFFFF"
         android:paddingLeft="10dp"
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:text= "@string/home_groupinfo"
             android:layout_width="wrap_content"
             android:textColor="#010101"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:paddingTop="5dp"
             android:paddingBottom="10dp"
             android:layout_centerVertical="true"

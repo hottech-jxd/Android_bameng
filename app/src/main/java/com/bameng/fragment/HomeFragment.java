@@ -52,6 +52,7 @@ import com.bameng.ui.business.RwordActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.MyListView;
 import com.bameng.widgets.RecycleItemDivider;
@@ -137,6 +138,18 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
         header = LayoutInflater.from(getContext()).inflate(R.layout.layout_home_header , null );
 
         adBannerWidget = (AdBannerWidget) header.findViewById(R.id.adbannerWidget);
+        int width = DensityUtils.getScreenW(getContext());
+        int height = width/2;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width,height);
+        adBannerWidget.setLayoutParams(layoutParams);
+
+        List<SlideListModel> list = new ArrayList<>();
+        SlideListModel item = new SlideListModel();
+        item.setPicUrl("res://"+ getContext().getPackageName() +"/" + R.mipmap.none);
+        list.add(item);
+        AdBannerConfig config =  new AdBannerConfig();
+        config.setImages(list);
+        adBannerWidget.setAdBannerConfig(config);
 
         adapter.addHeaderView(header);
 
@@ -274,7 +287,8 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
             @Override
             public void onFailure(Call<ArticleListOutput> call, Throwable t) {
                 homePullRefresh.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
     }
@@ -319,7 +333,8 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
 
             @Override
             public void onFailure(Call<SlideListOutputModel> call, Throwable t) {
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                //ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }
         });
     }

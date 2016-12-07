@@ -122,6 +122,7 @@ public class UploadDocumentsActivity
             tvAddPic.setVisibility(View.GONE);
             ivPicture.setVisibility(View.VISIBLE);
             hasImage=true;
+            imagePath = bitmapPath;
             int swid= DensityUtils.dip2px(this, 20);
             int wid = DensityUtils.getScreenW(this)-swid;
             FrescoDraweeController.loadImage( ivPicture , wid , "file://"+ bitmapPath , 0 , this );
