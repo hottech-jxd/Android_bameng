@@ -166,8 +166,7 @@ public class MyCashCardActivity extends BaseActivity
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -205,7 +204,7 @@ public class MyCashCardActivity extends BaseActivity
             @Override
             public void onFailure(Call<CashCouponOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage() == null ? "请求失败" : t.getMessage());
+                ToastUtils.showLongToast( Constants.SERVER_ERROR );
             }
         });
 
@@ -240,8 +239,7 @@ public class MyCashCardActivity extends BaseActivity
                 int userid = BaseApplication.UserData().getUserId();
                 map.put("userid", String.valueOf(userid) );
                 map.put("cpid", String.valueOf(couponId ));
-                AuthParamUtils authParamUtils = new AuthParamUtils();
-                String sign = authParamUtils.getSign(map);
+                String sign = AuthParamUtils.getSign(map);
                 String url = model.getUrl();
                 url +="?userid="+userid+"&cpid="+ model.getID()+"&sign="+sign;
 
@@ -299,8 +297,7 @@ public class MyCashCardActivity extends BaseActivity
         }else {
             map.put("ids", uid);
         }
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -344,7 +341,7 @@ public class MyCashCardActivity extends BaseActivity
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
                 if(progressDialog!=null)progressDialog.dismiss();
-                ToastUtils.showLongToast( t.getMessage()==null?"请求失败":t.getMessage() );
+                ToastUtils.showLongToast( Constants.SERVER_ERROR );
             }
         });
     }

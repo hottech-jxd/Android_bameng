@@ -122,8 +122,7 @@ public class PhoneLoginActivity extends BaseActivity {
         map.put("os", "android");
         map.put("loginName",edtPhone.getText().toString());
         map.put("password", EncryptUtil.getInstance().encryptMd532(edtpwd.getText().toString()));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

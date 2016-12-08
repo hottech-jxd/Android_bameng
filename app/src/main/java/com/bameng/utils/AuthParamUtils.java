@@ -1,53 +1,23 @@
 package com.bameng.utils;
 
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-
-
-import com.bameng.BaseApplication;
 import com.bameng.config.Constants;
-import com.bameng.model.AccountModel;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-
 /**
  * 授权参数构建类
  */
 public class AuthParamUtils {
 
-    public AuthParamUtils() {
-    }
-
-//    private Map removeNull(Map map){
-//        Map<String, String> lowerMap = new HashMap< String, String >(  );
-//        Iterator lowerIt = map.entrySet ().iterator ();
-//        while ( lowerIt.hasNext () )
-//        {
-//
-//            Map.Entry entry = ( Map.Entry ) lowerIt.next ();
-//            Object value = entry.getValue ( );
-//            if( null != value )
-//            {
-//                lowerMap.put ( String.valueOf ( entry.getKey () ).toLowerCase (), String.valueOf ( value ) );
-//            }
-//        }
-//
-//        return lowerMap;
-//    }
-
-
-    public String getSign(Map map) {
+    public static String getSign(Map map) {
         return getSign(map, Constants.APP_SECRET);
     }
 
-    public String getSign(Map map, String secret) {
-        String values = this.doSort(map, secret);
+    public static String getSign(Map map, String secret) {
+        String values = doSort(map, secret);
         Log.i("sign", values);
         // values = URLEncoder.encode(values);
         //String signHex =DigestUtils.md5DigestAsHex(values.toString().getBytes("UTF-8")).toLowerCase();
@@ -64,7 +34,7 @@ public class AuthParamUtils {
      * @参数：@return
      * @返回：String
      */
-    private String doSort(Map<String, String> map, String secret) {
+    private static String doSort(Map<String, String> map, String secret) {
         //将MAP中的key转成小写
         Map<String, String> lowerMap = new HashMap<String, String>();
         Iterator lowerIt = map.entrySet().iterator();

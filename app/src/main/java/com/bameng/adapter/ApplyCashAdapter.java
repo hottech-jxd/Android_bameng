@@ -27,23 +27,24 @@ public class ApplyCashAdapter extends BaseQuickAdapter<ConvertFlowModel, BaseVie
         setItem (baseViewHolder, obj );
     }
 
-    void setItem(BaseViewHolder baseViewHolder, ConvertFlowModel obj ){
+    void setItem(BaseViewHolder baseViewHolder, ConvertFlowModel obj ) {
         SimpleDraweeView imv = baseViewHolder.getView(R.id.img);
-        DraweeController draweeController= Fresco.newDraweeControllerBuilder()
-                .setUri(obj.getHeadimg())
-                .setAutoPlayAnimations(true).build();
-        imv.setController(draweeController);
-//
-        baseViewHolder.setText( R.id.name , "盟友:" + obj.getName());
-        baseViewHolder.setText( R.id.beam ,  String.valueOf(obj.getMoney()));
-        String statusName = obj.getStatus()==0? "未审核": obj.getStatus()==1?"已审核":"拒绝";
-        baseViewHolder.setText( R.id.status ,  statusName);
+//        DraweeController draweeController= Fresco.newDraweeControllerBuilder()
+//                .setUri(obj.getHeadimg())
+//                .setAutoPlayAnimations(true).build();
+//        imv.setController(draweeController);
+
+        imv.setImageURI(obj.getHeadimg());
+
+        baseViewHolder.setText(R.id.name, "盟友:" + obj.getName());
+        baseViewHolder.setText(R.id.beam, String.valueOf(obj.getMoney()));
+        String statusName = obj.getStatus() == 0 ? "未审核" : obj.getStatus() == 1 ? "已审核" : "拒绝";
+        baseViewHolder.setText(R.id.status, statusName);
 
         baseViewHolder.addOnClickListener(R.id.btnAgree);
         baseViewHolder.addOnClickListener(R.id.btnReject);
 
-        baseViewHolder.setVisible( R.id.lay_btn, obj.getStatus()==0);
+        baseViewHolder.setVisible(R.id.lay_btn, obj.getStatus() == 0);
 
     }
-
 }

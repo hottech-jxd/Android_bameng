@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
-import com.bameng.adapter.CustomDetailsAdapter;
 import com.bameng.adapter.MengDataAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.BaseModel;

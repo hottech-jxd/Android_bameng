@@ -20,8 +20,6 @@ import android.widget.Switch;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
-import com.bameng.R2;
-import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.AdBannerConfig;
@@ -102,9 +100,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initView();
-
     }
 
     @Override
@@ -122,7 +118,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
         homePullRefresh.setOnRefreshListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        recyclerView.addItemDecoration(new RecycleItemDivider(getContext(),RecyclerView.VERTICAL, 8 , R.color.dividerColor));
+        //recyclerView.addItemDecoration(new RecycleItemDivider(getContext(),RecyclerView.VERTICAL, 8 , R.color.dividerColor));
 
         adapter = new StoreAdapter();
         adapter.setOnLoadMoreListener(this);
@@ -220,8 +216,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
         map.put("identity","0");
         map.put("pageIndex",String.valueOf(idx));
         map.put("pageSize", String.valueOf(PAGESIZE));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -299,8 +294,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("type","2");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

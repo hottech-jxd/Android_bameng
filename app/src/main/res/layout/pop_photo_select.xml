@@ -43,7 +43,7 @@
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
-            android:drawableLeft="@mipmap/ic_picture"
+            android:drawableLeft="@mipmap/ic_camera2"
             android:text="  相册"
             android:textColor="@color/black" />
         <TextView

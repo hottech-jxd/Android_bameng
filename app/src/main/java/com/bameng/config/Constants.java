@@ -44,10 +44,12 @@ public class Constants {
 	//切换内容页
 	public static final int SWITCH_UI = 0x00000010;
 
+	//生产  url
+	//public final static String url="http://bmapi.mellkit.com";
 
 	//test url
 	public final static String url= "http://bmapi.51flashmall.com";
-	//public final static String url= "http://bmapi.guo.fancat.cn";
+
 
 	//dev url
 	//public final static String url= "http://bmapi.fancat.cn";

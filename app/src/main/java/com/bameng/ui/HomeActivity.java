@@ -35,7 +35,6 @@ import com.bameng.model.PostModel;
 import com.bameng.model.SetRightVisibleEvent;
 import com.bameng.model.SlideListOutputModel;
 import com.bameng.model.SwitchFragmentEvent;
-import com.bameng.receiver.MyBroadcastReceiver;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
@@ -154,6 +153,22 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+        outState.putString("curfrag", currentTab);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState==null)return;
+        currentTab = savedInstanceState.getString("curfrag");
+        if(currentTab==null || currentTab.isEmpty())return;
+
+        switchFrag(currentTab);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
@@ -216,7 +231,7 @@ public class HomeActivity extends BaseActivity {
             Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void onBaiduLocationNeverAskAgain(){
-        Toast.makeText(this, R.string.permission_baiduLocation_never_asked , Toast.LENGTH_SHORT).show();
+        ToastUtils.showLongToast( getString( R.string.permission_baiduLocation_never_asked ));
     }
 
     private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
@@ -288,6 +303,7 @@ public class HomeActivity extends BaseActivity {
     void onRightClick(){
         ActivityUtils.getInstance().showActivity(HomeActivity.this, AddnewsActivity.class);
     }
+
     public void onTabClicked(View view) {
         switch (view.getId()) {
             case R.id.homePage: {
@@ -317,7 +333,7 @@ public class HomeActivity extends BaseActivity {
                 //加载具体的页面
                 Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, tag);
                 mHandler.sendMessage(msg);
-                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.GO_TO_HOMEFRAG);
+                //MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.GO_TO_HOMEFRAG);
             }
             break;
             case R.id.newsPage: {
@@ -462,7 +478,7 @@ public class HomeActivity extends BaseActivity {
         titleLeftText.setText("");
         if (event == null) return;
         titleLeftText.setText(event.getModel() == null || event.getModel().getCity() == null ? "" : event.getModel().getCity());
-        //TODO 调用接口 上报位置信息
+        //调用接口 上报位置信息
         String lnglat = String.valueOf( event.getModel().getLongitude() ) +","+ String.valueOf( event.getModel().getLatitude() );
 
         if (null != event.getModel().getCity() ) {
@@ -476,16 +492,16 @@ public class HomeActivity extends BaseActivity {
 
 
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-        String token = application.readToken();
+        String token = BaseApplication.readToken();
         Map<String, String> map = new HashMap<>();
-        map.put("version", application.getAppVersion());
+        map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("mylocation", event.getModel().getCity() );
         map.put("lnglat", lnglat );
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
+
         application.baiduLocationService.stop();
 
         Call<BaseModel> call = apiService.myLocation( token , map);
@@ -520,15 +536,17 @@ public class HomeActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventSwitchFragment(SwitchFragmentEvent event){
-        //Message msg = mHandler.obtainMessage(Constants.SWITCH_UI, event.getFragnmentName());
-        //mHandler.sendMessage( msg);
-        if( event.getFragnmentName().equals( Constants.TAG_1 ) ) {
+        switchFrag( event.getFragnmentName() );
+    }
+
+    void switchFrag( String fragName ){
+        if( fragName.equals( Constants.TAG_1 ) ) {
             onTabClicked(homePage);
-        }else if( event.getFragnmentName().equals( Constants.TAG_2 )){
+        }else if( fragName.equals( Constants.TAG_2 )){
             onTabClicked(newsPage);
-        }else if(event.getFragnmentName().equals( Constants.TAG_3 )){
+        }else if(fragName.equals( Constants.TAG_3 )){
             onTabClicked( businessPage);
-        }else if(event.getFragnmentName().equals(Constants.TAG_4)){
+        }else if(fragName.equals(Constants.TAG_4)){
             onTabClicked(profilePage);
         }
     }

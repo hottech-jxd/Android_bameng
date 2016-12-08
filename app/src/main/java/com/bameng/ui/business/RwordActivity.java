@@ -1,5 +1,6 @@
 package com.bameng.ui.business;
 
+import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -51,21 +52,20 @@ public class RwordActivity extends BaseActivity {
     TextView titleText;
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    public Resources resources;
     @BindView(R2.id.CustomReward)
     EditText CustomReward;
     @BindView(R2.id.orderReword)
     EditText orderReword;
     @BindView(R2.id.shopReword)
     EditText shopReword;
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rword);
         ButterKnife.bind(this);
         initView();
-        application = (BaseApplication) this.getApplication();
-        resources = this.getResources();
         StartApi();
     }
 
@@ -108,8 +108,7 @@ public class RwordActivity extends BaseActivity {
         map.put("creward",CustomReward.getText().toString());
         map.put("orderreward",orderReword.getText().toString());
         map.put("shopreward",shopReword.getText().toString());
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -152,12 +151,17 @@ public class RwordActivity extends BaseActivity {
 
     @Override
     protected void StartApi() {
+        if(progressDialog==null){
+            progressDialog = new ProgressDialog(this);
+        }
+        progressDialog.setMessage("请稍等...");
+        progressDialog.show();
+
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -165,6 +169,8 @@ public class RwordActivity extends BaseActivity {
         call.enqueue(new Callback<GetRewardOutput>() {
             @Override
             public void onResponse(Call<GetRewardOutput> call, Response<GetRewardOutput> response) {
+                if(progressDialog!=null) progressDialog.dismiss();
+
                 if (response.code() != 200) {
                     ToastUtils.showLongToast(response.message());
                     return;
@@ -196,6 +202,8 @@ public class RwordActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<GetRewardOutput> call, Throwable t) {
+                if(progressDialog!=null) progressDialog.dismiss();
+
                 ToastUtils.showLongToast("失败");
             }
         });

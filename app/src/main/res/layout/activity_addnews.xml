@@ -14,7 +14,7 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
     <com.huotu.android.library.libedittext.EditText
         android:layout_margin="10dp"
         android:id="@+id/edtTitle"

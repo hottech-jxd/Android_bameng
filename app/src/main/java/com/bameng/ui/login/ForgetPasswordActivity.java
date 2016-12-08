@@ -204,9 +204,8 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
         map.put("os", "android");
         map.put("mobile",edtPhone.getText().toString());
         map.put("verifyCode",edtCode.getText().toString());
-        map.put("password",edtPsd.getText().toString());
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        map.put("password", EncryptUtil.getInstance().encryptMd532(edtPsd.getText().toString()));
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         Call<PostModel> call = apiService.ForgetPwd(BaseApplication.readToken(),map);

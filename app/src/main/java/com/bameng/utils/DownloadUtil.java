@@ -2,6 +2,7 @@ package com.bameng.utils;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.text.format.Formatter;
 
 import com.bameng.BaseApplication;
@@ -55,13 +56,25 @@ public class DownloadUtil {
     }
 
      public void download(){
-        oldapk_filepath = BaseApplication.single.getExternalCacheDir().getPath() + File.separator + BaseApplication.single.getPackageName() + "_old.apk";
-        newapk_savepath = BaseApplication.single.getExternalCacheDir().getPath() + File.separator + BaseApplication.single.getPackageName() + "_new.apk";
+         String cachePath="";
+         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
+             if ( BaseApplication.single.getExternalCacheDir() != null) {
+                 cachePath = BaseApplication.single.getExternalCacheDir().getPath(); // most likely your null value
+             }
+         } else {
+             if (BaseApplication.single.getCacheDir() != null) {
+                 cachePath = BaseApplication.single.getCacheDir().getPath();
+             }
+         }
+
+        oldapk_filepath = cachePath + File.separator + BaseApplication.single.getPackageName()+"_old.apk";
+        newapk_savepath = cachePath + File.separator + BaseApplication.single.getPackageName() + "_new.apk";
+         //oldapk_filepath = BaseApplication.single.getExternalCacheDir().getPath() + File.separator + BaseApplication.single.getPackageName() + "_old.apk";
+        //newapk_savepath = BaseApplication.single.getExternalCacheDir().getPath() + File.separator + BaseApplication.single.getPackageName() + "_new.apk";
         //softwarePath = BaseApplication.single.getExternalCacheDir().getPath() + File.separator + BaseApplication.single.getPackageName() + "_patch.apk";
 
         clientDownLoadTask = new ClientDownLoadTask();
         clientDownLoadTask.execute( versionData.getUpdateUrl() );
-
     }
 
     class ClientDownLoadTask extends AsyncTask<String, Integer, Integer> {
@@ -76,6 +89,9 @@ public class DownloadUtil {
             try {
                 url = new URL(params[0]);
                 hc = (HttpURLConnection) url.openConnection();
+                //hc.setConnectTimeout(15000);
+                //hc.setUseCaches(false);
+                //hc.setDoOutput(true);
 
                 if (hc == null) {
                     return null;

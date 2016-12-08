@@ -8,6 +8,9 @@
     <dimen name="large_text_size">24sp</dimen>
     <!-- 四类字体大小 -->
 
+    <!-- tab的高度 -->
+    <dimen name="tab_height">38dp</dimen>
+
 
     <!-- 首页Gallery高度 -->
     <dimen name="index_gallery_height">120dp</dimen>

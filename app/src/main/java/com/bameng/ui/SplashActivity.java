@@ -68,7 +68,7 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
         String version = BaseApplication.getAppVersion();
         tvVersion.setText(app + version);
 
-        BaseApplication.single.loadAddress();
+        //BaseApplication.single.loadAddress();
 
         AlphaAnimation anima = new AlphaAnimation(0.0f, 1.0f);
         anima.setDuration(1000);// 设置动画显示时间
@@ -80,6 +80,9 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
 
             @Override
             public void onAnimationEnd(Animation animation) {
+
+                BaseApplication.single.loadAddress();
+
                 //检测网络
                 isConnection = BaseApplication.checkNet(SplashActivity.this);
                 if (!isConnection) {
@@ -110,8 +113,7 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -133,39 +135,7 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
                     ToastUtils.showLongToast(response.body().getStatusText());
                     return;
                 }
-
-//                InitOutputsModel initOutputs = new InitOutputsModel();
-//                initOutputs.setData(response.body().getData());
-
                 callback( response.body() );
-
-//                if (response.body().getStatus() == 200 && response.body().getData() != null) {
-//                    BaseApplication.writeBaseInfo(initOutputs.getData().getBaseData());
-//                    //加载更新信息
-//                    application.loadUpdate(initOutputs.getData().getVersionData());
-//
-//                    if (initOutputs.getData().getBaseData().getUserStatus() == Constants.USER_LOGIN_STATUS_FREEZE) {
-//                        ToastUtils.showLongToast("账号被冻结，请重新登录");
-//                        ActivityUtils.getInstance().skipActivity(SplashActivity.this, PhoneLoginActivity.class);
-//                    } else if (initOutputs.getData().getBaseData().getUserStatus() == Constants.USER_LOGIN_STATUS_NOlOGIN) {
-//                        ActivityUtils.getInstance().skipActivity(SplashActivity.this, PhoneLoginActivity.class);
-//                    } else {
-//                        BaseApplication.writeUserInfo(response.body().getData().getUserData());
-//                        //加载用户信息
-//                        if (initOutputs.getData().getUserData().getUserIdentity() == 1) {
-//                            ActivityUtils.getInstance().skipActivity(SplashActivity.this, HomeActivity.class);
-//                        } else {
-//                            ActivityUtils.getInstance().skipActivity(SplashActivity.this, AllyHomeActivity.class);
-//                        }
-//                    }
-//                } else if (response.body().getStatus() == Constants.STATUS_70035) {
-//                    ToastUtils.showLongToast(response.body().getStatusText());
-//                    ActivityUtils.getInstance().skipActivity(SplashActivity.this, PhoneLoginActivity.class);
-//                }else {
-//                    tvClick.setVisibility(View.VISIBLE);
-//                    ToastUtils.showLongToast(response.body().getStatusText());
-//                    return;
-//                }
             }
 
 
@@ -225,7 +195,6 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
         downloadUtil.setProgressListener(this);
         downloadUtil.download();
     }
-
 
     private void checkAppUpdate( final InitOutputsModel data  ) {
         if( data.getData().getVersionData().getUpdateType() == 2 ){//强制更新
@@ -311,7 +280,7 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
                     public void onClick(DialogInterface dialogInterface, int i) {
                         downloadUtil.setCancel(true);
                         //downloadUtil.deleteTempApkFile();
-                        //finish();
+                        finish();
                     }
                 })
                 .create();

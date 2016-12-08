@@ -32,9 +32,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/icon_username"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/icon_username"/>
             <com.huotu.android.library.libedittext.EditText
                 android:layout_margin="10dp"
                 android:id="@+id/edtUserName"
@@ -62,9 +62,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/icon_psw"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/icon_psw"/>
             <com.huotu.android.library.libedittext.EditText
                 android:id="@+id/edtPwd"
                 android:layout_margin="10dp"

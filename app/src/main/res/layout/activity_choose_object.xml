@@ -11,15 +11,16 @@
         android:layout_height="@dimen/act_title_height">
         <include layout="@layout/title_index"/>
     </RelativeLayout>
-    <TextView
-        android:id="@+id/tvtwo"
-        android:layout_below="@id/rlone"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
+
+    <!--<TextView-->
+        <!--android:id="@+id/tvtwo"-->
+        <!--android:layout_below="@id/rlone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/line_gray"/>-->
 
     <com.bameng.widgets.BmSwipeRefreshLayout
-        android:layout_below="@id/tvtwo"
+        android:layout_below="@id/rlone"
         android:layout_above="@+id/llfour"
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"

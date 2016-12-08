@@ -122,8 +122,7 @@ public class ExchangeConfirmActivity extends BaseActivity {
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -160,7 +159,7 @@ public class ExchangeConfirmActivity extends BaseActivity {
             @Override
             public void onFailure(Call<ConvertBeanTotalOutputModel> call, Throwable t) {
                 if(progressDialog!=null) progressDialog.dismiss();
-                ToastUtils.showLongToast( "请求失败"+  (t.getMessage()==null ? "": t.getMessage()) );
+                ToastUtils.showLongToast( Constants.SERVER_ERROR );
             }
         });
     }
@@ -177,8 +176,7 @@ public class ExchangeConfirmActivity extends BaseActivity {
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("amount", String.valueOf( beam ));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -216,7 +214,7 @@ public class ExchangeConfirmActivity extends BaseActivity {
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
                 if(progressDialog!=null) progressDialog.dismiss();
-                ToastUtils.showLongToast( "请求失败"+ (t.getMessage()==null ? "": t.getMessage() ));
+                ToastUtils.showLongToast( Constants.SERVER_ERROR );
             }
         });
 

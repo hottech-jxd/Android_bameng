@@ -18,6 +18,7 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
     public TabPagerAdapter(FragmentManager fm, List<BaseFragment> fragmentList) {
         super(fm);
         this.fragmentList = fragmentList;
+
     }
 
     @Override

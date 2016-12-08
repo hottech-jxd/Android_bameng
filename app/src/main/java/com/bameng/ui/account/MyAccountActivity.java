@@ -47,7 +47,7 @@ public class MyAccountActivity extends BaseActivity {
         setContentView(R.layout.activity_my_account);
         ButterKnife.bind(this);
 
-        titleText.setText("我的账号");
+        titleText.setText("我的财富");
         //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         //SystemTools.loadBackground(titleLeftImage, leftDraw);
         titleLeftImage.setBackgroundResource(R.drawable.title_left_back);

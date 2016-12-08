@@ -10,17 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
-import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.AdBannerConfig;
 import com.bameng.model.AdImageBean;
-import com.bameng.model.AdlistModel;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.ListModel;
@@ -117,6 +113,16 @@ public class GroupFrag extends BaseFragment
         int height = width/2;
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width,height);
         adBannerWidget.setLayoutParams(layoutParams);
+
+
+        List<SlideListModel> list = new ArrayList<>();
+        SlideListModel item = new SlideListModel();
+        item.setPicUrl("res://"+ getContext().getPackageName() +"/" + R.mipmap.none);
+        list.add(item);
+        AdBannerConfig config =  new AdBannerConfig();
+        config.setImages(list);
+        adBannerWidget.setAdBannerConfig(config);
+
         adapter.addHeaderView(adBannerWidget);
     }
 

@@ -28,16 +28,22 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, CustomerModel customerModel ) {
-        baseViewHolder.setText( R.id.name, "客户名称:"+customerModel.getName());
-        baseViewHolder.setText(R.id.moblie , "联系方式:"+customerModel.getMobile());
+        baseViewHolder.setText( R.id.name, customerModel.getName());
+        baseViewHolder.setText(R.id.moblie , customerModel.getMobile());
         if (customerModel.getStatus()==1) {
+            baseViewHolder.setVisible(R.id.status,true);
             baseViewHolder.setText(status,"已同意");
+            baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext , R.color.green ) );
             baseViewHolder.setVisible(R.id.lay_btn ,false );
         }else if (customerModel.getStatus()==2){
+            baseViewHolder.setVisible(R.id.status,true);
             baseViewHolder.setText(status , "已拒绝");
+            baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext  , R.color.red ));
             baseViewHolder.setVisible(R.id.lay_btn ,false );
         }else {
+            baseViewHolder.setVisible(R.id.status,false);
             baseViewHolder.setText(status , "未审核");
+            baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext  , R.color.red ));
             baseViewHolder.setVisible(R.id.lay_btn , true);
         }
         //baseViewHolder.setTag(Customer);

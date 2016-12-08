@@ -12,7 +12,7 @@
 
     <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/tab_height"
         android:background="@color/white"
         android:paddingTop="0dp"
         android:layout_marginTop="0dp"

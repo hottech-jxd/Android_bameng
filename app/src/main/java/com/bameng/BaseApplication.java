@@ -31,15 +31,8 @@ import com.bameng.utils.PreferenceHelper;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.squareup.leakcanary.LeakCanary;
-
 import org.greenrobot.eventbus.EventBus;
-
 import cn.sharesdk.framework.ShareSDK;
-
-import static com.bameng.service.LocationService.Longitude;
-import static com.bameng.service.LocationService.address;
-import static com.bameng.service.LocationService.city;
-import static com.bameng.service.LocationService.latitude;
 
 
 /**
@@ -50,26 +43,16 @@ public class BaseApplication extends Application {
 
     public BaiduLocation baiduLocation;
 
-    //public FragManager mFragManager;
-
     protected  static UserData userData;
 
     protected static BaseData baseData;
 
     public LocalAddressModel localAddress;
-    //是否有网络连接
-    //public boolean isConn = false;
 
     public MyLocationListener mMyLocationListener;//地址从这开始
 
     //百度定位服务
     public BaiduLocationService baiduLocationService;
-
-    /**
-     * 是否是左划或者返回
-     * true 左划
-     * false 返回
-     */
 
     public static BaseApplication single;
 
@@ -90,9 +73,6 @@ public class BaseApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
 
-
-
-        //mLocationClient = new LocationClient(this.getApplicationContext());
         mMyLocationListener = new MyLocationListener();
         //mLocationClient.registerLocationListener(mMyLocationListener);
         baiduLocationService= new BaiduLocationService(this);
@@ -104,12 +84,15 @@ public class BaseApplication extends Application {
         // 极光初始化
         // JPushInterface.setDebugMode(true);// 日志，生产环境关闭
         //JPushInterface.init ( this );
-        //初始化shareSDK参数
 
+        //初始化shareSDK参数
         ShareSDK.initSDK(getApplicationContext());
 
         // 极光初始化
         //PushHelper.init(this, BuildConfig.DEBUG, BuildConfig.Push_Url);
+
+        solveAsyncTaskOnPostExecuteBug();
+
 
         //初始化 fresco
         Fresco.initialize(this);
@@ -143,24 +126,24 @@ public class BaseApplication extends Application {
 //        super.onTerminate();
 //    }
 //
-//    /**
-//     * 解决有些android版本 AsyncTask 无法执行  onPostExecute方法的问题
-//     *
-//     * @throws
-//     * @创建人：jinxiangdong
-//     * @修改时间：2015年7月7日 上午11:23:32
-//     * @方法描述：
-//     * @方法名：solveAsyncTaskOnPostExecuteBug
-//     * @参数：
-//     * @返回：void
-//     */
-//    protected void solveAsyncTaskOnPostExecuteBug() {
-//        try {
-//            Class.forName("android.os.AsyncTask");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    /**
+     * 解决有些android版本 AsyncTask 无法执行  onPostExecute方法的问题
+     *
+     * @throws
+     * @创建人：jinxiangdong
+     * @修改时间：2015年7月7日 上午11:23:32
+     * @方法描述：
+     * @方法名：solveAsyncTaskOnPostExecuteBug
+     * @参数：
+     * @返回：void
+     */
+    protected void solveAsyncTaskOnPostExecuteBug() {
+        try {
+            Class.forName("android.os.AsyncTask");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 //    /**
 //     * 获取手机IMEI码
 //     */
@@ -168,15 +151,6 @@ public class BaseApplication extends Application {
 //        TelephonyManager tm = (TelephonyManager) single.getSystemService(Context.TELEPHONY_SERVICE);
 //        return tm.getDeviceId();
 //    }
-//
-//    public String readMemberId() {
-//        return PreferenceHelper.readString(getApplicationContext(), Constants.MEMBER_INFO, Constants.MEMBER_ID,"0");
-//    }
-//
-//    public void writeMemberId(String userId) {
-//        PreferenceHelper.writeString(getApplicationContext(), Constants.MEMBER_INFO, Constants.MEMBER_ID, userId);
-//    }
-
 
     public static UserData UserData(){
         if( userData==null){
@@ -290,13 +264,6 @@ public class BaseApplication extends Application {
         }).start();
     }
 
-
-    //加载基础信息
-//    public void loadBaseData(BaseData baseData) {
-//        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "about", baseData.getAboutUrl());
-//        PreferenceHelper.writeString(getApplicationContext(), "Base_info", "Agreement", baseData.getAgreementUrl());
-//        PreferenceHelper.writeInt(getApplicationContext(), "Base_info", "userStatus", baseData.getUserStatus());
-//    }
     //加载版本信息
     public void loadUpdate(VersionData update) {
         PreferenceHelper.writeString(getApplicationContext(), "update_info", "serverVersion", update.getServerVersion());

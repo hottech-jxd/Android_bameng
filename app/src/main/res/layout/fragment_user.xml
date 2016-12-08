@@ -56,10 +56,10 @@
                     android:layout_marginTop="2dp"
                     android:background="@drawable/userl_points_draw"
                     android:gravity="left|center_vertical"
-                    android:paddingBottom="3dp"
+                    android:paddingBottom="2dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:paddingTop="3dp"
+                    android:paddingTop="2dp"
                     android:text=""
                     android:textColor="#c3b6a5"
                     android:textSize="@dimen/micro_text_size" />
@@ -79,13 +79,16 @@
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="我的账号" />
+                android:text="我的财富" />
 
             <ImageView
                 android:layout_width="@dimen/arrow_width"

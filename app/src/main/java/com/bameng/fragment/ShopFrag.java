@@ -12,10 +12,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.bameng.adapter.HomeBannerPagerAdapter;
-import com.bameng.adapter.StoreAdapter;
-import com.bameng.model.ArticleListOutput;
-import com.bameng.model.ListModel;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.SlideListModel;
 import com.bameng.model.SlideListOutputModel;

@@ -16,19 +16,19 @@
             layout="@layout/title_index"/>
 
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/line_gray"/>-->
     <LinearLayout
         android:id="@+id/changePswL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        android:background="@color/white"
-        >
+        android:padding="15dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="0dp"
@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="15dp"
         android:gravity="center_vertical"
         android:background="@color/white">
 
@@ -80,8 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
-        android:padding="10dp"
+        android:padding="15dp"
         android:gravity="center_vertical"
         android:background="@color/white"
         >
@@ -107,7 +106,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp"
+        android:padding="15dp"
         android:background="@color/white"
         >
 
@@ -126,13 +125,22 @@
         android:layout_height="1px"
         android:layout_marginLeft="10dp"
         android:background="@color/line_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <Button
+        android:layout_gravity="bottom"
         android:id="@+id/btn_signout"
-        android:layout_margin="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/btn_login"
         android:text="退出登录"
         android:textSize="15sp"
         android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
+        </LinearLayout>
+
 </LinearLayout>

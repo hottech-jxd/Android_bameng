@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
-import com.bameng.adapter.HomeBannerPagerAdapter;
 import com.bameng.adapter.StoreAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.ArticleListOutput;

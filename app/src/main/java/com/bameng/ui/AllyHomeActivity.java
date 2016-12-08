@@ -27,10 +27,7 @@ import com.bameng.fragment.FragManager;
 import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
-import com.bameng.model.InitOutputsModel;
-import com.bameng.model.PostModel;
 import com.bameng.model.SetRightVisibleEvent;
-import com.bameng.receiver.MyBroadcastReceiver;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
@@ -47,8 +44,6 @@ import com.bameng.widgets.ProgressPopupWindow;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -139,6 +134,28 @@ public class AllyHomeActivity extends BaseActivity {
         FragManager.clear();
         EventBus.getDefault().unregister(this);
         BaseApplication.clearAll();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+        outState.putString("curfrag", currentTab);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState==null)return;
+        currentTab = savedInstanceState.getString("curfrag");
+        if(currentTab==null || currentTab.isEmpty())return;
+
+        if( currentTab.equals( Constants.TAG_1 ) ) {
+            onTabClicked(homePage);
+        }else if( currentTab.equals( Constants.TAG_2 )){
+            onTabClicked(newsPage);
+        }else if(currentTab.equals(Constants.TAG_4)){
+            onTabClicked(richesPage);
+        }
     }
 
     @Override

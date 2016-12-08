@@ -45,7 +45,14 @@ public class DataCleanManager {
                 }
             }
         }
-        return dir.delete();
+
+        if( dir !=null){
+            return dir.delete();
+        }else{
+            return false;
+        }
+
+        //return dir.delete();
     }
     // 获取文件大小
     //Context.getExternalFilesDir() --> SDCard/Android/data/你的应用的包名/files/ 目录，一般放一些长时间保存的数据

@@ -296,7 +296,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
         //是否需要避免页面放大缩小操作
 
         viewPage.getSettings().setSupportZoom(true);
-        viewPage.getSettings().setBuiltInZoomControls(true);
+        viewPage.getSettings().setBuiltInZoomControls(false);
         viewPage.getSettings().setJavaScriptEnabled(true);
         viewPage.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         viewPage.getSettings().setSaveFormData(true);

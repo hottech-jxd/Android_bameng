@@ -21,7 +21,7 @@ public class OrderModel  implements Serializable{
     private String address;
     private String remark;
     private String successUrl;
-    private String mengbeans;
+    private int mengbeans;
 
     public long getID() {
         return ID;
@@ -119,11 +119,11 @@ public class OrderModel  implements Serializable{
         this.successUrl = successUrl;
     }
 
-    public String getMengbeans() {
+    public int getMengbeans() {
         return mengbeans;
     }
 
-    public void setMengbeans(String mengbeans) {
+    public void setMengbeans(int mengbeans) {
         this.mengbeans = mengbeans;
     }
 }

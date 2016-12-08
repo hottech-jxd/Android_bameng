@@ -33,6 +33,7 @@
         android:layout_height="100dp"
         android:id="@+id/image"
         app:placeholderImage="@mipmap/ic_ally"
+        app:roundAsCircle="true"
         app:failureImage="@mipmap/ic_ally"
         android:layout_gravity="center"
         android:layout_margin="10dp"/>

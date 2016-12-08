@@ -16,7 +16,9 @@
             android:id="@+id/titleLeftImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:paddingRight="15dp"
             android:onClick="onGoBackButton"
             android:layout_centerVertical="true"
@@ -53,12 +55,14 @@
 
         <ImageView
             android:id="@+id/titleRightImage"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:layout_toLeftOf="@+id/titleRightText"
-            android:layout_marginRight="2dp"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
+            android:layout_marginRight="0dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_centerVertical="true"/>
 
         <TextView
@@ -71,7 +75,9 @@
             android:layout_centerVertical="true"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:layout_marginRight="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="5dp"
+            android:layout_marginRight="0dp"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>

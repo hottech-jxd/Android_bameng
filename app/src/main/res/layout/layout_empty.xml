@@ -7,11 +7,11 @@
         android:layout_marginTop="50dp"
         android:layout_gravity="center_horizontal"
         android:src="@mipmap/ic_nodata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
     <TextView
         android:layout_gravity="center"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:text="暂时没有数据"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

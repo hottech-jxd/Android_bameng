@@ -1,5 +1,6 @@
 package com.bameng.adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.widget.LinearLayout;
 
 import com.bameng.R;
@@ -36,7 +37,14 @@ public class OrderAdapter extends BaseQuickAdapter<OrderModel, BaseViewHolder> {
 
         baseViewHolder.setText(R.id.tvname, orderModel.getUserName());
         baseViewHolder.setText(R.id.tvphone, orderModel.getMobile());
-        baseViewHolder.setText(R.id.tvBeans , orderModel.getMengbeans());
-        baseViewHolder.setText(R.id.status , orderModel.getStatusName());
+        baseViewHolder.setText(R.id.tvBeans , String.valueOf(orderModel.getMengbeans()));
+
+        if( orderModel.getStatus() == 1 ){
+            baseViewHolder.setTextColor( R.id.status , ContextCompat.getColor( mContext , R.color.green) );
+        }else if(orderModel.getStatus() == 2){
+            baseViewHolder.setTextColor( R.id.status , ContextCompat.getColor( mContext, R.color.red));
+        }
+
+        baseViewHolder.setText(R.id.status ,  orderModel.getStatusName());
     }
 }

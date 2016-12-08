@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">霸盟</string>
-    <string name="home_account">帐号</string>
+    <string name="home_account">账户</string>
     <string name="home_order">新建订单</string>
     <string name="home_info">客户信息</string>
     <string name="home_union">我的联盟</string>

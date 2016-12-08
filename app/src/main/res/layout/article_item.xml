@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_height="wrap_content"
               android:layout_width="match_parent"
-              android:layout_marginTop="1dp"
+              android:layout_marginTop="5dp"
               android:background="@color/white"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
@@ -34,7 +34,7 @@
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:maxLines="1"
         android:ellipsize="end"
         android:text=""/>
@@ -59,8 +59,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:background="@mipmap/ic_look"/>
             <TextView
                 android:id="@+id/browseAmount"

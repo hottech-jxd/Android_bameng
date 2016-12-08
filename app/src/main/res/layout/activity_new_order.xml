@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white">
 
@@ -13,29 +14,31 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height">
+        android:layout_height="wrap_content">
         <include layout="@layout/title_index"/>
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/line_gray"/>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="5dp"
-        >
+        android:padding="10dp">
         <TextView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="客户名称"/>
         <com.huotu.android.library.libedittext.EditText
             android:id="@+id/tvname"
+            app:style="transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
+            android:hint="客户名称"
+            android:textSize="14sp"
             android:imeOptions="actionNext"
             android:singleLine="true"
             android:maxLines="1"/>
@@ -49,13 +52,16 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="5dp">
+        android:padding="10dp">
         <TextView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="手机号"/>
         <com.huotu.android.library.libedittext.EditText
             android:id="@+id/tvphone"
+            app:style="transparent"
+            android:hint="手机号"
+            android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -73,7 +79,7 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="5dp"
+        android:padding="10dp"
         >
         <TextView
             android:layout_width="80dp"
@@ -81,9 +87,12 @@
             android:text="客户地址"/>
         <com.huotu.android.library.libedittext.EditText
             android:id="@+id/tvaddress"
+            app:style="transparent"
+            android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
+            android:hint="客户地址"
             android:imeOptions="actionNext"
             />
     </LinearLayout>
@@ -98,14 +107,17 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="5dp"
+        android:padding="10dp"
         >
         <TextView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="现金卷"/>
+            android:text="现金劵"/>
         <com.huotu.android.library.libedittext.EditText
             android:id="@+id/tvcash"
+            android:hint="现金劵"
+            android:textSize="14sp"
+            app:style="transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -122,13 +134,16 @@
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="5dp">
+        android:padding="10dp">
         <TextView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="备注"/>
         <com.huotu.android.library.libedittext.EditText
             android:id="@+id/tvremarks"
+            android:hint="备注"
+            android:textSize="14sp"
+            app:style="transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"

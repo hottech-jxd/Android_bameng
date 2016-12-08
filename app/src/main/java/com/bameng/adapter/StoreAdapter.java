@@ -3,6 +3,7 @@ package com.bameng.adapter;
 import android.telephony.CellIdentityGsm;
 import android.view.Gravity;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bameng.R;
 import com.bameng.model.ArticleModel;
@@ -35,28 +36,41 @@ public class StoreAdapter extends BaseQuickAdapter<ListModel , BaseViewHolder> {
     protected void convert(BaseViewHolder baseViewHolder, ListModel listModel ) {
         SimpleDraweeView imv = baseViewHolder.getView(R.id.image);
         if(listModel.isTop()) {
-            int wPx = DensityUtils.dip2px(this.mContext, 90);
+            int wPx = DensityUtils.dip2px(this.mContext, 80);
             int hPx = wPx;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(wPx,hPx);
-            layoutParams.gravity= Gravity.CENTER_VERTICAL;
+            //layoutParams.gravity= Gravity.CENTER_VERTICAL;
             imv.setLayoutParams(layoutParams);
+
+            TextView tvTitle = baseViewHolder.getView(R.id.articleTitle);
+            tvTitle.setTextSize(14);
+            //TextView tvdes = baseViewHolder.getView(R.id.articleIntro);
+            //tvdes.setTextSize(12);
+
         }else{
 
             int wPx = DensityUtils.dip2px(this.mContext, 70);
             int hPx = wPx;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(wPx,hPx);
-            layoutParams.gravity = Gravity.CENTER_VERTICAL;
+            //layoutParams.gravity = Gravity.CENTER_VERTICAL;
             imv.setLayoutParams(layoutParams);
+
+            TextView tvTitle = baseViewHolder.getView(R.id.articleTitle);
+            tvTitle.setTextSize(14);
+            //TextView tvdes = baseViewHolder.getView(R.id.articleIntro);
+            //tvdes.setTextSize(12);
         }
 
-       DraweeController draweeController= Fresco.newDraweeControllerBuilder()
-               .setUri(listModel.getArticleCover())
-               .setAutoPlayAnimations(true).build();
-        GenericDraweeHierarchy genericDraweeHierarchy =
-                new GenericDraweeHierarchyBuilder(mContext.getResources()).setFailureImage(R.mipmap.ic_picture)
-                .setPlaceholderImage(R.mipmap.ic_picture).build();
-        imv.setController(draweeController);
-        imv.setHierarchy(genericDraweeHierarchy);
+//       DraweeController draweeController= Fresco.newDraweeControllerBuilder()
+//               .setUri(listModel.getArticleCover())
+//               .setAutoPlayAnimations(true).build();
+//        GenericDraweeHierarchy genericDraweeHierarchy =
+//                new GenericDraweeHierarchyBuilder(mContext.getResources()).setFailureImage(R.mipmap.ic_picture)
+//                .setPlaceholderImage(R.mipmap.ic_picture).build();
+//        imv.setController(draweeController);
+//        imv.setHierarchy(genericDraweeHierarchy);
+
+        imv.setImageURI( listModel.getArticleCover() );
 
 
         baseViewHolder.setText(R.id.articleTitle, listModel.getArticleTitle());
