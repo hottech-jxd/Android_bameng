@@ -64,9 +64,7 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         swipeRefreshLayout.setOnRefreshListener(this);
-
     }
 
     public void initView(){//******数据为空
@@ -74,8 +72,7 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

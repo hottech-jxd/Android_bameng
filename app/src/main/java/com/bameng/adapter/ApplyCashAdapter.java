@@ -14,11 +14,14 @@ import com.facebook.drawee.view.SimpleDraweeView;
  * Created by Administrator on 2016/11/16.
  */
 public class ApplyCashAdapter extends BaseQuickAdapter<ConvertFlowModel, BaseViewHolder> {
-
-    public ApplyCashAdapter(  ) {
-
+    private int type;
+    public ApplyCashAdapter() {
         super(  R.layout.cash_apply_item , null );
+    }
 
+    public ApplyCashAdapter( int type ){
+        super(R.layout.cash_apply_item,null);
+        this.type=type;
     }
 
 
@@ -29,11 +32,6 @@ public class ApplyCashAdapter extends BaseQuickAdapter<ConvertFlowModel, BaseVie
 
     void setItem(BaseViewHolder baseViewHolder, ConvertFlowModel obj ) {
         SimpleDraweeView imv = baseViewHolder.getView(R.id.img);
-//        DraweeController draweeController= Fresco.newDraweeControllerBuilder()
-//                .setUri(obj.getHeadimg())
-//                .setAutoPlayAnimations(true).build();
-//        imv.setController(draweeController);
-
         imv.setImageURI(obj.getHeadimg());
 
         baseViewHolder.setText(R.id.name, "盟友:" + obj.getName());
@@ -45,6 +43,8 @@ public class ApplyCashAdapter extends BaseQuickAdapter<ConvertFlowModel, BaseVie
         baseViewHolder.addOnClickListener(R.id.btnReject);
 
         baseViewHolder.setVisible(R.id.lay_btn, obj.getStatus() == 0);
+
+        baseViewHolder.setVisible( R.id.status , type==1 );
 
     }
 }

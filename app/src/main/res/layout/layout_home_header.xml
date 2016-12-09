@@ -49,6 +49,7 @@
             android:id="@+id/layneworder"
             android:layout_weight="1"
             android:layout_margin="5dp"
+            android:background="@drawable/item_click_selector"
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -67,6 +68,7 @@
         <LinearLayout
             android:id="@+id/layCustomer"
             android:layout_weight="1"
+            android:background="@drawable/item_click_selector"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
@@ -84,6 +86,7 @@
                 android:text="@string/home_info"/>
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/item_click_selector"
             android:id="@+id/layally"
             android:layout_weight="1"
             android:layout_margin="5dp"
@@ -103,6 +106,7 @@
                 android:text="@string/home_union"/>
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/item_click_selector"
             android:id="@+id/layExchange"
             android:layout_weight="1"
             android:layout_margin="5dp"
@@ -122,6 +126,7 @@
                 android:text="@string/home_exchange"/>
         </LinearLayout>
         <LinearLayout
+            android:background="@drawable/item_click_selector"
             android:id="@+id/layReward"
             android:layout_weight="1"
             android:layout_margin="5dp"
@@ -145,7 +150,7 @@
     <RelativeLayout
         android:id="@+id/layMore"
         android:orientation="horizontal"
-        android:background="#FFFFFF"
+        android:background="@drawable/item_click_selector"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:layout_width="match_parent"

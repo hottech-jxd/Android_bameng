@@ -117,11 +117,13 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
     public void initView(){
         homePullRefresh.setOnRefreshListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
 
         //recyclerView.addItemDecoration(new RecycleItemDivider(getContext(),RecyclerView.VERTICAL, 8 , R.color.dividerColor));
 
         adapter = new StoreAdapter();
         adapter.setOnLoadMoreListener(this);
+        adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
 
         emptyView = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty, (ViewGroup) recyclerView.getParent());
         adapter.setEmptyView(emptyView);

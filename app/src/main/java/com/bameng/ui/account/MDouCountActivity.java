@@ -49,7 +49,8 @@ import retrofit2.Response;
 /***
  * 待结算盟豆
  */
-public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
+public class MDouCountActivity extends BaseActivity
+        implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
 
     @BindView(R2.id.mdou_count)
     TextView mdou_count;
@@ -137,8 +138,7 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("lastId",String.valueOf(lastid));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -167,7 +167,8 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
                     return;
                 }
                 if(operateTypeEnum == OperateTypeEnum.REFRESH){
-                    //adapter.setNewData( response.body() );
+                    mdou_count.setText( String.valueOf(response.body().getData().getTempMengBeans() ) );
+
                     adapter.setNewData( response.body().getData().getList() );
                     if(response.body().getData().getList()!=null && response.body().getData().getList().size()>0){
                         lastid = response.body().getData().getList().get( response.body().getData().getList().size()-1 ).getID();
@@ -191,7 +192,7 @@ public class MDouCountActivity extends BaseActivity implements SwipeRefreshLayou
             @Override
             public void onFailure(Call<BeanFlowOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showLongToast(t.getMessage()==null?"请求失败":t.getMessage());
+                ToastUtils.showLongToast( Constants.SERVER_ERROR );
             }
         });
 

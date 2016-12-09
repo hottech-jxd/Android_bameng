@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                                             xmlns:tools="http://schemas.android.com/tools"
-
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,7 +14,7 @@
 
     <RelativeLayout
         android:id="@+id/titleLayoutL"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -23,41 +22,72 @@
 
     </RelativeLayout>
 
-    <!--<TextView-->
+    <!--<View-->
         <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1px"-->
+        <!--android:layout_height="10px"-->
         <!--android:background="@color/line_gray" />-->
 
-    <LinearLayout
-        android:id="@+id/layImg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:id="@+id/layImg"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="头像" />
+            android:background="@drawable/item_click_selector"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="15dp">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/img_user"
-            app:roundAsCircle="true"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@mipmap/ic_user" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="头像" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_user"
+                app:roundAsCircle="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/ic_user" />
 
 
-        <ImageView
-            android:layout_width="@dimen/arrow_width"
-            android:layout_height="@dimen/arrow_height"
-            android:layout_marginLeft="10dp"
-            android:background="@mipmap/icon_go" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="@dimen/arrow_width"
+                android:layout_height="@dimen/arrow_height"
+                android:layout_marginLeft="10dp"
+                android:background="@mipmap/icon_go" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/line_gray" />
+
+        <LinearLayout
+            android:id="@+id/layAccountName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_click_selector"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="账户名" />
+
+            <TextView
+                android:id="@+id/txt_loginName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+        </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -68,11 +98,11 @@
         android:id="@+id/layname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <TextView
             android:layout_width="0dp"
@@ -84,7 +114,7 @@
             android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
         <ImageView
@@ -94,7 +124,7 @@
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
@@ -103,11 +133,11 @@
         android:id="@+id/layphone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <TextView
             android:layout_width="0dp"
@@ -119,7 +149,7 @@
             android:id="@+id/txt_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
         <ImageView
@@ -130,7 +160,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="wrap_content"
@@ -139,23 +170,24 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
             android:textSize="16sp"
             android:text="实名认证" />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/line_gray" />-->
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:id="@+id/layrealname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <TextView
             android:layout_width="0dp"
@@ -167,7 +199,7 @@
             android:id="@+id/txt_realname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
         <ImageView
@@ -177,7 +209,7 @@
             android:background="@mipmap/icon_go" />
 
     </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
@@ -186,10 +218,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <TextView
             android:layout_width="0dp"
@@ -201,7 +233,7 @@
             android:id="@+id/txt_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
         <ImageView
@@ -210,7 +242,7 @@
             android:layout_marginLeft="10dp"
             android:background="@mipmap/icon_go" />
         </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
@@ -219,10 +251,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <TextView
             android:layout_width="0dp"
@@ -234,7 +266,7 @@
             android:id="@+id/txt_nationality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xiaomiao" />
+            android:text="" />
 
 
         <ImageView

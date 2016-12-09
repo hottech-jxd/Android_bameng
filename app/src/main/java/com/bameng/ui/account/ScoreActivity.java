@@ -147,8 +147,7 @@ public class ScoreActivity extends BaseActivity implements SwipeRefreshLayout.On
 
         map.put("lastId",String.valueOf(id));
 
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

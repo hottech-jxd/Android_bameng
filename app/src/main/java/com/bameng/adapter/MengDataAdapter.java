@@ -63,8 +63,8 @@ public class MengDataAdapter extends BaseQuickAdapter<MengModel, BaseViewHolder>
                 .setAutoPlayAnimations(true).build();
         imv.setController(draweeController);
 
-        baseViewHolder.setText( R.id.name , "客户名称:"+userData.getUserName());
-        baseViewHolder.setText( R.id.moblie , "联系方式:"+userData.getMobile());
+        baseViewHolder.setText( R.id.name , userData.getUserName());
+        baseViewHolder.setText( R.id.moblie , userData.getMobile());
 
         ProgressBar progressBar= baseViewHolder.getView(R.id.progressBar);
         progressBar.setVisibility( userData.isDoing() ? View.VISIBLE : View.GONE );

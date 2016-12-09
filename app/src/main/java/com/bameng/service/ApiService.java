@@ -101,7 +101,7 @@ public interface ApiService {
     Call<PostModel> SendSms(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("/sys/sendsms")
+    @POST("/sys/SendUserSms")
     Call<PostModel> SendSmsForModifyPhone(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
 

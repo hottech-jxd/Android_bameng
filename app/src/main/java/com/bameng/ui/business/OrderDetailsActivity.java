@@ -146,8 +146,7 @@ public class OrderDetailsActivity extends BaseActivity
         map.put("os", "android");
         map.put("id", orderId);
 
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign",sign);
 
         ApiService apiService = ZRetrofitUtil.getApiService();

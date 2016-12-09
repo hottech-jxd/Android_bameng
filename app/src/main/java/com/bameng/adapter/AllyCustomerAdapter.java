@@ -12,8 +12,8 @@ public class AllyCustomerAdapter extends CustomerDetailAdapter {
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, CustomerModel customerModel ) {
-        baseViewHolder.setText( R.id.name, "客户名称:"+customerModel.getName());
-        baseViewHolder.setText(R.id.moblie , "联系方式:"+customerModel.getMobile());
+        baseViewHolder.setText( R.id.name, customerModel.getName());
+        baseViewHolder.setText(R.id.moblie , customerModel.getMobile());
         baseViewHolder.setVisible(R.id.lay_btn ,false );
         if (customerModel.getStatus()==1) {
             baseViewHolder.setText(R.id.status,"已同意");

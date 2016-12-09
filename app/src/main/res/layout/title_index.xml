@@ -52,7 +52,6 @@
             android:layout_centerVertical="true"
             />
 
-
         <ImageView
             android:id="@+id/titleRightImage"
             android:layout_width="50dp"
@@ -75,8 +74,8 @@
             android:layout_centerVertical="true"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="5dp"
+            android:paddingRight="0dp"
+            android:paddingLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_height="wrap_content"/>
 

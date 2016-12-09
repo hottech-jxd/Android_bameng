@@ -79,15 +79,12 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
     TextView titleText;
     @BindView(R2.id.titleRightImage)
     ImageView titleRightImage;
-
     String url = "";
-
     SharePopupWindow sharePopupWindow;
     //是否需要截屏
     boolean needCapture=false;
     boolean isCapture=false;
     Runnable runnable=null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

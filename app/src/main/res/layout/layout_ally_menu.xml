@@ -9,7 +9,7 @@
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="15dp"
@@ -33,15 +33,16 @@
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
+
     <LinearLayout
         android:id="@+id/laymycash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="15dp"
@@ -51,7 +52,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@mipmap/ic_userinfo" />
+            android:background="@mipmap/ic_cash" />
         <TextView
             android:id="@+id/tvmycash"
             android:layout_width="wrap_content"
@@ -66,7 +67,7 @@
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
@@ -75,7 +76,7 @@
         android:id="@+id/laysign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="15dp"
@@ -102,7 +103,7 @@
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
@@ -111,7 +112,7 @@
         android:id="@+id/laymyuserinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="15dp"
@@ -122,7 +123,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@mipmap/ic_user" />
+            android:background="@mipmap/ic_userinfo" />
 
         <TextView
             android:id="@+id/tvuserinfo"

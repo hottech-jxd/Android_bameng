@@ -49,9 +49,7 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
     TextView tvClick;
     @BindView(R2.id.progressBar)
     ProgressBar progressBar;
-
     boolean isConnection = false;
-
     DownloadUtil downloadUtil;
 
     @Override
@@ -68,8 +66,6 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
         String version = BaseApplication.getAppVersion();
         tvVersion.setText(app + version);
 
-        //BaseApplication.single.loadAddress();
-
         AlphaAnimation anima = new AlphaAnimation(0.0f, 1.0f);
         anima.setDuration(1000);// 设置动画显示时间
         splashL.setAnimation(anima);
@@ -82,7 +78,6 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
             public void onAnimationEnd(Animation animation) {
 
                 BaseApplication.single.loadAddress();
-
                 //检测网络
                 isConnection = BaseApplication.checkNet(SplashActivity.this);
                 if (!isConnection) {
@@ -95,10 +90,8 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
-
     }
 
     @OnClick(R.id.tvClick)
@@ -137,7 +130,6 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
                 }
                 callback( response.body() );
             }
-
 
             @Override
             public void onFailure(Call<InitOutputsModel> call, Throwable t) {

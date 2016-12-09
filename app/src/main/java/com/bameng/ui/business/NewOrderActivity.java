@@ -175,8 +175,7 @@ public class NewOrderActivity extends PhoteActivity
         map.put("memo",remarks);
         map.put("cashNo",cash);
 
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
 
         Map<String, RequestBody> requestBodyMap = new HashMap<>();
         RequestBody requestBody = RequestBody.create( MediaType.parse("text/plain") , timestamp );

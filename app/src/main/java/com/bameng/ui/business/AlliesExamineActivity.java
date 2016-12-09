@@ -27,6 +27,7 @@ import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
+import com.bameng.widgets.TipAlertDialog;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,6 +40,8 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static u.aly.av.n;
 
 /***
  * 盟友审核 界面
@@ -63,6 +66,8 @@ public class AlliesExamineActivity extends BaseActivity {
     MengModel model;
 
     ProgressDialog progressDialog;
+
+    TipAlertDialog tipAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +106,28 @@ public class AlliesExamineActivity extends BaseActivity {
 
     @OnClick({R.id.tvAgress})
     void agress(View v ){
-        audit( model.getID() , 1 );
+        if(tipAlertDialog==null) tipAlertDialog = new TipAlertDialog(this,false);
+        tipAlertDialog.show("审核提醒", "确定要同意申请吗？", null, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if( tipAlertDialog!=null) tipAlertDialog.dismiss();
+                audit( model.getID() , 1 );
+            }
+        });
     }
 
     @OnClick(R.id.tvReject)
     void reject(View v){
-        audit(model.getID() , 2 );
+        if(tipAlertDialog==null) tipAlertDialog = new TipAlertDialog(this,false);
+        tipAlertDialog.show("审核提醒", "确定要拒绝申请吗？", null, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(tipAlertDialog!=null) tipAlertDialog.dismiss();
+
+                audit( model.getID() , 2 );
+            }
+        });
     }
 
     protected void audit( int id , int status ){

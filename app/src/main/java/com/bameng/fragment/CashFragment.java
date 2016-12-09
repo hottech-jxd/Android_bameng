@@ -35,6 +35,7 @@ import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.AddressPopWin;
+import com.bameng.widgets.TipAlertDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
@@ -67,10 +68,10 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
     View emptyView;
     //0：未处理审核列表，1：已处理审核列表
     int type = 0;
-
     long lastId =0;
-    //int PAGESIZE = 10;
     OperateTypeEnum operateTypeEnum = OperateTypeEnum.REFRESH;
+
+    TipAlertDialog tipAlertDialog;
 
     public CashFragment() {
         // Required empty public constructor
@@ -105,7 +106,7 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
         this.type = getArguments().getInt("type");
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        adapter = new ApplyCashAdapter();
+        adapter = new ApplyCashAdapter( type );
         adapter.setOnLoadMoreListener(this);
 
         emptyView = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty ,  (ViewGroup) recyclerView.getParent(),false);
@@ -134,14 +135,14 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
 
                 if( view.getId() == R.id.btnAgree){
                     ConvertFlowModel model =(ConvertFlowModel)baseQuickAdapter.getItem(position);
-                    model.setDoing(true);
-                    baseQuickAdapter.notifyItemChanged(position);
-                    audit(model , 1 );
+                    //model.setDoing(true);
+                    //baseQuickAdapter.notifyItemChanged(position);
+                    auditTip( position , model , 1 ,"确定要同意申请吗？" );
                 }else if(view.getId() == R.id.btnReject){
                     ConvertFlowModel model =(ConvertFlowModel)baseQuickAdapter.getItem(position);
-                    model.setDoing(true);
-                    baseQuickAdapter.notifyItemChanged(position);
-                    audit(model,2);
+                    //model.setDoing(true);
+                    //baseQuickAdapter.notifyItemChanged(position);
+                    auditTip( position , model,2,"确定要拒绝申请吗？");
                 }else{
 
                 }
@@ -150,7 +151,6 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
         });
 
     }
-
 
     @Nullable
     @Override
@@ -203,8 +203,7 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
         map.put("lastId",String.valueOf(id));
         map.put("type", String.valueOf(type));
 
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -266,6 +265,21 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
 
     }
 
+    void auditTip(final int position , final ConvertFlowModel model , final int status ,String msg){
+        if(tipAlertDialog==null) tipAlertDialog = new TipAlertDialog(getContext() ,false);
+        tipAlertDialog.show("审核提醒", msg , null, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tipAlertDialog!=null) tipAlertDialog.dismiss();
+
+                model.setDoing(true);
+                adapter.notifyItemChanged(position);
+                audit(  model , status );
+            }
+        });
+    }
+
+
     void audit(final ConvertFlowModel model , final int status){
 
         Map<String, String> map = new HashMap<>();
@@ -274,8 +288,7 @@ public class CashFragment extends BaseFragment   implements SwipeRefreshLayout.O
         map.put("os", "android");
         map.put("id", String.valueOf( model.getID()  ) );
         map.put("status",  String.valueOf( status ));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

@@ -85,8 +85,6 @@ public class OrderFragment extends BaseFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.type = this.getArguments().getInt("type");
-
-        //System.currentTimeMillis()
     }
 
     @Nullable
@@ -110,8 +108,9 @@ public class OrderFragment extends BaseFragment
         swipeRefreshLayout.setOnRefreshListener(this);
         orderAdapter = new OrderAdapter();
         orderAdapter.openLoadMore(PAGESIZE);
+        orderAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
         orderAdapter.setOnLoadMoreListener(this);
-        //orderAdapter.setEmptyView(emptyView);
+        orderAdapter.setEmptyView(emptyView);
         recyclerView.setAdapter(orderAdapter);
 
         recyclerView.addOnItemTouchListener(onItemClickListener);
@@ -155,7 +154,7 @@ public class OrderFragment extends BaseFragment
     public void onRefresh() {
         lastId=0;
         operateType = OperateTypeEnum.REFRESH;
-        orderAdapter.setEmptyView(null);
+        //orderAdapter.setEmptyView(null);
         loadData(type , lastId);
     }
 
@@ -172,8 +171,7 @@ public class OrderFragment extends BaseFragment
         map.put("os", "android");
         map.put("type",String.valueOf(type));
         map.put("lastId",String.valueOf(lid));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -200,7 +198,7 @@ public class OrderFragment extends BaseFragment
                 }
 
                 if( operateType == OperateTypeEnum.REFRESH){
-                    orderAdapter.setEmptyView(emptyView);
+                    //orderAdapter.setEmptyView(emptyView);
                     orderAdapter.setNewData( response.body().getData().getList() );
                     if(response.body().getData().getList()!=null && response.body().getData().getList().size()>0) {
                         lastId = response.body().getData().getList().get(response.body().getData().getList().size() - 1).getID();

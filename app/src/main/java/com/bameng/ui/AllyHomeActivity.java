@@ -125,7 +125,6 @@ public class AllyHomeActivity extends BaseActivity {
         mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         initView();
-        StartApi();
     }
 
     @Override
@@ -182,28 +181,28 @@ public class AllyHomeActivity extends BaseActivity {
         AllyHomeActivityPermissionsDispatcher.baiduLocationWithCheck(this);
     }
 
-    @NeedsPermission({Manifest.permission.READ_PHONE_STATE,
+    @NeedsPermission({Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void baiduLocation() {
         application.baiduLocationService.start();
     }
 
-    @OnShowRationale({Manifest.permission.READ_PHONE_STATE,
+    @OnShowRationale({Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void showRationaleForBaiduLocation(PermissionRequest request) {
         showRationaleDialog(R.string.permission_baiduLocation_rationale, request);
     }
 
-    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE,
+    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void onBaiduLocationDenied() {
         Toast.makeText(this, R.string.permission_baiduLocation_denied, Toast.LENGTH_SHORT).show();
     }
 
-    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE,
+    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void onBaiduLocationNeverAskAgain() {
@@ -269,13 +268,11 @@ public class AllyHomeActivity extends BaseActivity {
             case R.id.homePage: {
                 //currentTab="业务客户";
                 currentTab = Constants.TAG_1;
-
                 titleText.setText("业务客户");
                 titleLeftImage.setVisibility(View.VISIBLE);
                 titleLeftText.setVisibility(View.VISIBLE);
                 titleRightImage.setVisibility(View.VISIBLE);
                 if (progress != null) progress.dismissView();
-
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
                 SystemTools.loadBackground(homeImg, oneBuyDraw);
@@ -312,7 +309,6 @@ public class AllyHomeActivity extends BaseActivity {
                 richesTxt.setTextColor(ContextCompat.getColor(this, R.color.text_color_black));
                 mFragManager.setCurrentFrag(FragManager.FragType.NEWS);
 
-
             }
             break;
             case R.id.richesPage: {
@@ -342,42 +338,12 @@ public class AllyHomeActivity extends BaseActivity {
     }
     @Override
     protected void StartApi() {
-//        Map<String, String> map = new HashMap<>();
-//        map.put("version", application.getAppVersion());
-//        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
-//        map.put("os", "android");
-//        AuthParamUtils authParamUtils = new AuthParamUtils();
-//        String sign = authParamUtils.getSign(map);
-//        map.put("sign", sign);
-//        ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
-//        Call<InitOutputsModel> call = apiService.init(map);
-//        call.enqueue(new Callback<InitOutputsModel>() {
-//            @Override
-//            public void onResponse(Call<InitOutputsModel> call, Response<InitOutputsModel> response) {
-//                if (response.body() == null) {
-//                    ToastUtils.showLongToast(response.code() + ":" + response.message());
-//                    return;
-//                }
-//
-//                if (response.body().getStatus() == 200) {
-//                    ToastUtils.showLongToast("成功");
-//                } else {
-//                    ToastUtils.showLongToast(response.body().getStatusText());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<PostModel> call, Throwable t) {
-//                ToastUtils.showLongToast("失败");
-//            }
-//        });
     }
 
     @Override
     public boolean handleMessage(Message msg) {
         return false;
     }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -434,8 +400,7 @@ public class AllyHomeActivity extends BaseActivity {
         map.put("os", "android");
         map.put("mylocation", event.getModel().getCity() );
         map.put("lnglat", lnglat );
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         application.baiduLocationService.stop();
 
@@ -465,9 +430,5 @@ public class AllyHomeActivity extends BaseActivity {
                 application.baiduLocationService.start();
             }
         });
-
-
     }
-
-
 }

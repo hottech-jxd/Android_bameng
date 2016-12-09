@@ -23,6 +23,7 @@ public class BeanFlowOutputModel extends BaseModel {
         private List<BeanRecordModel> list;
         private int income;
         private int outcome;
+        private int TempMengBeans;
 
         public List<BeanRecordModel> getList() {
             return list;
@@ -46,6 +47,14 @@ public class BeanFlowOutputModel extends BaseModel {
 
         public void setOutcome(int outcome) {
             this.outcome = outcome;
+        }
+
+        public int getTempMengBeans() {
+            return TempMengBeans;
+        }
+
+        public void setTempMengBeans(int tempMengBeans) {
+            TempMengBeans = tempMengBeans;
         }
     }
 }

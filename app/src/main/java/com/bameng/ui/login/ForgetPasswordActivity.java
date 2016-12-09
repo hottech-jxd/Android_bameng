@@ -72,8 +72,6 @@ public class ForgetPasswordActivity extends BaseActivity implements CountDownTim
     CountDownTimerButton countDownBtn;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

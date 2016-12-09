@@ -42,6 +42,7 @@ import com.bameng.utils.DensityUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.AddressPopWin;
 import com.bameng.widgets.RecycleItemDivider;
+import com.bameng.widgets.TipAlertDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -89,6 +90,7 @@ public class MengFragment extends BaseFragment
 
     int sortCode=0;
     int isDesc = 0;
+    TipAlertDialog tipAlertDialog;
 
     public MengFragment() {
     }
@@ -181,16 +183,15 @@ public class MengFragment extends BaseFragment
                 //super.onItemChildClick(adapter, view, position);
                 if( view.getId() == R.id.btnAgree){
                     MengModel model =(MengModel)baseQuickAdapter.getItem(position);
-                    model.setDoing(true);
-                    baseQuickAdapter.notifyItemChanged(position);
-                    audit(model , 1 );
+                    //model.setDoing(true);
+                    //baseQuickAdapter.notifyItemChanged(position);
+                    auditTip( position , model , 1 ,"确定要同意申请吗？");
                 }else if(view.getId() == R.id.btnReject){
                     MengModel model =(MengModel)baseQuickAdapter.getItem(position);
-                    model.setDoing(true);
-                    baseQuickAdapter.notifyItemChanged(position);
-                    audit(model,2);
+                    //model.setDoing(true);
+                    //baseQuickAdapter.notifyItemChanged(position);
+                    auditTip( position , model,2 ,"确定要拒绝申请吗？");
                 }else{
-
                 }
             }
         });
@@ -207,6 +208,21 @@ public class MengFragment extends BaseFragment
         }
 
     }
+
+    void auditTip(final int position , final MengModel model , final int status , String msg ){
+        if(tipAlertDialog==null) tipAlertDialog = new TipAlertDialog(getContext() ,false);
+        tipAlertDialog.show("审核提醒", msg , null, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tipAlertDialog!=null) tipAlertDialog.dismiss();
+
+                model.setDoing(true);
+                adapter.notifyItemChanged(position);
+                audit(  model , status );
+            }
+        });
+    }
+
 
     @Override
     public void onRefresh() {
@@ -289,6 +305,9 @@ public class MengFragment extends BaseFragment
 
                 if( operateTypeEnum== OperateTypeEnum.REFRESH) {
                     adapter.setNewData( response.body().getData().getRows() );
+                    if( response.body().getData().getRows()!=null && response.body().getData().getRows().size()>0){
+                        //las
+                    }
                 }else{
                     if(response.body().getData().getRows()==null|| response.body().getData().getRows().size()<1){
                         if (noDataView == null){
@@ -320,15 +339,13 @@ public class MengFragment extends BaseFragment
 
     void audit(final MengModel model , final int status){
 
-
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("id", String.valueOf( model.getID()  ) );
         map.put("status",  String.valueOf( status ));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getInstance().create(ApiService.class);
         String token = BaseApplication.readToken();
@@ -343,13 +360,13 @@ public class MengFragment extends BaseFragment
                     return;
                 }
                 if( response.body() !=null && response.body().getStatus() ==200 ){
-                    if(status==2){
-                        model.setStatus(2);
-                        model.setStatusName("拒绝");
-                    }else {
+                    //if(status==2){
+                    //    model.setStatus(2);
+                    //   model.setStatusName("拒绝");
+                    //}else {
                         adapter.getData().remove(model);
                         EventBus.getDefault().post(new RefreshMengYouEvent(1));
-                    }
+                    //}
 
                     adapter.notifyDataSetChanged();
                 }else{

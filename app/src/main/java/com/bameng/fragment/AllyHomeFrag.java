@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bameng.BaseApplication;
@@ -77,7 +78,6 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
     TextView tvordercount;
     TextView tvtradecount;
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -101,8 +101,8 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
         adapter.openLoadMore(PAGESIZE);
         adapter.setOnLoadMoreListener(this);
         LayoutInflater layoutInflater= LayoutInflater.from(getContext());
-        emptyView = layoutInflater.inflate(R.layout.layout_empty,null);
-        adapter.setEmptyView(emptyView);
+        emptyView = layoutInflater.inflate(R.layout.layout_empty, (ViewGroup) recyclerView.getParent() , false);
+        adapter.setEmptyView( true , emptyView);
         recyclerView.setAdapter(adapter);
 
         header = layoutInflater.inflate(R.layout.layout_allyhome_header,null);
@@ -174,8 +174,7 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -227,8 +226,7 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
         map.put("type", String.valueOf(0));
         map.put("pageIndex",String.valueOf(indx));
         map.put("pageSize", String.valueOf( PAGESIZE ));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

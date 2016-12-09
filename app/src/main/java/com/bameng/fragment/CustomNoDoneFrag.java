@@ -30,6 +30,7 @@ import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.AddressPopWin;
+import com.bameng.widgets.TipAlertDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
@@ -70,7 +71,7 @@ public class CustomNoDoneFrag extends BaseFragment
     int type = 1;
 
     CustomerDetailAdapter adapter;
-
+    TipAlertDialog tipAlertDialog;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -123,10 +124,10 @@ public class CustomNoDoneFrag extends BaseFragment
                 super.onItemChildClick(adapter, view, position);
                 if( view.getId() == R.id.btnAgree){
                     CustomerModel model = (CustomerModel) adapter.getItem(position);
-                    audit(  position , model , 1 );
+                    auditTip(  position , model , 1 ,"确定要同意申请吗？");
                 }else if(view.getId() == R.id.btnReject){
                     CustomerModel model = (CustomerModel) adapter.getItem(position);
-                    audit( position , model , 2 );
+                    auditTip( position , model , 2 ,"确定要拒绝申请吗？");
                 }else {
                     CustomerModel customerModel = (CustomerModel)adapter.getItem(position);
                     Bundle bundle = new Bundle();
@@ -137,6 +138,16 @@ public class CustomNoDoneFrag extends BaseFragment
         });
     }
 
+    void auditTip(final int position , final CustomerModel customerModel , final int status , String msg  ){
+        if(tipAlertDialog==null) tipAlertDialog = new TipAlertDialog(getContext() ,false);
+        tipAlertDialog.show("审核提醒", msg , null, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if( tipAlertDialog !=null) tipAlertDialog.dismiss();
+                audit( position, customerModel , status );
+            }
+        });
+    }
 
     @Override
     protected void loadData() {

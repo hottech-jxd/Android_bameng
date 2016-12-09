@@ -19,6 +19,7 @@ import com.bameng.fragment.CashFragment;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.utils.SystemTools;
+import com.bameng.widgets.TipAlertDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class ExchangeExamineActivity extends BaseActivity {
     MYFragmentAdapter<BaseFragment> fragmentAdapter;
     String[] titles;
     List<BaseFragment> fragments;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,24 +111,6 @@ public class ExchangeExamineActivity extends BaseActivity {
            }
        });
     }
-
-//    private void changeIndex(int index) {
-//        if (index == 0) {
-//            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-//            Drawable drawable_normal = resources.getDrawable(R.color.white);
-//            SystemTools.loadBackground(nodoneLabel, drawable_press);
-//            SystemTools.loadBackground(doneLabel, drawable_normal);
-//            nodoneLabel.setTextColor(resources.getColor(R.color.red));
-//            doneLabel.setTextColor(resources.getColor(R.color.black));
-//        } else if (index == 1) {
-//            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-//            Drawable drawable_normal = resources.getDrawable(R.color.white);
-//            SystemTools.loadBackground(nodoneLabel, drawable_normal);
-//            SystemTools.loadBackground(doneLabel, drawable_press);
-//            nodoneLabel.setTextColor(resources.getColor(R.color.black));
-//            doneLabel.setTextColor(resources.getColor(R.color.red));
-//        }
-//    }
 
     @Override
     protected void StartApi() {

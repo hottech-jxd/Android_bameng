@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_height="wrap_content"
               android:layout_width="match_parent"
               android:layout_marginTop="5dp"
-              android:background="@color/white"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical">
-    <LinearLayout
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:padding="10dp">
+              android:padding="10dp"
+              android:background="@drawable/item_click_selector"
+              android:orientation="horizontal">
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:layout_gravity="center_vertical"
             android:id="@+id/image"
@@ -84,5 +79,3 @@
         </LinearLayout>
     </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>

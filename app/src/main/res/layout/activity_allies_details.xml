@@ -29,8 +29,8 @@
         android:layout_height="1px"
         android:background="@color/line_gray" />
     <com.facebook.drawee.view.SimpleDraweeView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:id="@+id/image"
         app:placeholderImage="@mipmap/ic_ally"
         app:roundAsCircle="true"

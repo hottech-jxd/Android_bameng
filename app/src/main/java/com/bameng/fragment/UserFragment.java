@@ -12,16 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.config.Constants;
-import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
-import com.bameng.model.PostModel;
-import com.bameng.model.RefreshMengYouEvent;
 import com.bameng.model.RefreshUserDataEvent;
 import com.bameng.model.SignOutputModel;
 import com.bameng.model.UserData;
@@ -29,7 +24,6 @@ import com.bameng.model.UserOutputsModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.WebViewActivity;
-import com.bameng.ui.account.ExchangeConfirmActivity;
 import com.bameng.ui.account.MDouCountActivity;
 import com.bameng.ui.account.MyAccountActivity;
 import com.bameng.ui.account.MyBeanActivity;
@@ -37,7 +31,6 @@ import com.bameng.ui.account.ScoreActivity;
 import com.bameng.ui.account.SettingActivity;
 import com.bameng.ui.account.UserInfoActivity;
 import com.bameng.ui.base.BaseFragment;
-import com.bameng.ui.business.AlliesExamineActivity;
 import com.bameng.ui.business.MyCashCardActivity;
 import com.bameng.ui.business.OrderListActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
@@ -54,14 +47,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.bameng.R.id.layroot;
-
 /***
  * 盟主 个人中心
  */

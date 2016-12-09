@@ -1,15 +1,10 @@
 package com.bameng.fragment;
 
 
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.TextView;
-
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
@@ -17,18 +12,11 @@ import com.bameng.adapter.TabPagerAdapter;
 import com.bameng.config.Constants;
 import com.bameng.model.SetRightVisibleEvent;
 import com.bameng.ui.base.BaseFragment;
-import com.bameng.utils.SystemTools;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static com.bameng.R.id.viewPager;
 
 /***
  * 资讯列表
@@ -40,16 +28,13 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
     @BindView(R2.id.tablayout)
     TabLayout tabLayout;
 
-    public Resources resources;
-    public TabPagerAdapter tabPagerAdapter;
-    private List<BaseFragment> mFragmentList = new ArrayList<>();
+    TabPagerAdapter tabPagerAdapter;
+    List<BaseFragment> mFragmentList = new ArrayList<>();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        resources = this.getResources();
-
         initSwitch();
     }
 
@@ -107,31 +92,7 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
         allyFrag.setArguments(b);
         mFragmentList.add(allyFrag);
         tabPagerAdapter = new TabPagerAdapter(getChildFragmentManager(), mFragmentList);
-        //raidersViewPager.setAdapter(tabPagerAdapter);
         raidersViewPager.setOffscreenPageLimit(3);
-
-//        raidersViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//
-//            @Override
-//            public void onPageSelected(int index) {
-//                 int  idx = tabPagerAdapter.getItem(index).getArguments().getInt("index");
-//                changeIndex(idx);
-//            }
-//
-//
-//            @Override
-//            public void onPageScrolled(int index, float arg1, int pixes) {
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//            }
-//        });
-
-        //raidersViewPager.setCurrentItem(currentIndex);
-
-        //changeIndex(currentIndex);
-
 
         tabLayout.setupWithViewPager(raidersViewPager);
         raidersViewPager.setAdapter( tabPagerAdapter);

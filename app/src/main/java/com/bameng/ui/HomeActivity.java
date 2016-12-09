@@ -207,27 +207,27 @@ public class HomeActivity extends BaseActivity {
         HomeActivityPermissionsDispatcher.baiduLocationWithCheck(this);
     }
 
-    @NeedsPermission( {Manifest.permission.READ_PHONE_STATE ,
+    @NeedsPermission( {Manifest.permission.READ_PHONE_STATE , Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void baiduLocation(){
         application.baiduLocationService.start();
     }
-    @OnShowRationale({Manifest.permission.READ_PHONE_STATE ,
+    @OnShowRationale({Manifest.permission.READ_PHONE_STATE ,Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void showRationaleForBaiduLocation(PermissionRequest request){
         showRationaleDialog( R.string.permission_baiduLocation_rationale , request );
     }
 
-    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE ,
+    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE ,Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void onBaiduLocationDenied(){
         Toast.makeText(this, R.string.permission_baiduLocation_denied , Toast.LENGTH_SHORT).show();
     }
 
-    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE ,
+    @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE ,Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE})
     protected void onBaiduLocationNeverAskAgain(){

@@ -29,9 +29,9 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 fresco:actualImageUri="fitCenter"
-                fresco:placeholderImage="@mipmap/ic_nickname"
+                fresco:placeholderImage="@mipmap/ic_default"
                 fresco:placeholderImageScaleType="fitCenter"
-                fresco:failureImage="@mipmap/ic_nickname"
+                fresco:failureImage="@mipmap/ic_default"
                 fresco:failureImageScaleType="fitCenter"
                 fresco:roundAsCircle="true" />
 
@@ -69,14 +69,14 @@
                 android:id="@+id/img_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/icon_setting" />
+                android:src="@mipmap/icon_setting"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layaccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@drawable/item_click_selector"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="15dp"
@@ -85,7 +85,7 @@
             android:paddingLeft="10dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="我的财富" />
@@ -108,6 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/item_click_selector"
                 android:id="@+id/layBean"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -133,6 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/item_click_selector"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="10dp">
@@ -157,6 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/item_click_selector"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="10dp">

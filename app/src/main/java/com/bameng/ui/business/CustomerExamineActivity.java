@@ -30,6 +30,7 @@ import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
+import com.bameng.widgets.TipAlertDialog;
 import com.bameng.widgets.UserInfoView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,6 +71,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
     Bundle bundle;
     CustomerModel customerModel;
     ProgressDialog progressDialog;
+    TipAlertDialog tipAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,9 +144,10 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         if(view.getId() == R.id.llShopStatus){
             popWind.show(UserInfoView.Type.ShopStatus , shopStatus.getText().toString() );
         }else if(view.getId() == R.id.tvAgree){
-            audit(customerModel , 1 );
+            //audit(customerModel , 1 );
+            auditTip("确定要同意申请吗？",customerModel , 1);
         }else if(view.getId() == R.id.tvReject){
-            audit(customerModel , 2 );
+            auditTip( "确定要拒绝申请吗？", customerModel , 2 );
         }else if( view.getId() == R.id.btnSubmit){
             int status = shopStatus.getText().toString().equals("未进店")? 0:1;
             updateShop(customerModel, status);
@@ -206,6 +209,17 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         });
     }
 
+    void auditTip( String msg , final CustomerModel customerModel , final int status){
+        if(tipAlertDialog==null) tipAlertDialog = new TipAlertDialog(this,false);
+        tipAlertDialog.show("审核提醒", msg , null, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if( tipAlertDialog!=null) tipAlertDialog.dismiss();
+                audit( customerModel , status );
+            }
+        });
+    }
+
     protected void audit(final CustomerModel customerModel , int status ){
         if( progressDialog == null){
             progressDialog = new ProgressDialog(this);
@@ -249,7 +263,6 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
             }
         });
     }
-
 
     @Override
     public void onUserInfoBack(UserInfoView.Type type , String value ) {

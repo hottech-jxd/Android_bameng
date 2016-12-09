@@ -79,6 +79,8 @@ public class UserInfoActivity extends PhoteActivity
         implements PhotoSelectView.OnPhotoSelectBackListener,
         UserInfoView.OnUserInfoBackListener ,Handler.Callback {
 
+    @BindView(R.id.txt_loginName)
+    TextView txtLoginName;
     @BindView(R2.id.layImg)
     LinearLayout layImg;
     @BindView(R2.id.img_user)
@@ -107,7 +109,6 @@ public class UserInfoActivity extends PhoteActivity
     TextView titleText;
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    public Resources resources;
     private PhotoSelectView pop;
     private UserInfoView userInfoView;
     UserData userData;
@@ -123,7 +124,6 @@ public class UserInfoActivity extends PhoteActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
-        resources = this.getResources();
         userInfoView = new UserInfoView(this);
         userInfoView.setOnUserInfoBackListener(this);
         inputMethodManager = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
@@ -133,9 +133,7 @@ public class UserInfoActivity extends PhoteActivity
     }
 
     protected void initView() {
-
         mHandler= new Handler(this);
-
         titleText.setText("个人信息");
         //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
         //SystemTools.loadBackground(titleLeftImage, leftDraw);
@@ -154,8 +152,10 @@ public class UserInfoActivity extends PhoteActivity
         }else{
             txtSex.setText("未知");
         }
-        //txtSex.setText(userData.get);
+
         txtNationality.setText(userData.getUserCity());
+
+        txtLoginName.setText(userData.getLoginName());
 
     }
 
@@ -398,8 +398,7 @@ public class UserInfoActivity extends PhoteActivity
         map.put("os", "android");
         map.put("type",String.valueOf(type));
         map.put("content", value );
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -448,8 +447,7 @@ public class UserInfoActivity extends PhoteActivity
         map.put("os", "android");
         map.put("type",String.valueOf(type));
         //map.put("content", value );
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
 
         Map<String, RequestBody> requestBodyMap = new HashMap<>();
         RequestBody requestBody = RequestBody.create( MediaType.parse("text/plain") , timestamp );
@@ -531,8 +529,9 @@ public class UserInfoActivity extends PhoteActivity
         //inputMethodManager.hideSoftInputFromWindow(provinceL.getWindowToken(), 0);
         if(addressPopWin==null) {
             addressPopWin = new AddressPopWin(mHandler, application, UserInfoActivity.this, application.localAddress, 0, getWindowManager(), UserInfoActivity.this);
+            addressPopWin.initView();
         }
-        addressPopWin.initView();
+        //addressPopWin.initView();
 
 
         //if( !TextUtils.isEmpty(province)) {
@@ -540,7 +539,10 @@ public class UserInfoActivity extends PhoteActivity
         //    String areaname = area.getText().toString();
         //    addressPopWin.setCurrentAddress(proviceName, cityname, areaname);
         //}
-        addressPopWin.setCurrentAddress(province , city , area );
+
+        if( !province.isEmpty()) {
+            addressPopWin.setCurrentAddress(province, city, area);
+        }
 
         addressPopWin.showAtLocation(getWindow().getDecorView() , Gravity.BOTTOM, 0, 0);
         addressPopWin.setOnDismissListener(new PoponDismissListener(UserInfoActivity.this));

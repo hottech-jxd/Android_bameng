@@ -43,6 +43,8 @@ public class OrderAdapter extends BaseQuickAdapter<OrderModel, BaseViewHolder> {
             baseViewHolder.setTextColor( R.id.status , ContextCompat.getColor( mContext , R.color.green) );
         }else if(orderModel.getStatus() == 2){
             baseViewHolder.setTextColor( R.id.status , ContextCompat.getColor( mContext, R.color.red));
+        }else if( orderModel.getStatus() == 0){
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor(mContext, R.color.red));
         }
 
         baseViewHolder.setText(R.id.status ,  orderModel.getStatusName());
