@@ -16,6 +16,7 @@ import com.bameng.R2;
 import com.bameng.config.Constants;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CloseEvent;
+import com.bameng.model.CustomerModel;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
@@ -102,6 +103,27 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
 
     @OnClick(R.id.btn_submit)
     void submit(){
+
+        String name = customName.getText().toString().trim();
+        String mobile = customMoblie.getText().toString().trim();
+        String address = customAddress.getText().toString().trim();
+        boolean isok = true;
+        if(address.isEmpty()){
+            customAddress.setError("请填写客户地址");
+            isok=false;
+        }
+        if( mobile.isEmpty()){
+            customMoblie.setError("请填写客户电话");
+            isok=false;
+        }
+        if( name.isEmpty()){
+            customName.setError("请填写客户姓名");
+            isok=false;
+        }
+        if(!isok){
+            return;
+        }
+
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -110,8 +132,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
         map.put("mobile",customMoblie.getText().toString());
         map.put("address",customAddress.getText().toString());
         map.put("remark",remark.getText().toString());
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

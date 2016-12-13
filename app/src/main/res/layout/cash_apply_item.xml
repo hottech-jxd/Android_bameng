@@ -85,9 +85,9 @@
             />
         <Button
             android:id="@+id/btnReject"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="70dp"
             android:layout_height="28dp"
             android:text="拒绝"
