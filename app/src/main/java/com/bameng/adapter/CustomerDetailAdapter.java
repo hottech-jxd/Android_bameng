@@ -46,27 +46,15 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
             baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext  , R.color.red ));
             baseViewHolder.setVisible(R.id.lay_btn , true);
         }
-        //baseViewHolder.setTag(Customer);
-        //baseViewHolder.reject.setTag(Customer);
+
         baseViewHolder.setVisible(R.id.progressBar , customerModel.isDoing()? true :false );
         baseViewHolder.setVisible( R.id.btnAgree , customerModel.isDoing()? false:true);
         baseViewHolder.setVisible( R.id.btnReject , customerModel.isDoing()? false:true);
         baseViewHolder.addOnClickListener(R.id.btnAgree);
         baseViewHolder.addOnClickListener(R.id.btnReject);
-        //holder.agress.setOnClickListener(this);
-        //holder.reject.setOnClickListener(this);
-        baseViewHolder.addOnClickListener(R.id.img);
-        //holder.img.setOnClickListener(this);
-        //holder.img.setTag(Customer);
-        //baseViewHolder.addOnClickListener(R.id.llItem);
-        baseViewHolder.addOnClickListener(status );
-        //holder.status.setTag(Customer);
-        baseViewHolder.addOnClickListener(R.id.name);
-        //holder.name.setTag(Customer);
-        baseViewHolder.addOnClickListener(R.id.moblie);
-        //holder.moblie.setTag(Customer);
-
-
-
+        //baseViewHolder.addOnClickListener(R.id.img);
+        //baseViewHolder.addOnClickListener(status );
+        //baseViewHolder.addOnClickListener(R.id.name);
+        //baseViewHolder.addOnClickListener(R.id.moblie);
     }
 }

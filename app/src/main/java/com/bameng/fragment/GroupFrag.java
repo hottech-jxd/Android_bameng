@@ -104,6 +104,7 @@ public class GroupFrag extends BaseFragment
                 ListModel model = (ListModel) baseQuickAdapter.getItem(position);
                 Bundle bd = new Bundle();
                 bd.putString(Constants.INTENT_URL, model.getArticleUrl());
+                bd.putString(Constants.INTENT_TITLE,model.getArticleTitle());
                 ActivityUtils.getInstance().showActivity( getActivity() , WebViewActivity.class , bd );
             }
         });

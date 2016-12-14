@@ -9,9 +9,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.bameng.BaseApplication;
 import com.bameng.R;
@@ -111,6 +113,15 @@ public class OrderFragment extends BaseFragment
         orderAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
         orderAdapter.setOnLoadMoreListener(this);
         orderAdapter.setEmptyView(emptyView);
+        orderAdapter.isUseEmpty(false);
+
+
+//        if (noDataView == null) {
+//            noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
+//        }
+//        orderAdapter.addFooterView(noDataView);
+
+
         recyclerView.setAdapter(orderAdapter);
 
         recyclerView.addOnItemTouchListener(onItemClickListener);
@@ -154,13 +165,19 @@ public class OrderFragment extends BaseFragment
     public void onRefresh() {
         lastId=0;
         operateType = OperateTypeEnum.REFRESH;
-        //orderAdapter.setEmptyView(null);
+
+        if( noDataView!=null && noDataView.getParent()!=null){
+            ((ViewGroup)noDataView.getParent()).removeView(noDataView);
+        }
+
+        orderAdapter.isUseEmpty(false);
         loadData(type , lastId);
     }
 
     @Override
     public void onLoadMoreRequested() {
         operateType = OperateTypeEnum.LOADMORE;
+
         loadData( type , lastId);
     }
 
@@ -180,6 +197,7 @@ public class OrderFragment extends BaseFragment
             @Override
             public void onResponse(Call<OrderOutputModel> call, Response<OrderOutputModel> response) {
                 swipeRefreshLayout.setRefreshing(false);
+                orderAdapter.isUseEmpty(true);
 
                 if(response.code()!=200 || response.body()==null ){
                     ToastUtils.showLongToast( response.message()==null? "失败": response.message());
@@ -206,10 +224,14 @@ public class OrderFragment extends BaseFragment
                 }else {
                     if (response.body().getData().getList() == null || response.body().getData().getList().size()<1) {
                         if (noDataView == null) {
-                            noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
+                            noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata,  (ViewGroup) recyclerView.getParent() , false);
+                            orderAdapter.addFooterView( noDataView );
+                        }else{
+                            if( noDataView.getParent()!=null){
+                                ((ViewGroup)noDataView.getParent()).removeView( noDataView);
+                            }
+                            orderAdapter.addFooterView(noDataView);
                         }
-                        orderAdapter.removeAllFooterView();
-                        orderAdapter.addFooterView(noDataView);
                         orderAdapter.loadComplete();
                         return;
                     }
@@ -224,6 +246,7 @@ public class OrderFragment extends BaseFragment
             @Override
             public void onFailure(Call<OrderOutputModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
+                orderAdapter.isUseEmpty(true);
                 //ToastUtils.showLongToast(t.getMessage()==null?"发送错误":t.getMessage());
                 ToastUtils.showLongToast(Constants.SERVER_ERROR);
             }

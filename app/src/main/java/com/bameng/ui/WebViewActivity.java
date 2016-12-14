@@ -97,14 +97,12 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
     @Override
     protected void onResume() {
         super.onResume();
-
         viewPage.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         viewPage.onPause();
     }
 
@@ -150,8 +148,12 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
             }
         });
 
-        loadPage();
+        String title = getIntent().getStringExtra(Constants.INTENT_TITLE);
+        if(title!=null && !title.isEmpty()){
+            titleText.setText(title);
+        }
 
+        loadPage();
     }
 
     void capturnScreenPost(){
@@ -164,7 +166,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
                 captureScreen();
             }
         };
-        mHandler.postDelayed( runnable ,5000);
+        mHandler.postDelayed( runnable ,3000);
     }
 
     /***
@@ -288,6 +290,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
     public void loadPage() {
         viewPage.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
         viewPage.setVerticalScrollBarEnabled(false);
+        viewPage.setHorizontalScrollBarEnabled(false);
         viewPage.setClickable(true);
         viewPage.getSettings().setUseWideViewPort(true);
         //是否需要避免页面放大缩小操作

@@ -7,7 +7,7 @@
               android:id="@+id/llItem"
               android:gravity="center_vertical"
               android:layout_marginTop="10dp"
-              android:background="@color/white">
+              android:background="@drawable/item_click_selector">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/img"

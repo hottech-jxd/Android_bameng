@@ -62,7 +62,6 @@ public class StoreFrag extends BaseFragment
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R2.id.recycleView)
     RecyclerView recyclerView;
-
     BaseQuickAdapter baseAdapter;
     final int PAGESIZE=10;
     View noDataView;
@@ -83,6 +82,7 @@ public class StoreFrag extends BaseFragment
 
             Bundle bd = new Bundle();
             bd.putString(Constants.INTENT_URL, model.getArticleUrl());
+            bd.putString(Constants.INTENT_TITLE, model.getArticleTitle());
             ActivityUtils.getInstance().showActivity( getActivity() , WebViewActivity.class , bd );
         }
     };
@@ -139,8 +139,7 @@ public class StoreFrag extends BaseFragment
         map.put("identity",String.valueOf(type));
         map.put("pageIndex",String.valueOf(pidx));
         map.put("pageSize",String.valueOf(PAGESIZE));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

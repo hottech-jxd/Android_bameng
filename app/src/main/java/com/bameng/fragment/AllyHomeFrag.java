@@ -159,6 +159,9 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onRefresh() {
         operateTypeEnum=OperateTypeEnum.REFRESH;
         pageIndex=0;
+        if( noDataView!=null && noDataView.getParent()!=null){
+            ((ViewGroup)noDataView.getParent()).removeView(noDataView);
+        }
         loadMySummary();
         loadData(pageIndex);
     }
@@ -267,9 +270,14 @@ public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnR
                     if(response.body().getData().getRows()==null|| response.body().getData().getRows().size()<1){
                         if (noDataView == null){
                             noDataView = LayoutInflater.from(getContext()).inflate(R.layout.layout_nodata,null);
+                            adapter.addFooterView( noDataView );
+                        }else {
+                            if( noDataView.getParent()!=null){
+                                ((ViewGroup)noDataView.getParent()).removeView( noDataView);
+                            }
+                            adapter.addFooterView(noDataView);
                         }
-                        adapter.removeAllFooterView();
-                        adapter.addFooterView(noDataView);
+
                         adapter.loadComplete();
                         return;
                     }

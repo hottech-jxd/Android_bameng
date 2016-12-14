@@ -115,8 +115,11 @@ public class CustomNoDoneFrag extends BaseFragment
 
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
+                CustomerModel customerModel = (CustomerModel)adapter.getItem(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("customerinfo", customerModel);
+                ActivityUtils.getInstance().showActivity( getActivity() , CustomerExamineActivity.class,bundle);
             }
 
             @Override
@@ -168,8 +171,7 @@ public class CustomNoDoneFrag extends BaseFragment
         map.put("type", String.valueOf(type));
         map.put("pageIndex",String.valueOf(indx));
         map.put("pageSize",String.valueOf(PAGESIZE));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -207,9 +209,13 @@ public class CustomNoDoneFrag extends BaseFragment
                     if(response.body().getData().getRows()==null|| response.body().getData().getRows().size()<1){
                         if (noDataView == null){
                             noDataView = LayoutInflater.from(getContext()).inflate(R.layout.layout_nodata,null);
+                            adapter.addFooterView(noDataView);
+                        }else {
+                            if( noDataView.getParent()!=null){
+                                ((ViewGroup)noDataView.getParent()).removeView( noDataView);
+                            }
+                            adapter.addFooterView(noDataView);
                         }
-                        adapter.removeAllFooterView();
-                        adapter.addFooterView(noDataView);
                         adapter.loadComplete();
                         return;
                     }
@@ -268,6 +274,11 @@ public class CustomNoDoneFrag extends BaseFragment
     public void onRefresh() {
         operateType = OperateTypeEnum.REFRESH;
         pageIndex=0;
+
+        if( noDataView!=null && noDataView.getParent()!=null){
+            ((ViewGroup)noDataView.getParent()).removeView(noDataView);
+        }
+
         loadData(pageIndex);
     }
 

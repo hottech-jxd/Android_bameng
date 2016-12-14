@@ -159,6 +159,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
                 ListModel model = (ListModel) baseQuickAdapter.getItem(i);
                 Bundle bd = new Bundle();
                 bd.putString(Constants.INTENT_URL, model.getArticleUrl());
+                bd.putString(Constants.INTENT_TITLE,model.getArticleTitle());
                 ActivityUtils.getInstance().showActivity(getActivity(), WebViewActivity.class , bd);
             }
         });
@@ -269,9 +270,13 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
                     if (response.body().getData().getList().getRows() == null || response.body().getData().getList().getRows().size() == 0) {
                         if (noDataView == null) {
                             noDataView = getActivity().getLayoutInflater().inflate(R.layout.layout_nodata, (ViewGroup) recyclerView.getParent(), false);
+                            adapter.addFooterView(noDataView);
+                        }else {
+                            if( noDataView.getParent()!=null){
+                                ((ViewGroup)noDataView.getParent()).removeView( noDataView);
+                            }
+                            adapter.addFooterView(noDataView);
                         }
-                        adapter.removeAllFooterView();
-                        adapter.addFooterView(noDataView);
                         adapter.loadComplete();
                     } else {
                         adapter.addData(response.body().getData().getList().getRows());
@@ -365,6 +370,11 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
     public void onRefresh() {
         operateType = OperateTypeEnum.REFRESH;
         pageIndex = 1;
+
+        if( noDataView!=null && noDataView.getParent()!=null){
+            ((ViewGroup)noDataView.getParent()).removeView(noDataView);
+        }
+
         loadData(pageIndex);
         initSwitchImg();
     }

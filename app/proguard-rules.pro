@@ -16,6 +16,11 @@
 #   public *;
 #}
 
+#----------------------------------------霸盟---------------------------------------------------
+-keep class  com.bameng.model.** {*;}
+
+#------------------------------------------------------------------------------------------------
+
 #-------------------------------------百度定位---------------------------------------------
 -keep class com.baidu.** {*;}
 -keep class vi.com.** {*;}
@@ -129,5 +134,18 @@ public static final int *;
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
+
+#---------------------------------------------------------------------------------------------------
+
+
+#---------------------------------------------------shareSDK-------------------------------------
+-keep class cn.sharesdk.**{*;}
+-keep class com.sina.**{*;}
+-keep class **.R$* {*;}
+-keep class **.R{*;}
+-keep class com.mob.**{*;}
+-dontwarn com.mob.**
+-dontwarn cn.sharesdk.**
+-dontwarn **.R$*
 
 #---------------------------------------------------------------------------------------------------

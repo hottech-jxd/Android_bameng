@@ -15,22 +15,23 @@ import com.facebook.drawee.view.SimpleDraweeView;
  */
 public class ApplyCashAdapter extends BaseQuickAdapter<ConvertFlowModel, BaseViewHolder> {
     private int type;
+
     public ApplyCashAdapter() {
-        super(  R.layout.cash_apply_item , null );
+        super(R.layout.cash_apply_item, null);
     }
 
-    public ApplyCashAdapter( int type ){
-        super(R.layout.cash_apply_item,null);
-        this.type=type;
+    public ApplyCashAdapter(int type) {
+        super(R.layout.cash_apply_item, null);
+        this.type = type;
     }
 
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, ConvertFlowModel obj ) {
-        setItem (baseViewHolder, obj );
+    protected void convert(BaseViewHolder baseViewHolder, ConvertFlowModel obj) {
+        setItem(baseViewHolder, obj);
     }
 
-    void setItem(BaseViewHolder baseViewHolder, ConvertFlowModel obj ) {
+    void setItem(BaseViewHolder baseViewHolder, ConvertFlowModel obj) {
         SimpleDraweeView imv = baseViewHolder.getView(R.id.img);
         imv.setImageURI(obj.getHeadimg());
 
@@ -43,8 +44,6 @@ public class ApplyCashAdapter extends BaseQuickAdapter<ConvertFlowModel, BaseVie
         baseViewHolder.addOnClickListener(R.id.btnReject);
 
         baseViewHolder.setVisible(R.id.lay_btn, obj.getStatus() == 0);
-
-        baseViewHolder.setVisible( R.id.status , type==1 );
-
+        baseViewHolder.setVisible(R.id.status, type == 1);
     }
 }
