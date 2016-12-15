@@ -63,7 +63,7 @@ import retrofit2.Response;
 
 import static android.R.attr.id;
 import static android.R.attr.mode;
-import static com.baidu.location.h.j.ad;
+
 
 /***
  * 我的现金劵列表

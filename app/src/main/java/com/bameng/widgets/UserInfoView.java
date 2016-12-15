@@ -25,7 +25,6 @@ import com.bameng.utils.DensityUtils;
 
 import java.util.HashMap;
 
-import static com.baidu.location.h.j.C;
 
 public class UserInfoView {
 	public enum Type{

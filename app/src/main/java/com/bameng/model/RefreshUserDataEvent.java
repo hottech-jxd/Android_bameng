@@ -1,6 +1,5 @@
 package com.bameng.model;
 
-import static com.baidu.location.h.j.p;
 
 /**
  * Created by Administrator on 2016/11/23.

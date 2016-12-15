@@ -39,7 +39,6 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
 
-import static com.baidu.location.h.j.m;
 
 /**
  * Created by Administrator on 2016/3/15.

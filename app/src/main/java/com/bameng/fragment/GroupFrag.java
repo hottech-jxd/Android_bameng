@@ -54,15 +54,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.baidu.location.h.j.ad;
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.adbannerWidget;
-import static com.bameng.R.id.dot;
-import static com.bameng.R.id.homePullRefresh;
-import static com.bameng.R.id.homeViewPager;
-import static com.bameng.R.id.listL;
-import static com.bameng.R.id.recycleView;
-
 /**
  * 集团资讯
  * Created by 47483 on 2016.11.01.

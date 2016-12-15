@@ -42,11 +42,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.recognitionService;
-import static android.R.attr.type;
-import static com.baidu.location.h.j.B;
-import static com.bameng.R.id.beam;
-
 /***
  * 兑换确认 界面
  */

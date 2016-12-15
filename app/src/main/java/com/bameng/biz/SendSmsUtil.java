@@ -20,10 +20,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.edtPhone;
-
 /**
  * Created by Administrator on 2016/11/16.
  */

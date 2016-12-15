@@ -1,8 +1,6 @@
 package com.bameng.config;
 
 
-import static com.baidu.location.h.j.P;
-
 public class Constants {
 	// 屏幕高度
 	public static int SCREEN_HEIGHT = 800;

@@ -10,8 +10,6 @@ import com.bameng.utils.Util;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import static com.baidu.location.h.j.o;
-
 /**
  * Created by Administrator on 2016/11/21.
  */

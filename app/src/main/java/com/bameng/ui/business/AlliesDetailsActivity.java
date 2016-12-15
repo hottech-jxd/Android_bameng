@@ -38,9 +38,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.status;
-import static com.bameng.R.id.txt_name;
 
 /***
  * 盟友详情 界面

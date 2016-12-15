@@ -58,19 +58,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.bitmap;
-import static android.R.attr.cursorVisible;
-import static android.R.attr.mode;
-import static android.R.attr.order;
-import static android.R.attr.width;
-import static com.baidu.location.h.j.B;
-import static com.baidu.location.h.j.ap;
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.btnSave;
-import static com.bameng.R.id.orderReword;
-import static com.bameng.R.id.status;
-import static com.bameng.R.id.tvname;
-import static com.bameng.service.LocationService.address;
 
 /***
  * 订单详情 界面

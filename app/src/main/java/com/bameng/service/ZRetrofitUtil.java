@@ -10,7 +10,6 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.baidu.location.h.j.ap;
 
 /**
  * Created by Administrator on 2016/3/15.

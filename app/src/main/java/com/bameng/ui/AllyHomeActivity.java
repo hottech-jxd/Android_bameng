@@ -1,6 +1,7 @@
 package com.bameng.ui;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.share.LocationShareURLOption;
+import com.baidu.mapapi.search.share.ShareUrlSearch;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
@@ -31,6 +35,7 @@ import com.bameng.model.SetRightVisibleEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.base.BaseShareActivity;
 import com.bameng.ui.business.SubmitCustomerInfoActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
@@ -64,7 +69,7 @@ import retrofit2.Response;
  * 盟友主页
  */
 @RuntimePermissions
-public class AllyHomeActivity extends BaseActivity {
+public class AllyHomeActivity extends BaseShareActivity {
 
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
@@ -159,6 +164,8 @@ public class AllyHomeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        super.initView();
+
         goback = false;
         titleText.setText("业务客户");
         titleLeftImage.setVisibility(View.VISIBLE);
@@ -235,6 +242,38 @@ public class AllyHomeActivity extends BaseActivity {
 
         AllyHomeActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
+
+    @OnClick({R.id.titleLeftText})
+    void shareLocation(View view){
+        Object obj  =view.getTag();
+        if(obj==null ) {
+            ToastUtils.showLongToast("缺少位置信息，无法分享");
+            return;
+        }
+        LatLng latLng = (LatLng) obj;
+        if( latLng==null ){
+            ToastUtils.showLongToast("缺少位置信息，无法分享");
+            return;
+        }
+
+        if(progressDialog==null){
+            progressDialog = new ProgressDialog(this);
+        }
+        progressDialog.setMessage("请稍等...");
+        progressDialog.show();
+
+        if(shareUrlSearch==null){
+            shareUrlSearch = ShareUrlSearch.newInstance();
+            shareUrlSearch.setOnGetShareUrlResultListener(this);
+        }
+        LocationShareURLOption option = new LocationShareURLOption();
+        option.name("我的位置");
+        String city = ((TextView)view).getText().toString();
+        option.snippet(city);
+        option.location( latLng);
+        shareUrlSearch.requestLocationShareUrl(option);
+    }
+
 
 
     private void initTab() {
@@ -342,7 +381,7 @@ public class AllyHomeActivity extends BaseActivity {
 
     @Override
     public boolean handleMessage(Message msg) {
-        return false;
+        return super.handleMessage(msg);
     }
 
     @Override
@@ -381,6 +420,9 @@ public class AllyHomeActivity extends BaseActivity {
         titleLeftText.setText(event.getModel() == null || event.getModel().getCity() == null ? "" : event.getModel().getCity());
 
         String lnglat = String.valueOf( event.getModel().getLongitude() ) +","+ String.valueOf( event.getModel().getLatitude() );
+        LatLng latLng = new LatLng( event.getModel().getLatitude() , event.getModel().getLongitude() );
+        titleLeftText.setTag( latLng );
+
 
         if (null != event.getModel().getCity() ) {
             PreferenceHelper.writeString(getApplicationContext(),Constants.LOCATION_INFO, Constants.CITY, event.getModel().getCity());

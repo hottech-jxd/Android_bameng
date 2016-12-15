@@ -23,10 +23,6 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.width;
-import static com.baidu.location.h.j.S;
-import static com.baidu.location.h.j.W;
-
 
 /**
  * Banner组件

@@ -1,8 +1,10 @@
 package com.bameng.ui;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,15 +15,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DrawableUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.share.LocationShareURLOption;
+import com.baidu.mapapi.search.share.OnGetShareUrlResultListener;
+import com.baidu.mapapi.search.share.ShareUrlResult;
+import com.baidu.mapapi.search.share.ShareUrlSearch;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
@@ -33,11 +43,13 @@ import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
 import com.bameng.model.SetRightVisibleEvent;
+import com.bameng.model.ShareModel;
 import com.bameng.model.SlideListOutputModel;
 import com.bameng.model.SwitchFragmentEvent;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.base.BaseShareActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
@@ -45,7 +57,10 @@ import com.bameng.utils.AuthParamUtils;
 import com.bameng.utils.PreferenceHelper;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
+import com.bameng.utils.Util;
+import com.bameng.utils.WindowUtils;
 import com.bameng.widgets.ProgressPopupWindow;
+import com.bameng.widgets.SharePopupWindow;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +68,9 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.wechat.favorite.WechatFavorite;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -69,11 +87,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import static android.webkit.WebSettings.PluginState.ON;
+import static com.bameng.config.Constants.url;
+
 /***
  * 盟主主页
  */
 @RuntimePermissions
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseShareActivity {
 
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
@@ -158,6 +179,38 @@ public class HomeActivity extends BaseActivity {
         outState.putString("curfrag", currentTab);
     }
 
+
+    @OnClick({R.id.titleLeftText})
+    void shareLocation(View view){
+        Object obj  =view.getTag();
+        if(obj==null ) {
+            ToastUtils.showLongToast("缺少位置信息，无法分享");
+            return;
+        }
+        LatLng latLng = (LatLng) obj;
+        if( latLng==null ){
+            ToastUtils.showLongToast("缺少位置信息，无法分享");
+            return;
+        }
+
+        if(progressDialog==null){
+            progressDialog = new ProgressDialog(this);
+        }
+        progressDialog.setMessage("请稍等...");
+        progressDialog.show();
+
+        if(shareUrlSearch==null){
+            shareUrlSearch = ShareUrlSearch.newInstance();
+            shareUrlSearch.setOnGetShareUrlResultListener(this);
+        }
+        LocationShareURLOption option = new LocationShareURLOption();
+        option.name("我的位置");
+        String city = ((TextView)view).getText().toString();
+        option.snippet(city);
+        option.location( latLng);
+        shareUrlSearch.requestLocationShareUrl(option);
+    }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -181,6 +234,8 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        super.initView();
+
         currentTab = Constants.TAG_1;
         goback=false;
         titleText.setText(getString(R.string.app_name));
@@ -199,7 +254,6 @@ public class HomeActivity extends BaseActivity {
         mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         initTab();
 
-        //
         requestBaiduLocation();
     }
 
@@ -450,6 +504,11 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean handleMessage(Message msg) {
+
+        if(super.handleMessage(msg)){
+            return  true;
+        }
+
         switch (msg.what){
             case Constants.SWITCH_UI:{
                 if(progress!=null) progress.dismissView();
@@ -476,10 +535,12 @@ public class HomeActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN )
     public void onEventBaiduLocation(BaiduLocationEvent event) {
         titleLeftText.setText("");
-        if (event == null) return;
+        if (event == null || event.getModel()==null ) return;
         titleLeftText.setText(event.getModel() == null || event.getModel().getCity() == null ? "" : event.getModel().getCity());
         //调用接口 上报位置信息
         String lnglat = String.valueOf( event.getModel().getLongitude() ) +","+ String.valueOf( event.getModel().getLatitude() );
+        LatLng latLng = new LatLng( event.getModel().getLatitude() , event.getModel().getLongitude() );
+        titleLeftText.setTag( latLng );
 
         if (null != event.getModel().getCity() ) {
             PreferenceHelper.writeString(getApplicationContext(),Constants.LOCATION_INFO, Constants.CITY, event.getModel().getCity());

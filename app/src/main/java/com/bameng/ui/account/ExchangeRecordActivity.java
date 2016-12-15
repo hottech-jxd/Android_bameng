@@ -44,9 +44,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.baidu.location.h.j.ad;
-import static com.baidu.location.h.j.t;
-import static com.bameng.R.id.status;
 
 /***
  * 兑换记录

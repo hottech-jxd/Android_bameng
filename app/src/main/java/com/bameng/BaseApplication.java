@@ -14,6 +14,7 @@ import android.webkit.CookieManager;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
+import com.baidu.mapapi.SDKInitializer;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.model.BaiduLocation;
@@ -77,6 +78,7 @@ public class BaseApplication extends Application {
         //mLocationClient.registerLocationListener(mMyLocationListener);
         baiduLocationService= new BaiduLocationService(this);
         baiduLocationService.registerListener(mMyLocationListener);
+        SDKInitializer.initialize(this);
         //baiduLocationService.start();
 
         // 初始化Volley实例

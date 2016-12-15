@@ -48,12 +48,7 @@ import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Header;
 
-import static android.R.attr.addPrintersActivity;
-import static android.R.attr.type;
-import static com.baidu.location.h.j.P;
-import static com.baidu.location.h.j.ad;
 
 /**
  * 盟友 主页

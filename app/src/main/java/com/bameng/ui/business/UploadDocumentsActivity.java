@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.R.attr.bitmap;
-import static com.baidu.location.h.j.v;
+
 
 /***
  * 上传成交凭证 界面
