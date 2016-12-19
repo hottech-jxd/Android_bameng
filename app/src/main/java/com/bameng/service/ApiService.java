@@ -20,6 +20,7 @@ import com.bameng.model.MyOutputModel;
 import com.bameng.model.OrderDetailOutputModel;
 import com.bameng.model.OrderOutputModel;
 import com.bameng.model.PostModel;
+import com.bameng.model.RemindOutputModel;
 import com.bameng.model.ScoreOutputModel;
 import com.bameng.model.SignOutputModel;
 import com.bameng.model.SlideListOutputModel;
@@ -312,6 +313,16 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("user/AlreadyConvertTotal")
     Call<ConvertBeanTotalOutputModel> AlreadyConvertTotal(@Header("Authorization") String token , @FieldMap Map<String, String> params );
+
+    /***
+     * 定时获得未读消息，和未处理的客户审核，兑换审核，盟友审核 接口
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/remind")
+    Call<RemindOutputModel> remind(@Header("Authorization") String token , @FieldMap Map<String, String> params );
 
     @Multipart
     @POST("order/create")

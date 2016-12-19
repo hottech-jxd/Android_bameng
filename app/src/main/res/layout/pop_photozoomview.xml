@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+<me.relex.photodraweeview.PhotoDraweeView
+    android:id="@+id/photoDraweeView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+    <ImageView
+        android:padding="10dp"
+        android:id="@+id/ivClose"
+        android:layout_gravity="right"
+        android:background="@drawable/close_click_selector"
+        android:src="@mipmap/ic_close_white"
+        android:layout_width="48dp"
+        android:layout_height="48dp"/>
+
+</FrameLayout>

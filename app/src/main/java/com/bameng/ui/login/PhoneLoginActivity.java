@@ -1,6 +1,7 @@
 package com.bameng.ui.login;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
+import com.bameng.config.Constants;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.PostModel;
@@ -23,9 +25,11 @@ import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.AllyHomeActivity;
 import com.bameng.ui.HomeActivity;
+import com.bameng.ui.WebViewActivity;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.EncryptUtil;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
@@ -56,6 +60,9 @@ public class PhoneLoginActivity extends BaseActivity {
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
 
+    //@BindView(R.id.titleRightText)
+    //TextView titleRightText;
+
     @BindView(R2.id.edtUserName)
     EditText edtPhone;
 
@@ -82,12 +89,25 @@ public class PhoneLoginActivity extends BaseActivity {
         goback=false;
         titleText.setText("登录");
 
+//        titleRightText.setBackgroundResource(R.drawable.item_click_selector);
+//        titleRightText.setText("注册");
+//        int px = DensityUtils.dip2px(this, 10);
+//        titleRightText.setPadding( titleRightText.getPaddingLeft() , titleRightText.getPaddingTop() , px  , titleRightText.getPaddingBottom() );
     }
 
     @Override
     protected void StartApi() {
 
     }
+
+    @OnClick(R.id.tvRegister)
+    void register(){
+        Intent intent = new Intent(this, WebViewActivity.class);
+        String url = BaseApplication.readBaseInfo().getRegisterUrl();
+        intent.putExtra(Constants.INTENT_URL,  url);
+        ActivityUtils.getInstance().showActivity(this, intent);
+    }
+
     /***
      * 手机登录
      */
@@ -97,13 +117,13 @@ public class PhoneLoginActivity extends BaseActivity {
         String phone = edtPhone.getText().toString().trim();
         String password = edtpwd.getText().toString().trim();
         if(TextUtils.isEmpty( phone )){
-            edtPhone.setError("请输入手机号");
+            edtPhone.setError( "请输入" + getString(R.string.hint_username2));
             ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(edtPhone , 0);
             return;
         }
 
         if(TextUtils.isEmpty(password)){
-            edtpwd.setError("请输入验证码");
+            edtpwd.setError("请输入登录密码");
             ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(edtpwd,0);
             return;
         }
@@ -180,7 +200,7 @@ public class PhoneLoginActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.tv_forgetpsd,R.id.img_forgetpsd})
+    @OnClick({R.id.tv_forgetpsd})
     void onforgetpsd(){
         ActivityUtils.getInstance().showActivity(PhoneLoginActivity.this,ForgetPasswordActivity.class);
     }

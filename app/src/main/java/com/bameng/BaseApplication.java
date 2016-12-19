@@ -21,6 +21,7 @@ import com.bameng.model.BaiduLocation;
 import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseData;
 import com.bameng.model.LocalAddressModel;
+import com.bameng.model.SignOutputModel;
 import com.bameng.model.UserData;
 import com.bameng.model.VersionData;
 import com.bameng.service.BaiduLocationService;
@@ -305,6 +306,29 @@ public class BaseApplication extends Application {
         String json = PreferenceHelper.readString( single , Constants.BASE_INFO , Constants.BASE_DATA , null);
         if(json==null) return null;
         return JSONUtil.getGson().fromJson(json, BaseData.class);
+    }
+
+    public static void writeMessageInfo( int newsCount , boolean hasBusiness){
+        //PreferenceHelper.writeBoolean( single , Constants.MESSAGE_INFO , "hasNews",hasNews);
+        PreferenceHelper.writeInt(single, Constants.MESSAGE_INFO,"NewsCount", newsCount );
+        PreferenceHelper.writeBoolean(single,Constants.MESSAGE_INFO,"hasBusiness",hasBusiness);
+    }
+
+    public static boolean readNewsMessage(){
+        int count = readNewsCount();
+        return count>0;
+    }
+
+    public static boolean readBusinessMessage(){
+        return PreferenceHelper.readBoolean( single , Constants.MESSAGE_INFO , "hasBusiness",false);
+    }
+
+    public static int readNewsCount(){
+        return PreferenceHelper.readInt(single,Constants.MESSAGE_INFO, "NewsCount");
+    }
+
+    public static void writeMessageCount(int count){
+        PreferenceHelper.writeInt( single , Constants.MESSAGE_INFO , "NewsCount" , count );
     }
 
     public static void clearAllCookies(){

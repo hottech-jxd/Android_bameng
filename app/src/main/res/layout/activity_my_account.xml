@@ -26,7 +26,7 @@
     <LinearLayout
         android:padding="5dp"
         android:id="@+id/layMbean"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -61,7 +61,7 @@
     <LinearLayout
         android:padding="5dp"
         android:id="@+id/layjifen"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -96,7 +96,7 @@
     <LinearLayout
         android:padding="5dp"
         android:id="@+id/laydjsmd"
-        android:background="@color/white"
+        android:background="@drawable/item_click_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

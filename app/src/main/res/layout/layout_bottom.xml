@@ -72,6 +72,12 @@
                     android:background="@mipmap/ic_launcher"
                     android:focusable="false"
                     android:scaleType="centerInside"/>
+                <View android:id="@+id/circle_news"
+                      android:layout_alignParentTop="true"
+                      android:layout_alignRight="@+id/newsImg"
+                      android:background="@drawable/circle_white"
+                      android:layout_width="10dp"
+                      android:layout_height="10dp"/>
 
                 <TextView
                     android:id="@+id/newsTxt"
@@ -106,6 +112,12 @@
                     android:background="@mipmap/ic_launcher"
                     android:focusable="false"
                     android:scaleType="centerInside" />
+                <View android:id="@+id/circle_business"
+                      android:layout_alignParentTop="true"
+                      android:layout_alignRight="@+id/businessImg"
+                      android:background="@drawable/circle_white"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"/>
                 <TextView
                     android:id="@+id/businessTxt"
                     android:layout_width="wrap_content"
@@ -118,6 +130,7 @@
                     android:textSize="@dimen/tabhost_text_size" />
             </RelativeLayout>
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/profilePage"
             android:layout_width="0dp"
@@ -151,5 +164,6 @@
                 android:textSize="@dimen/tabhost_text_size" />
             </RelativeLayout>
         </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -83,7 +83,7 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
         b.putInt("type",2);
         customDoneFrag.setArguments(b);
         mFragmentList.add(customDoneFrag);
-        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragmentList);
+        tabPagerAdapter = new TabPagerAdapter( this, getSupportFragmentManager(), mFragmentList);
         customViewPager.setAdapter(tabPagerAdapter);
         customViewPager.setOffscreenPageLimit(2);
 

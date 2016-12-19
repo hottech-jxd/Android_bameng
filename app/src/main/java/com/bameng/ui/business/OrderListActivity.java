@@ -117,7 +117,7 @@ public class OrderListActivity extends BaseActivity implements TabLayout.OnTabSe
         orderFragment4.setArguments(bd);
         mFragmentList.add(orderFragment4);
 
-        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),mFragmentList);
+        tabPagerAdapter = new TabPagerAdapter( this, getSupportFragmentManager(),mFragmentList);
         orderViewPager.setAdapter(tabPagerAdapter);
 
         tabLayout.setupWithViewPager(orderViewPager);

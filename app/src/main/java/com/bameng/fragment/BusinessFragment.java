@@ -12,6 +12,7 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.config.Constants;
+import com.bameng.model.BadgeBusinessEvent;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.MyBusinessOutputModel;
 import com.bameng.model.PostModel;
@@ -55,6 +56,15 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
     TextView txtExchange;
     @BindView(R2.id.txt_cash)
     TextView txtCash;
+    @BindView(R.id.txt_ally)
+    TextView txtAlly;
+    @BindView(R.id.circle_customer)
+    View circle_customer;
+    @BindView(R.id.circle_exchange)
+    View circle_exchange;
+    @BindView(R.id.circle_ally)
+    View circle_ally;
+
     @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     Unbinder unbinder;
@@ -65,7 +75,7 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    public void initView(){//******数据为空
+    public void initView(){
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -99,6 +109,18 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
                     txtCustomer.setText(String.valueOf(response.body().getData().getCustomerAmount()));
                     txtCash.setText(String.valueOf(response.body().getData().getCashCouponAmount()));
                     txtExchange.setText(String.valueOf(response.body().getData().getExchangeAmount()));
+                    txtAlly.setText( String.valueOf(response.body().getData().getAllyApplyAmount()) );
+
+                    circle_customer.setBackgroundResource( response.body().getData().getCustomerAmount()>0? R.drawable.circle_red:R.drawable.circle_white );
+                    circle_exchange.setBackgroundResource(response.body().getData().getExchangeAmount()>0?R.drawable.circle_red :R.drawable.circle_white);
+                    circle_ally.setBackgroundResource(response.body().getData().getAllyApplyAmount()>0?R.drawable.circle_red:R.drawable.circle_white);
+
+                    boolean showCircle= response.body().getData().getCustomerAmount()>0
+                            ||response.body().getData().getExchangeAmount()>0
+                            || response.body().getData().getAllyApplyAmount()>0;
+
+                    EventBus.getDefault().post(new BadgeBusinessEvent( showCircle ));
+
                 } else {
                     ToastUtils.showLongToast(response.body().getStatusText());
                 }
@@ -177,5 +199,14 @@ public class BusinessFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         initView();
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+
+
     }
 }

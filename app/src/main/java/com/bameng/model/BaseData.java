@@ -9,6 +9,7 @@ public class BaseData {
     private String aboutUrl;
     private String agreementUrl;
     private int enableSignIn;
+    private String registerUrl;
 
 
     public int getUserStatus() {
@@ -43,4 +44,11 @@ public class BaseData {
         this.enableSignIn = enableSignIn;
     }
 
+    public String getRegisterUrl() {
+        return registerUrl;
+    }
+
+    public void setRegisterUrl(String registerUrl) {
+        this.registerUrl = registerUrl;
+    }
 }

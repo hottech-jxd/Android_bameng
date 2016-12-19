@@ -26,8 +26,11 @@ import com.baidu.mapapi.search.share.ShareUrlSearch;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
+import com.bameng.biz.UnReadMessageUtil;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
+import com.bameng.model.BadgeEvent;
+import com.bameng.model.BadgeNewEvent;
 import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
@@ -41,6 +44,7 @@ import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.PreferenceHelper;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
@@ -65,6 +69,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.umeng.analytics.a.p;
+import static com.umeng.analytics.social.e.t;
+
 /**
  * 盟友主页
  */
@@ -79,6 +86,9 @@ public class AllyHomeActivity extends BaseShareActivity {
 
     @BindView(R2.id.titleRightImage)
     ImageView titleRightImage;
+
+    @BindView(R.id.titleRightText)
+    TextView titleRightText;
 
     @BindView(R2.id.titleText)
     TextView titleText;
@@ -111,6 +121,10 @@ public class AllyHomeActivity extends BaseShareActivity {
 
     @BindView(R2.id.newsTxt)
     TextView newsTxt;
+
+    @BindView(R.id.circle_news)
+    View circleNews;
+
     public Resources resources;
     public ProgressPopupWindow progress;
 
@@ -173,16 +187,41 @@ public class AllyHomeActivity extends BaseShareActivity {
         //SystemTools.loadBackground(titleLeftImage, leftDraw);
         titleLeftImage.setImageResource(R.mipmap.ic_location);
 
+        titleLeftText.setBackgroundResource(R.drawable.item_click_selector);
+
         //Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
         //SystemTools.loadBackground(titleRightImage,rightDraw);
         titleRightImage.setBackgroundResource(R.drawable.title_left_back);
         titleRightImage.setImageResource(R.mipmap.ic_newadd);
+        int rightPx = DensityUtils.dip2px(this,1);
+        titleRightImage.setPadding( titleRightImage.getPaddingLeft(),titleRightImage.getPaddingTop() , rightPx , titleRightImage.getPaddingBottom() );
+
+        rightPx = DensityUtils.dip2px(this,10);
+        titleRightText.setBackgroundResource(R.drawable.item_click_selector);
+        titleRightText.setPadding(titleRightText.getPaddingLeft(),titleRightText.getPaddingTop(), rightPx , titleRightText.getPaddingBottom());
+        titleRightText.setText("新增");
 
         mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
         initTab();
 
         requestBaiduLocation();
+
+        periodGetUnReadMsg();
     }
+
+    void periodGetUnReadMsg(){
+        mHandler.postDelayed( runnable,1000);
+    }
+
+    Runnable runnable=new Runnable() {
+        @Override
+        public void run() {
+            boolean hasNews = BaseApplication.readNewsMessage();
+            circleNews.setBackgroundResource( hasNews ?R.drawable.circle_red:R.drawable.circle_white);
+            UnReadMessageUtil.getUnReadMessage();
+            mHandler.postDelayed(runnable , 30000);
+        }
+    };
 
     void requestBaiduLocation() {
         AllyHomeActivityPermissionsDispatcher.baiduLocationWithCheck(this);
@@ -292,9 +331,8 @@ public class AllyHomeActivity extends BaseShareActivity {
         richesTxt.setTextColor(resources.getColor(R.color.text_color_black));
     }
 
-    @OnClick(R.id.titleRightImage)
+    @OnClick({R.id.titleRightImage,R.id.titleRightText})
     void onRightClick() {
-        //if( currentTab.equals("业务客户")) {
         if (currentTab.equals(Constants.TAG_1)) {
             ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, SubmitCustomerInfoActivity.class);
         } else if (currentTab.equals(Constants.TAG_2)) {
@@ -311,6 +349,7 @@ public class AllyHomeActivity extends BaseShareActivity {
                 titleLeftImage.setVisibility(View.VISIBLE);
                 titleLeftText.setVisibility(View.VISIBLE);
                 titleRightImage.setVisibility(View.VISIBLE);
+                titleRightText.setVisibility(View.VISIBLE);
                 if (progress != null) progress.dismissView();
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
@@ -358,6 +397,7 @@ public class AllyHomeActivity extends BaseShareActivity {
                 titleLeftImage.setVisibility(View.GONE);
                 titleLeftText.setVisibility(View.GONE);
                 titleRightImage.setVisibility(View.GONE);
+                titleRightText.setVisibility(View.GONE);
                 if (progress != null) progress.dismissView();
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
@@ -410,6 +450,7 @@ public class AllyHomeActivity extends BaseShareActivity {
     public void onEventRightButtomVisible(SetRightVisibleEvent event){
         if( currentTab.equals( event.getTabName() )) {
             titleRightImage.setVisibility(event.isShow() ? View.VISIBLE : View.GONE);
+            titleRightText.setVisibility(event.isShow()?View.VISIBLE:View.GONE);
         }
     }
 
@@ -442,6 +483,7 @@ public class AllyHomeActivity extends BaseShareActivity {
         map.put("os", "android");
         map.put("mylocation", event.getModel().getCity() );
         map.put("lnglat", lnglat );
+        map.put("addr", event.getModel().getAddress() );
         String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         application.baiduLocationService.stop();
@@ -473,4 +515,15 @@ public class AllyHomeActivity extends BaseShareActivity {
             }
         });
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBadge(BadgeEvent event){
+        circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBadge(BadgeNewEvent event){
+        circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
+    }
+
 }

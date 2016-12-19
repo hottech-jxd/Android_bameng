@@ -15,10 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1px"-->
-        <!--android:background="@color/line_gray"/>-->
     <LinearLayout
         android:id="@+id/layOrder"
         android:layout_width="match_parent"
@@ -33,7 +29,7 @@
         android:paddingLeft="10dp">
 
         <TextView
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -69,6 +65,12 @@
         android:paddingRight="10dp"
         android:paddingLeft="10dp">
 
+        <View
+            android:id="@+id/circle_customer"
+            android:background="@drawable/circle_red"
+            android:layout_width="8dp"
+            android:layout_height="8dp" />
+
         <TextView
             android:layout_marginLeft="10dp"
             android:layout_width="0dp"
@@ -88,6 +90,8 @@
             android:layout_height="@dimen/arrow_height"
             android:layout_marginLeft="10dp"
             android:background="@mipmap/icon_go" />
+
+
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -105,6 +109,12 @@
         android:paddingBottom="15dp"
         android:paddingRight="10dp"
         android:paddingLeft="10dp">
+
+        <View
+            android:id="@+id/circle_exchange"
+            android:background="@drawable/circle_white"
+            android:layout_width="8dp"
+            android:layout_height="8dp" />
 
         <TextView
             android:layout_marginLeft="10dp"
@@ -144,7 +154,7 @@
         android:paddingLeft="10dp">
 
         <TextView
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -173,12 +183,25 @@
         android:paddingRight="10dp"
         android:paddingLeft="10dp">
 
+        <View
+            android:id="@+id/circle_ally"
+            android:background="@drawable/circle_white"
+            android:layout_width="8dp"
+            android:layout_height="8dp" />
+
         <TextView
             android:layout_marginLeft="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="我的联盟" />
+
+
+        <TextView
+            android:id="@+id/txt_ally"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
 
 
 
@@ -207,7 +230,7 @@
         android:paddingLeft="10dp">
 
         <TextView
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="18dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

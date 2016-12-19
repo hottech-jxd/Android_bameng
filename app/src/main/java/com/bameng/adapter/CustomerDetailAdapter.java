@@ -32,7 +32,11 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
         baseViewHolder.setText(R.id.moblie , customerModel.getMobile());
         if (customerModel.getStatus()==1) {
             baseViewHolder.setVisible(R.id.status,true);
-            baseViewHolder.setText(status,"已同意");
+            if(customerModel.getInShop()==1){
+                baseViewHolder.setText(status, "已进店");
+            }else {
+                baseViewHolder.setText(status, "已同意");
+            }
             baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext , R.color.green ) );
             baseViewHolder.setVisible(R.id.lay_btn ,false );
         }else if (customerModel.getStatus()==2){
@@ -44,7 +48,7 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
             baseViewHolder.setVisible(R.id.status,false);
             baseViewHolder.setText(status , "未审核");
             baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext  , R.color.red ));
-            baseViewHolder.setVisible(R.id.lay_btn , true);
+            baseViewHolder.setVisible(R.id.lay_btn , false);
         }
 
         baseViewHolder.setVisible(R.id.progressBar , customerModel.isDoing()? true :false );

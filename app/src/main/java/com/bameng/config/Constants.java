@@ -194,4 +194,6 @@ public class Constants {
 	public static final  int SHOP_HEAD = 1;
 
 	public static String SERVER_ERROR="服务器开小差了";
+
+	public static String MESSAGE_INFO="message_info";
 }

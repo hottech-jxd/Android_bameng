@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
+import com.bameng.model.CustomerModel;
 import com.bameng.model.PostModel;
 import com.bameng.model.RefreshOrderEvent;
 import com.bameng.service.ApiService;
@@ -93,8 +94,8 @@ public class NewOrderActivity extends PhoteActivity
     FrameLayout layImage;
 
     private PhotoSelectView pop;
-    private String imgPath;
-    public Resources resources;
+//    private String imgPath;
+    //public Resources resources;
     private Bitmap cropBitmap;
     private Bitmap currentBitmap;
     boolean hasImage=false;
@@ -118,6 +119,16 @@ public class NewOrderActivity extends PhoteActivity
 
         layAddImage.setVisibility(View.VISIBLE);
         layImage.setVisibility(View.GONE);
+
+        CustomerModel customerModel;
+        if(getIntent().hasExtra("customer")){
+            customerModel = (CustomerModel) getIntent().getSerializableExtra("customer");
+            if(customerModel!=null){
+                etName.setText( customerModel.getName() );
+                etPhone.setText(customerModel.getMobile());
+                etAddress.setText(customerModel.getAddr());
+            }
+        }
     }
 
     @Override

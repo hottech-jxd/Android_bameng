@@ -88,7 +88,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         android:text="兑换说明:"/>
     <TextView
         android:layout_width="wrap_content"
@@ -109,5 +111,6 @@
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/item_click_selector"
         android:text="兑换记录"/>
     </LinearLayout>

@@ -35,13 +35,19 @@ import com.baidu.mapapi.search.share.ShareUrlSearch;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
+import com.bameng.biz.UnReadMessageUtil;
 import com.bameng.config.Constants;
 import com.bameng.fragment.FragManager;
 import com.bameng.fragment.HomeFragment;
+import com.bameng.model.BadgeBusinessEvent;
+import com.bameng.model.BadgeEvent;
+import com.bameng.model.BadgeNewEvent;
 import com.bameng.model.BaiduLocationEvent;
 import com.bameng.model.BaseModel;
+import com.bameng.model.BeanFlowOutputModel;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.PostModel;
+import com.bameng.model.RemindOutputModel;
 import com.bameng.model.SetRightVisibleEvent;
 import com.bameng.model.ShareModel;
 import com.bameng.model.SlideListOutputModel;
@@ -150,6 +156,12 @@ public class HomeActivity extends BaseShareActivity {
     @BindView(R2.id.homeBottom)
     LinearLayout homeBottom;
 
+    @BindView(R.id.circle_news)
+    View circleNews;
+
+    @BindView(R.id.circle_business)
+    View circleBusiness;
+
     Resources resources;
 
     ProgressPopupWindow progress;
@@ -178,7 +190,6 @@ public class HomeActivity extends BaseShareActivity {
         //super.onSaveInstanceState(outState);
         outState.putString("curfrag", currentTab);
     }
-
 
     @OnClick({R.id.titleLeftText})
     void shareLocation(View view){
@@ -230,6 +241,8 @@ public class HomeActivity extends BaseShareActivity {
         BaseApplication.clearAll();
 
         FragManager.clear();
+
+        mHandler.removeCallbacks(runnable);
     }
 
     @Override
@@ -255,6 +268,8 @@ public class HomeActivity extends BaseShareActivity {
         initTab();
 
         requestBaiduLocation();
+
+        periodGetUnReadMsg();
     }
 
     void requestBaiduLocation(){
@@ -531,7 +546,6 @@ public class HomeActivity extends BaseShareActivity {
         return false;
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN )
     public void onEventBaiduLocation(BaiduLocationEvent event) {
         titleLeftText.setText("");
@@ -560,6 +574,7 @@ public class HomeActivity extends BaseShareActivity {
         map.put("os", "android");
         map.put("mylocation", event.getModel().getCity() );
         map.put("lnglat", lnglat );
+        map.put("addr",event.getModel().getAddress());
         String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
 
@@ -623,4 +638,46 @@ public class HomeActivity extends BaseShareActivity {
             titleRightImage.setVisibility(event.isShow() ? View.VISIBLE : View.GONE);
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBadge(BadgeEvent event){
+        circleBusiness.setBackgroundResource(  event.isShowBusiness() ? R.drawable.circle_red:R.drawable.circle_white);
+        circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBadge(BadgeNewEvent event){
+         circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventBadge(BadgeBusinessEvent event){
+        circleBusiness.setBackgroundResource(event.isShowBusiness()?R.drawable.circle_red:R.drawable.circle_white);
+    }
+
+    Runnable runnable=new Runnable() {
+        @Override
+        public void run() {
+            boolean hasNews = BaseApplication.readNewsMessage();
+            boolean hasBusiness = BaseApplication.readBusinessMessage();
+            circleBusiness.setBackgroundResource(  hasBusiness ? R.drawable.circle_red:R.drawable.circle_white);
+            circleNews.setBackgroundResource( hasNews ?R.drawable.circle_red:R.drawable.circle_white);
+
+
+            UnReadMessageUtil.getUnReadMessage();
+            mHandler.postDelayed(runnable , 30000);
+        }
+    };
+
+    /***
+     * 定期检测是否有未读消息或未处理业务
+     */
+    void periodGetUnReadMsg(){
+//        boolean hasNews = BaseApplication.readNewsMessage();
+//        boolean hasBusiness = BaseApplication.readBusinessMessage();
+//        circleBusiness.setBackgroundResource(  hasBusiness ? R.drawable.circle_red:R.drawable.circle_white);
+//        circleNews.setBackgroundResource( hasNews ?R.drawable.circle_red:R.drawable.circle_white);
+
+        mHandler.postDelayed( runnable,1000);
+    }
+
 }

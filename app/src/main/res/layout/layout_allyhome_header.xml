@@ -28,6 +28,8 @@
                 android:textColor="#c3b6a5"/>
             <TextView
                 android:layout_marginTop="5dp"
+                android:maxLines="1"
+                android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="通过信息"/>
@@ -50,6 +52,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="12sp"
                 android:text="信息排名"/>
         </LinearLayout>
         <LinearLayout
@@ -70,6 +74,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="12sp"
                 android:text="盟友"/>
         </LinearLayout>
         <LinearLayout
@@ -90,6 +96,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="12sp"
                 android:text="订单排名"/>
         </LinearLayout>
         <LinearLayout
@@ -110,6 +118,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="12sp"
                 android:text="成交订单"/>
         </LinearLayout>
     </LinearLayout>

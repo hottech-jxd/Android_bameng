@@ -3,6 +3,7 @@ package com.bameng.model;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Created by Administrator on 2016/11/18.
@@ -22,6 +23,14 @@ public class OrderModel  implements Serializable{
     private String remark;
     private String successUrl;
     private int mengbeans;
+    /***
+     * 订单金额
+     */
+    private BigDecimal fianlamount;
+    /***
+     * 现金券金额
+     */
+    private BigDecimal cashcouponmoney;
 
     public long getID() {
         return ID;
@@ -125,5 +134,21 @@ public class OrderModel  implements Serializable{
 
     public void setMengbeans(int mengbeans) {
         this.mengbeans = mengbeans;
+    }
+
+    public BigDecimal getFianlamount() {
+        return fianlamount;
+    }
+
+    public void setFianlamount(BigDecimal fianlamount) {
+        this.fianlamount = fianlamount;
+    }
+
+    public BigDecimal getCashcouponmoney() {
+        return cashcouponmoney;
+    }
+
+    public void setCashcouponmoney(BigDecimal cashcouponmoney) {
+        this.cashcouponmoney = cashcouponmoney;
     }
 }

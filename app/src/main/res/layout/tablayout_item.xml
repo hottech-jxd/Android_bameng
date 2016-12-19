@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+              android:padding="5dp"
+              android:gravity="center"
+                  android:orientation="horizontal">
+        <!-- LinearLayout的Height必须为wrap_content,如果为match_parent,那么在第二次加载Badge的时候,Tab布局会出现问题 -->
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"/>
+
+        <View
+            android:id="@+id/badgeview"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/circle_white"
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="top|left"/>
+</LinearLayout>

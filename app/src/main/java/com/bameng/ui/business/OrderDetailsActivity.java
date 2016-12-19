@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
@@ -38,6 +39,7 @@ import com.bameng.utils.FileUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.utils.Util;
+import com.bameng.widgets.PhoteZoomView;
 import com.bameng.widgets.UserInfoView;
 import com.bameng.widgets.custom.FrescoControllerListener;
 import com.bameng.widgets.custom.FrescoDraweeController;
@@ -46,17 +48,21 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.relex.photodraweeview.PhotoDraweeView;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.bameng.config.Constants.url;
 
 
 /***
@@ -89,6 +95,15 @@ public class OrderDetailsActivity extends BaseActivity
     Button btnSave;
     @BindView(R2.id.btnUpload)
     Button btnUpload;
+    @BindView(R.id.line_coupon)
+    View lineCoupon;
+    @BindView(R.id.layCoupon)
+    LinearLayout layCoupon;
+    @BindView(R.id.tvCouponMoney)
+    TextView tvCouponMoney;
+    @BindView(R.id.tvOrderMoney)
+    TextView tvOrderMoney;
+
     ProgressDialog progressDialog;
     UserInfoView userInfoView;
 
@@ -97,6 +112,8 @@ public class OrderDetailsActivity extends BaseActivity
     //Bitmap bitmap;
     final  int REQUEST_CODE_UPLOAD=100;
     String bitmapPath;
+
+    PhoteZoomView photeZoomView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +133,8 @@ public class OrderDetailsActivity extends BaseActivity
         //SystemTools.loadBackground(titleLeftImage, leftDraw);
         titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
         titleLeftImage.setImageResource(R.mipmap.ic_back);
+
+
     }
 
     @Override
@@ -172,6 +191,17 @@ public class OrderDetailsActivity extends BaseActivity
                 tvRemark.setText(orderModel.getRemark());
                 tvOrderStatus.setText( orderModel.getStatus() == Constants.ORDER_DEAL ? getString(R.string.deal) : orderModel.getStatus() ==Constants.ORDER_BACK ? getString(R.string.backorder ) : getString(R.string.noDeal));
 
+                BigDecimal zero = new BigDecimal(0);
+                if(orderModel.getCashcouponmoney().compareTo(zero)>0){
+                    lineCoupon.setVisibility(View.VISIBLE);
+                    layCoupon.setVisibility(View.VISIBLE);
+                    tvCouponMoney.setText( String.valueOf( orderModel.getCashcouponmoney() ) );
+                }else{
+                    lineCoupon.setVisibility(View.GONE);
+                    layCoupon.setVisibility(View.GONE);
+                }
+                tvOrderMoney.setText( String.valueOf(orderModel.getFianlamount()) );
+
 //                tvOrderStatus.setEnabled( orderModel.getStatus() == Constants.ORDER_NODEAL  );
 //                btnSave.setVisibility(View.GONE);
 //                btnUpload.setVisibility(View.GONE);
@@ -205,8 +235,12 @@ public class OrderDetailsActivity extends BaseActivity
             int swid = DensityUtils.dip2px(OrderDetailsActivity.this, 20);
             if( orderModel.getStatus() == Constants.ORDER_DEAL){
                 FrescoDraweeController.loadImage( ivPicture , wpx - swid , orderModel.getSuccessUrl() , 0 , OrderDetailsActivity.this );
+                //ivPicture.setPhotoUri( Uri.parse( orderModel.getSuccessUrl() ) );
+                ivPicture.setTag( orderModel.getSuccessUrl() );
             }else {
                 FrescoDraweeController.loadImage(ivPicture, wpx - swid , orderModel.getPictureUrl(), 0 , OrderDetailsActivity.this);
+                //ivPicture.setPhotoUri(Uri.parse( orderModel.getPictureUrl() ));
+                ivPicture.setTag( orderModel.getPictureUrl() );
             }
         }else {
             tvOrderStatus.setEnabled(false);
@@ -220,7 +254,7 @@ public class OrderDetailsActivity extends BaseActivity
         return false;
     }
 
-    @OnClick({R.id.tvOrderStatus,R.id.btnUpload,R.id.btnSave})
+    @OnClick({R.id.tvOrderStatus,R.id.btnUpload,R.id.btnSave,R.id.ivPicture})
     void onClick(View view ){
         if( view.getId() == R.id.tvOrderStatus){
             setOrderStatus();
@@ -239,11 +273,17 @@ public class OrderDetailsActivity extends BaseActivity
                 }
                 uploadData();
             }
+        }else if(view.getId()==R.id.ivPicture){
+            Object obj = ivPicture.getTag();
+            if(obj==null || obj.toString().isEmpty() ) return;
+            if(photeZoomView==null){
+                photeZoomView=new PhoteZoomView(this);
+            }
+            photeZoomView.show(  obj.toString() );
         }
     }
 
     void save(){
-
         String statusstr = tvOrderStatus.getText().toString();
         int status=0;
         if(statusstr.equals(getString(R.string.deal))){
@@ -253,7 +293,6 @@ public class OrderDetailsActivity extends BaseActivity
         }else if(statusstr.equals(getString(R.string.backorder))){
             status=2;
         }
-
 
         if(progressDialog==null){
             progressDialog = new ProgressDialog(this);
@@ -269,8 +308,7 @@ public class OrderDetailsActivity extends BaseActivity
         map.put("orderId", orderId);
         map.put("status", String.valueOf(status));
 
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign",sign);
         String token = BaseApplication.readToken();
         ApiService apiService = ZRetrofitUtil.getApiService();
@@ -465,14 +503,15 @@ public class OrderDetailsActivity extends BaseActivity
             tvRemark.setText( temp.getRemark() );
             orderModel.setMoney(temp.getMoney());
 
-            //bitmap = data.getParcelableExtra("bitmap");
+            tvOrderMoney.setText( temp.getMoney() );
 
             bitmapPath = data.getStringExtra("bitmapPath");
 
-            //bitmap = Util.readBitmapByPath(bitmapPath);
+            String imagePath = "file://"+ bitmapPath;
 
-//            ivPicture.setImageBitmap(bitmap);
-            ivPicture.setImageURI("file://"+ bitmapPath );
+            ivPicture.setImageURI( imagePath );
+
+            ivPicture.setTag(  imagePath );
 
         }
     }

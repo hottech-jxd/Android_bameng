@@ -1,6 +1,7 @@
 package com.bameng.ui.business;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
@@ -47,6 +48,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/***
+ * 订单审核
+ */
 public class CustomerExamineActivity extends BaseActivity implements UserInfoView.OnUserInfoBackListener  {
 
     @BindView(R2.id.titleLeftImage)
@@ -66,6 +70,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
     @BindView(R2.id.tvReject) TextView reject;
     @BindView(R2.id.btnSubmit) Button btnSubmit;
     @BindView(R2.id.belongone) TextView belongone;
+    @BindView(R.id.btnNewOrder) Button btnNewOrder;
 
     UserInfoView popWind;
     Bundle bundle;
@@ -101,37 +106,34 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
             laybtn.setVisibility(View.VISIBLE);
             layShopStatus.setVisibility(View.GONE);
             btnSubmit.setVisibility(View.GONE);
+            btnNewOrder.setVisibility(View.GONE);
             status.setText("未审核");
         }else if (customerModel.getStatus()==1){
             laybtn.setVisibility(View.GONE);
             layShopStatus.setVisibility(View.VISIBLE);
-
-
-            btnSubmit.setVisibility(View.GONE);
             if(customerModel.getInShop() == 1){
                 btnSubmit.setVisibility(View.GONE);
+                btnNewOrder.setVisibility(View.VISIBLE);
                 layShopStatus.setEnabled(false);
             }else{
                 layShopStatus.setEnabled(true);
-                //btnSubmit.setVisibility(View.VISIBLE);
+                btnSubmit.setVisibility(View.GONE);
             }
-
             status.setText("已同意");
         }else {
             laybtn.setVisibility(View.GONE);
             layShopStatus.setVisibility(View.GONE);
             btnSubmit.setVisibility(View.GONE);
+            btnNewOrder.setVisibility(View.GONE);
             status.setText("已拒绝");
         }
         remark.setText(TextUtils.isEmpty(customerModel.getRemark())? "无":customerModel.getRemark() );
-
         popWind = new UserInfoView(this);
         popWind.setOnUserInfoBackListener(this);
     }
 
     @Override
     protected void StartApi() {
-
     }
 
     @Override
@@ -139,7 +141,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         return false;
     }
 
-    @OnClick({R.id.llShopStatus, R.id.tvAgree , R.id.tvReject ,R.id.btnSubmit })
+    @OnClick({R.id.llShopStatus, R.id.tvAgree , R.id.tvReject ,R.id.btnSubmit,R.id.btnNewOrder })
     public void OnClick(View view){
         if(view.getId() == R.id.llShopStatus){
             popWind.show(UserInfoView.Type.ShopStatus , shopStatus.getText().toString() );
@@ -151,6 +153,10 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         }else if( view.getId() == R.id.btnSubmit){
             int status = shopStatus.getText().toString().equals("未进店")? 0:1;
             updateShop(customerModel, status);
+        }else if(view.getId() == R.id.btnNewOrder){
+            Intent intent=new Intent(CustomerExamineActivity.this, NewOrderActivity.class);
+            intent.putExtra("customer", customerModel );
+            ActivityUtils.getInstance().skipActivity(this, intent);
         }
     }
 

@@ -42,6 +42,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +64,8 @@ public class UserFragment extends BaseFragment
     SimpleDraweeView img_user;
     @BindView(R2.id.txt_name)
     TextView txtName;
+    @BindView(R.id.txt_belongone)
+    TextView txtBelongOne;
     @BindView(R2.id.txt_Points)
     TextView txtPoints;
     @BindView(R2.id.img_setting)
@@ -106,6 +109,10 @@ public class UserFragment extends BaseFragment
         if(userData!=null) {
             img_user.setImageURI(userData.getUserHeadImg());
             txtName.setText(userData.getNickName());
+            if( !userData.getBelongOneUserName().isEmpty()) {
+                txtBelongOne.setText("盟主:"+userData.getBelongOneUserName());
+                txtBelongOne.setVisibility(View.VISIBLE);
+            }
             txtPoints.setText(userData.getLevelName());
             txtMbean.setText(String.valueOf(userData.getMengBeans()));
             txtNosettlembean.setText(String.valueOf(userData.getTempMengBeans()));
@@ -164,8 +171,7 @@ public class UserFragment extends BaseFragment
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -305,8 +311,7 @@ public class UserFragment extends BaseFragment
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();

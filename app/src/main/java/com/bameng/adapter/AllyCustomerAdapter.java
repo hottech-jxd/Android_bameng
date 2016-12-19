@@ -1,5 +1,7 @@
 package com.bameng.adapter;
 
+import android.support.v4.content.ContextCompat;
+
 import com.bameng.R;
 import com.bameng.model.CustomerModel;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -16,14 +18,18 @@ public class AllyCustomerAdapter extends CustomerDetailAdapter {
         baseViewHolder.setText(R.id.moblie , customerModel.getMobile());
         baseViewHolder.setVisible(R.id.lay_btn ,false );
         if (customerModel.getStatus()==1) {
-            baseViewHolder.setText(R.id.status,"已同意");
-
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor( mContext , R.color.green ));
+            if(customerModel.getInShop()==1){
+                baseViewHolder.setText(R.id.status, "已进店");
+            }else {
+                baseViewHolder.setText(R.id.status, "已同意");
+            }
         }else if (customerModel.getStatus()==2){
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor( mContext , R.color.red ));
             baseViewHolder.setText(R.id.status , "已拒绝");
-
         }else {
+            baseViewHolder.setTextColor(R.id.status,ContextCompat.getColor(mContext,R.color.black));
             baseViewHolder.setText(R.id.status , "未审核");
-
         }
 
         //baseViewHolder.addOnClickListener(R.id.llItem);

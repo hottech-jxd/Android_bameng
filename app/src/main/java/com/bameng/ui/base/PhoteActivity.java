@@ -126,7 +126,7 @@ public abstract class PhoteActivity extends TakePhotoActivity {
         //if(rgCropSize.getCheckedRadioButtonId()==R.id.rbAspect){
         //    builder.setAspectX(cropWidth).setAspectY(cropHeight);
         //}else {
-            builder.setOutputX(cropHeight).setOutputY(cropHeight);
+            builder.setOutputX(cropWidth).setOutputY(cropHeight);
         //}
         builder.setWithOwnCrop(withWonCrop);
         return builder.create();

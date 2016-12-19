@@ -22,6 +22,11 @@ public class MyBusinessModel {
      */
     private int cashCouponAmount;
 
+    /**
+     * 盟友审核数量
+     */
+    private int 	allyApplyAmount;
+
     public int getOrderAmount() {
         return orderAmount;
     }
@@ -52,5 +57,13 @@ public class MyBusinessModel {
 
     public void setCashCouponAmount(int cashCouponAmount) {
         this.cashCouponAmount = cashCouponAmount;
+    }
+
+    public int getAllyApplyAmount() {
+        return allyApplyAmount;
+    }
+
+    public void setAllyApplyAmount(int allyApplyAmount) {
+        this.allyApplyAmount = allyApplyAmount;
     }
 }

@@ -57,7 +57,7 @@ import retrofit2.Response;
 public class StoreFrag extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener , BaseQuickAdapter.RequestLoadMoreListener {
     int pageIndex=1;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+    OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R2.id.recycleView)
@@ -77,6 +77,8 @@ public class StoreFrag extends BaseFragment
 
             ListModel model = (ListModel) baseQuickAdapter.getItem(position);
 
+            setBadge(model);
+
             model.setIsRead(1);
             baseQuickAdapter.notifyItemChanged(position);
 
@@ -91,6 +93,12 @@ public class StoreFrag extends BaseFragment
         baseAdapter = new StoreAdapter( layoutId );
     }
 
+    /***
+     *  处理未读消息的红点显示
+     */
+    protected void setBadge(ListModel model){
+
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -181,12 +189,10 @@ public class StoreFrag extends BaseFragment
                         if (response.body().getData().getList() != null && response.body().getData().getList().getRows() != null) {
                             Articles.addAll(response.body().getData().getList().getRows());
                         }
-
-                        //TopArticles.clear();
-                        //Articles.addAll(response.body().getData().getList().getRows());
-                        //TopArticles.addAll(response.body().getData().getTop());
                         baseAdapter.setNewData(Articles);
-                        //storeAdapter.notifyDataSetChanged();
+
+                        updateBadge();
+
                     } else if (operateType == OperateTypeEnum.LOADMORE) {
 
                         if (response.body().getData().getList().getRows().size() < 1) {
@@ -204,6 +210,8 @@ public class StoreFrag extends BaseFragment
                             //Articles.addAll( response.body().getData().getList().getRows() );
                             baseAdapter.addData(response.body().getData().getList().getRows());
                             pageIndex = pageIndex + 1;
+
+                            updateBadge();
                         }
 
                     }
@@ -268,4 +276,9 @@ public class StoreFrag extends BaseFragment
     public String getPageTitle() {
         return "总店资讯";
     }
+
+    protected void updateBadge(){
+
+    }
+
 }

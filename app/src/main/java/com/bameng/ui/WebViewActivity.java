@@ -496,7 +496,6 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
         });
     }
 
-
 }
 
 

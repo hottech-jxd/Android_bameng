@@ -135,6 +135,7 @@ public class RwordActivity extends BaseActivity {
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200 ) {
                         ToastUtils.showLongToast(response.body().getStatusText());
+                        RwordActivity.this.finish();
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
                     }

@@ -11,6 +11,7 @@ public class UserData  implements Serializable {
 
 
         String BelongOne;
+    String BelongOneUserName;
         int UserId;
         int UserIdentity;
         String MerchantID;
@@ -301,5 +302,13 @@ public class UserData  implements Serializable {
 
     public void setShopType(int shopType) {
         ShopType = shopType;
+    }
+
+    public String getBelongOneUserName() {
+        return BelongOneUserName;
+    }
+
+    public void setBelongOneUserName(String belongOneUserName) {
+        BelongOneUserName = belongOneUserName;
     }
 }
