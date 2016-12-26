@@ -36,6 +36,7 @@ import com.bameng.ui.business.OrderListActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.PreferenceHelper;
 import com.bameng.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -311,6 +312,9 @@ public class UserFragment extends BaseFragment
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
+        String address = PreferenceHelper.readString( BaseApplication.single ,Constants.LOCATION_INFO, Constants.ADDRESS,"");
+        map.put("addr",  address );
+
         String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
