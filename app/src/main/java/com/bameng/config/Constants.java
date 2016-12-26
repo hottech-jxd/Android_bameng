@@ -48,7 +48,6 @@ public class Constants {
 	//test url
 	public final static String url= "http://bmapi.51flashmall.com";
 
-
 	//dev url
 	//public final static String url= "http://bmapi.fancat.cn";
 	//test miyao

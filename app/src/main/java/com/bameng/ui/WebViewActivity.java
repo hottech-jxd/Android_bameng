@@ -2,11 +2,13 @@ package com.bameng.ui;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
@@ -188,7 +190,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
         String filename = DateUtils.formatDate( System.currentTimeMillis(),"yyyyMMddHHmmss") +".png";
         String dir = getString(R.string.app_name);
         String relative = dir + File.separator + filename ;
-        String path = Environment.getExternalStorageDirectory() + File.separator + relative;
+        String path = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_DCIM) + File.separator + relative;
         File file;
         FileOutputStream fileOutputStream=null;
         try {
@@ -200,7 +202,8 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
             fileOutputStream = new FileOutputStream(path);
             boolean isSave =  bmp.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream );
             if(isSave){
-                ToastUtils.showLongToast("本分享页面已经保存在"+ relative );
+                ToastUtils.showLongToast("本分享页面已经保存在 "+ relative );
+                sendBroadcast( new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_DCIM ))));
                 isCapture=true;
             }
         }catch (Exception ex){
