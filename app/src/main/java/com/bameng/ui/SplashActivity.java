@@ -66,32 +66,36 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
         String version = BaseApplication.getAppVersion();
         tvVersion.setText(app + version);
 
-        AlphaAnimation anima = new AlphaAnimation(0.0f, 1.0f);
-        anima.setDuration(1000);// 设置动画显示时间
-        splashL.setAnimation(anima);
-        anima.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+        initWork();
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
+//        AlphaAnimation anima = new AlphaAnimation(0.0f, 1.0f);
+//        anima.setDuration(1000);// 设置动画显示时间
+//        splashL.setAnimation(anima);
+//        anima.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//            }
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                startApi();
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//            }
+//        });
+    }
 
-                BaseApplication.single.loadAddress();
-                //检测网络
-                isConnection = BaseApplication.checkNet(SplashActivity.this);
-                if (!isConnection) {
-                    //无网络日志
-                    ToastUtils.showLongToast("无网络，请打开网络。");
-                } else {
-                    StartApi();
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+    private void initWork(){
+        BaseApplication.single.loadAddress();
+        //检测网络
+        isConnection = BaseApplication.checkNet(SplashActivity.this);
+        if (!isConnection) {
+            //无网络日志
+            ToastUtils.showLongToast("无网络，请打开网络。");
+        } else {
+            StartApi();
+        }
     }
 
     @OnClick(R.id.tvClick)
