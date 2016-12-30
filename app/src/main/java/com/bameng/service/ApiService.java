@@ -1,6 +1,8 @@
 package com.bameng.service;
 
 
+import android.app.Notification;
+
 import com.bameng.model.AllySummeryOutputModel;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.AvatarOutputModel;
@@ -11,12 +13,15 @@ import com.bameng.model.ConvertBeanTotalOutputModel;
 import com.bameng.model.ConvertFlowModel;
 import com.bameng.model.ConvertFlowOutputModel;
 import com.bameng.model.CustomListOutput;
+import com.bameng.model.CustomerResourceModel;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.InitOutputsModel;
 import com.bameng.model.MengModel;
 import com.bameng.model.MengOutputModel;
+import com.bameng.model.MessageOutputModel;
 import com.bameng.model.MyBusinessOutputModel;
 import com.bameng.model.MyOutputModel;
+import com.bameng.model.MyPageModel;
 import com.bameng.model.OrderDetailOutputModel;
 import com.bameng.model.OrderOutputModel;
 import com.bameng.model.PostModel;
@@ -26,6 +31,7 @@ import com.bameng.model.SignOutputModel;
 import com.bameng.model.SlideListOutputModel;
 import com.bameng.model.UserData;
 import com.bameng.model.UserOutputsModel;
+import com.bameng.model.WorkReportModel;
 
 
 import java.util.Map;
@@ -55,12 +61,40 @@ public interface ApiService {
     Call<PostModel> create(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
+    @POST("/customer/addInfo")
+    Call<PostModel> addInfo(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+
+    @Multipart
+    @POST("/customer/addImgInfo")
+    Call<PostModel> addImgInfo(@Header("Authorization") String token, @PartMap Map<String, RequestBody> params);
+
+    @FormUrlEncoded
     @POST("/customer/audit")
     Call<PostModel> audit(@Header("Authorization") String token , @FieldMap Map<String,String> params);
 
     @FormUrlEncoded
     @POST("/customer/UpdateInShop")
     Call<PostModel> UpdateInShop(@Header("Authorization") String token , @FieldMap Map<String ,String> params );
+
+    /***
+     * 客户资源 列表
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/customer/reslist")
+    Call<MyOutputModel<CustomerResourceModel>> reslist(@Header("Authorization") String token , @FieldMap Map<String ,String> params );
+
+    /***
+     * 获得工作汇报列表
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/user/reportlist")
+    Call<MyOutputModel<WorkReportModel>> reportlist(@Header("Authorization") String token , @FieldMap Map<String ,String> params);
 
     @FormUrlEncoded
     @POST("/user/setallyRaward")
@@ -76,6 +110,16 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/article/list")
     Call<ArticleListOutput> list(@Header("Authorization") String token, @FieldMap Map<String, String> params);
+
+    /***
+     *
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/article/maillist")
+    Call<MessageOutputModel> maillist(@Header("Authorization") String token , @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("/article/create")

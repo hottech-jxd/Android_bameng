@@ -1,5 +1,6 @@
 package com.bameng.adapter;
 
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.os.TraceCompat;
 import android.view.View;
@@ -10,6 +11,7 @@ import com.bameng.model.ScoreModel;
 import com.bameng.utils.DateUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import static com.bameng.R.id.status;
 
@@ -28,8 +30,16 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, CustomerModel customerModel ) {
-        baseViewHolder.setText( R.id.name, customerModel.getName());
-        baseViewHolder.setText(R.id.moblie , customerModel.getMobile());
+        if(customerModel.getIsSave()==0) {
+            baseViewHolder.setText(R.id.name, customerModel.getName());
+            baseViewHolder.setText(R.id.moblie, customerModel.getMobile());
+        }else{
+            baseViewHolder.setText(R.id.name, "提交人:"+ customerModel.getBelongOneName() );
+            baseViewHolder.setText(R.id.moblie,"提交信息:照片");
+            SimpleDraweeView iv = baseViewHolder.getView(R.id.img);
+            iv.setImageURI(Uri.parse( customerModel.getDataImg() ));
+        }
+
         if (customerModel.getStatus()==1) {
             baseViewHolder.setVisible(R.id.status,true);
             if(customerModel.getInShop()==1){
@@ -56,9 +66,6 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
         baseViewHolder.setVisible( R.id.btnReject , customerModel.isDoing()? false:true);
         baseViewHolder.addOnClickListener(R.id.btnAgree);
         baseViewHolder.addOnClickListener(R.id.btnReject);
-        //baseViewHolder.addOnClickListener(R.id.img);
-        //baseViewHolder.addOnClickListener(status );
-        //baseViewHolder.addOnClickListener(R.id.name);
-        //baseViewHolder.addOnClickListener(R.id.moblie);
+
     }
 }

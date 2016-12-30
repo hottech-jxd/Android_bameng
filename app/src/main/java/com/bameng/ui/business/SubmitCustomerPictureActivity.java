@@ -2,10 +2,9 @@ package com.bameng.ui.business;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,28 +14,37 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.config.Constants;
-import com.bameng.model.ArticleListOutput;
 import com.bameng.model.CloseEvent;
-import com.bameng.model.CustomerModel;
 import com.bameng.model.GetRewardOutput;
-import com.bameng.model.OperateTypeEnum;
 import com.bameng.model.PostModel;
 import com.bameng.model.RefreshCustomerEvent;
 import com.bameng.model.UserData;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
+import com.bameng.ui.base.PhoteActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
+import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.ui.news.ChooseObjectActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
-import com.bameng.utils.SystemTools;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.ToastUtils;
+import com.bameng.utils.Util;
+import com.bameng.widgets.PhotoSelectView;
+import com.bameng.widgets.custom.FrescoControllerListener;
+import com.bameng.widgets.custom.FrescoDraweeController;
+import com.bumptech.glide.Glide;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.huotu.android.library.libedittext.EditText;
+import com.jph.takephoto.model.TImage;
+import com.jph.takephoto.model.TResult;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,35 +52,47 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.bameng.R.id.CustomReward;
-import static com.bameng.R.id.laySend;
-import static com.bameng.R.id.orderReword;
-import static com.bameng.R.id.shopReword;
-import static com.bameng.R.id.tvDes1;
-import static com.bameng.R.id.tvDes3;
+import static android.R.attr.bitmap;
 
 /***
- * 新增客户界面
+ * 新增客户图片
  */
-public class SubmitCustomerInfoActivity extends BaseActivity {
-    final  static int REQUEST_CODE_CHOOSE= 100;
+public class SubmitCustomerPictureActivity extends PhoteActivity
+        implements PhotoSelectView.OnPhotoSelectBackListener,FrescoControllerListener.ImageCallback{
+    public final  static int REQUEST_CODE_CHOOSE= 100;
+
     @BindView(R2.id.titleText)
     TextView titleText;
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
-    public Resources resources;
-    @BindView(R2.id.customName)
-    EditText customName;
-    @BindView(R2.id.customMoblie)
-    EditText customMoblie;
-    @BindView(R2.id.customAddress)
-    EditText customAddress;
+
     @BindView(R2.id.remark)
     EditText remark;
+
+    //@BindView(R.id.layAddImage)
+    //LinearLayout layAddImage;
+
+    //@BindView(R.id.layImage)
+    //LinearLayout layImage;
+
+    @BindView(R.id.ivPicture)
+    SimpleDraweeView ivPicture;
+    //@BindView(R.id.ivAddPic)
+    //ImageView ivAddPic;
+
+    //@BindView(R.id.laySendObject)
+    //LinearLayout laySendObject;
+    @BindView(R.id.laySendShop)
+    LinearLayout laySendShop;
+    @BindView(R.id.ivSelect)
+    ImageView ivSelect;
+
     @BindView(R2.id.layDesc)
     LinearLayout layDesc;
     @BindView(R2.id.tvDes1)
@@ -84,27 +104,25 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
     @BindView(R.id.tvDes4)
     TextView tvDes4;
 
-    @BindView(R.id.laySendShop)
-    LinearLayout laySendShop;
-    @BindView(R.id.ivSelect)
-    ImageView ivSelect;
     @BindView(R.id.tvPersons)
     TextView tvPersons;
     @BindView(R.id.laySend)
     LinearLayout laySend;
 
+    boolean hasImage=false;
+    String imagePath;
+    private PhotoSelectView pop;
     boolean sendShop= true;
     List<UserData> objects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_submit_customer_info);
+        setContentView(R.layout.activity_submit_customer_picture);
         ButterKnife.bind(this);
         initView();
     }
 
-    @Override
     protected void initView() {
         titleText.setText("提交客户信息");
         titleLeftImage.setVisibility(View.VISIBLE);
@@ -112,6 +130,11 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
         //SystemTools.loadBackground(titleLeftImage, leftDraw);
         titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
         titleLeftImage.setImageResource(R.mipmap.ic_back);
+
+        //layAddImage.setVisibility(View.VISIBLE);
+        //layImage.setVisibility(View.GONE);
+
+        ivPicture.setImageURI( Uri.parse("res://"+ this.getPackageName()+"/"+ R.mipmap.ic_defaultpic));
 
         if( BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU){
             layDesc.setVisibility(View.GONE);
@@ -123,30 +146,39 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
         }
     }
 
+    @OnClick(R.id.ivAddPic)
+    void onClick(View v ){
+        if(null == pop) pop = new PhotoSelectView(this, this);
+        pop.show();
+    }
+
+    @OnClick(R.id.laySendShop)
+    void onSendShop(View v){
+        sendShop=  !sendShop;
+        ivSelect.setBackgroundResource( sendShop ? R.mipmap.ic_choose : R.mipmap.ic_nochoose );
+    }
+
+    @OnClick(R.id.laySendObject)
+    void onSendPersons(View v){
+        Bundle bd = new Bundle();
+        bd.putSerializable("customer", (Serializable) objects);
+        ActivityUtils.getInstance().showActivityForResult(this, REQUEST_CODE_CHOOSE , ChooseObjectActivity.class , bd );
+    }
+
     @OnClick(R.id.btn_submit)
     void submit(){
 
-        String name = customName.getText().toString().trim();
-        String mobile = customMoblie.getText().toString().trim();
-        String address = customAddress.getText().toString().trim();
         boolean isok = true;
-        if(address.isEmpty()){
-            customAddress.setError("请填写客户地址");
-            isok=false;
-        }
-        if( mobile.isEmpty()){
-            customMoblie.setError("请填写客户电话");
-            isok=false;
-        }
-        if( name.isEmpty()){
-            customName.setError("请填写客户姓名");
-            isok=false;
-        }
 
+        if(!hasImage){
+            ToastUtils.showLongToast("请上传图片");
+            return;
+        }
         if(tvPersons.getText().toString().isEmpty() && !sendShop ){
             ToastUtils.showLongToast("请选择分享盟友或者发送盟店");
-            isok=false;
+            return;
         }
+
         String ids = "";
         if( objects !=null) {
             for (UserData item : objects) {
@@ -157,25 +189,40 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
             }
         }
 
-        if(!isok){
-            return;
-        }
-
+        String timestamp = String.valueOf(System.currentTimeMillis());
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
-        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("timestamp", timestamp);
         map.put("os", "android");
-        map.put("username",customName.getText().toString());
-        map.put("mobile",customMoblie.getText().toString());
-        map.put("address",customAddress.getText().toString());
-        map.put("remark",remark.getText().toString());
+
+        map.put("remark",remark.getText().toString().trim());
         map.put("issave", sendShop?"1":"0");
         map.put("ids", ids);
         String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
-        Call<PostModel> call = apiService.addInfo(token , map); // apiService.create(token,map);
+
+        Map<String, RequestBody> requestBodyMap = new HashMap<>();
+        RequestBody requestBody = RequestBody.create( MediaType.parse("text/plain") , timestamp );
+        requestBodyMap.put("timestamp",requestBody);
+        requestBody=RequestBody.create(MediaType.parse("text/plain"), BaseApplication.getAppVersion());
+        requestBodyMap.put("version",requestBody);
+        requestBody=RequestBody.create(MediaType.parse("text/plain"), "android");
+        requestBodyMap.put("os",requestBody);
+        requestBody=RequestBody.create(MediaType.parse("text/plain"), remark.getText().toString().trim());
+        requestBodyMap.put("remark",requestBody);
+        requestBody=RequestBody.create(MediaType.parse("text/plain"), sendShop?"1":"0");
+        requestBodyMap.put("issave",requestBody);
+        requestBody=RequestBody.create(MediaType.parse("text/plain"), ids);
+        requestBodyMap.put("ids",requestBody);
+        requestBody=RequestBody.create(MediaType.parse("text/plain"), sign);
+        requestBodyMap.put("sign",requestBody);
+
+        requestBody = RequestBody.create(MediaType.parse("image/*"), Util.File2byte(  imagePath ));
+        requestBodyMap.put("image\"; filename=\"" + timestamp + "\"", requestBody);
+
+        Call<PostModel> call = apiService.addImgInfo(token,requestBodyMap);
         call.enqueue(new Callback<PostModel>() {
             @Override
             public void onResponse(Call<PostModel> call, Response<PostModel> response) {
@@ -191,7 +238,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
                 if (response.body().getStatus() == Constants.STATUS_70035) {
                     ToastUtils.showLongToast(response.body().getStatusText());
                     EventBus.getDefault().post(new CloseEvent());
-                    ActivityUtils.getInstance().skipActivity(SubmitCustomerInfoActivity.this , PhoneLoginActivity.class);
+                    ActivityUtils.getInstance().skipActivity(SubmitCustomerPictureActivity.this , PhoneLoginActivity.class);
                     return;
                 }
 
@@ -215,7 +262,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
         });
 
     }
-    @Override
+
     protected void StartApi() {
 
         Map<String, String> map = new HashMap<>();
@@ -243,7 +290,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
                 if (response.body().getStatus() == Constants.STATUS_70035) {
                     ToastUtils.showLongToast(response.body().getStatusText());
                     EventBus.getDefault().post(new CloseEvent());
-                    ActivityUtils.getInstance().skipActivity(SubmitCustomerInfoActivity.this, PhoneLoginActivity.class);
+                    ActivityUtils.getInstance().skipActivity(SubmitCustomerPictureActivity.this, PhoneLoginActivity.class);
                     return;
                 }
 
@@ -257,7 +304,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
                     tvDes2.setText(String.format( "2.每笔成交的订单可获得%d盟豆奖励", response.body().getData().getOrderReward()));
                     tvDes3.setText(String.format( "3.客户上门%d盟豆奖励", response.body().getData().getShopReward()));
                     if( null != response.body().getData().getExtraReward() && !response.body().getData().getExtraReward().isEmpty() ){
-                        tvDes4.setText("4.额外奖励:"+ response.body().getData().getExtraReward() );
+                        tvDes4.setText( "4.额外奖励:"+response.body().getData().getExtraReward() );
                     }
                 }
             }
@@ -271,21 +318,63 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
 
     }
 
+
+
     @Override
-    public boolean handleMessage(Message msg) {
-        return false;
+    public void onPhotoSelectBack(PhotoSelectView.SelectType type) {
+        if(null == type) return;
+
+        switch (type) {
+            case Camera:
+                selectPhotoByCamera();
+                break;
+            case File:
+                selectPhotoByFile();
+                break;
+            default:
+                break;
+        }
     }
 
-    @OnClick(R.id.laySendShop)
-    void onSendShop(View v){
-        sendShop=  !sendShop;
-        ivSelect.setBackgroundResource( sendShop ? R.mipmap.ic_choose : R.mipmap.ic_nochoose );
+    void selectPhotoByCamera(){
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+        selectByCamera(imageUri);
     }
-    @OnClick(R.id.laySendObject)
-    void onSendPersons(View v){
-        Bundle bd = new Bundle();
-        bd.putSerializable("customer", (Serializable) objects);
-        ActivityUtils.getInstance().showActivityForResult(this, REQUEST_CODE_CHOOSE , ChooseObjectActivity.class , bd );
+
+    void selectPhotoByFile(){
+        File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+        selectByFile(imageUri);
+    }
+
+
+    @Override
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+
+        hasImage=true;
+        showImg(result.getImages());
+    }
+
+    private void showImg( ArrayList<TImage> images) {
+        imagePath = images.get(0).getPath();
+        //Glide.with(this).load(new File(imagePath)).into(ivPicture);
+        int wid = DensityUtils.dip2px(this, 80);
+        FrescoDraweeController.loadImage( ivPicture , wid , "file://"+ imagePath , 0 , this );
+    }
+
+
+    @Override
+    public void takeFail(TResult result, String msg) {
+        super.takeFail(result, msg);
+    }
+
+    @Override
+    public void takeCancel() {
+        super.takeCancel();
     }
 
     @Override
@@ -309,4 +398,17 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void imageCallback(int position, int width, int height) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width,height);
+        ivPicture.setLayoutParams(layoutParams);
+    }
+
+//    @Override
+//    protected void setCropWidthHeigth() {
+//        int wid = DensityUtils.getScreenW(this);
+//        int hei = DensityUtils.getScreenH(this);
+//        int t = wid>= hei ? hei:wid;
+//        this.cropWidth = this.cropHeight =t;
+//    }
 }

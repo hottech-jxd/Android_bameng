@@ -10,6 +10,7 @@ public class BaseData {
     private String agreementUrl;
     private int enableSignIn;
     private String registerUrl;
+    private String reportUrl;
 
 
     public int getUserStatus() {
@@ -50,5 +51,13 @@ public class BaseData {
 
     public void setRegisterUrl(String registerUrl) {
         this.registerUrl = registerUrl;
+    }
+
+    public String getReportUrl() {
+        return reportUrl;
+    }
+
+    public void setReportUrl(String reportUrl) {
+        this.reportUrl = reportUrl;
     }
 }

@@ -14,6 +14,7 @@ public class RewardsSettingModel {
     int ShopReward;
     String UpdateTime;
     int UserId;
+    String ExtraReward;
 
     public String getCreateTime() {
         return CreateTime;
@@ -69,5 +70,13 @@ public class RewardsSettingModel {
 
     public void setUserId(int userId) {
         UserId = userId;
+    }
+
+    public String getExtraReward() {
+        return ExtraReward;
+    }
+
+    public void setExtraReward(String extraReward) {
+        ExtraReward = extraReward;
     }
 }

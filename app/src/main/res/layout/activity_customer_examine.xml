@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,14 +12,34 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/act_title_height">
+        android:layout_height="wrap_content">
         <include layout="@layout/title_index"/>
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
+
     <LinearLayout
+        android:id="@+id/layPicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="信息照片"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/ivPicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/laySecond"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/layName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -33,10 +58,12 @@
             android:text=""
             />
     </LinearLayout>
-    <TextView
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +82,7 @@
             android:text=""
             />
     </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -79,7 +106,9 @@
             />
     </LinearLayout>
 
-    <TextView
+    </LinearLayout>
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -89,8 +118,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -103,7 +131,7 @@
             android:text=""/>
     </LinearLayout>
 
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -126,7 +154,7 @@
             android:text=""
             />
     </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -149,7 +177,7 @@
             android:text=""
             />
     </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -189,8 +217,7 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
-
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -230,6 +257,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
         android:textColor="@color/white"
         android:visibility="gone"
         android:textSize="16sp"
@@ -243,6 +271,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
         android:textColor="@color/white"
         android:visibility="gone"
         android:textSize="16sp"
@@ -252,3 +281,5 @@
         android:layout_height="wrap_content" />
 
 </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

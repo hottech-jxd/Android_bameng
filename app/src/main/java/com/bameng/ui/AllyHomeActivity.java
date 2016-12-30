@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +40,9 @@ import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.ui.base.BaseShareActivity;
+import com.bameng.ui.business.CustomerInfoActivity;
 import com.bameng.ui.business.SubmitCustomerInfoActivity;
+import com.bameng.ui.business.SubmitCustomerPictureActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.ui.news.AddnewsActivity;
 import com.bameng.utils.ActivityUtils;
@@ -48,12 +51,16 @@ import com.bameng.utils.DensityUtils;
 import com.bameng.utils.PreferenceHelper;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
+import com.bameng.widgets.BMPopWindow;
 import com.bameng.widgets.ProgressPopupWindow;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -76,7 +83,7 @@ import static com.umeng.analytics.social.e.t;
  * 盟友主页
  */
 @RuntimePermissions
-public class AllyHomeActivity extends BaseShareActivity {
+public class AllyHomeActivity extends BaseShareActivity implements  View.OnClickListener{
 
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
@@ -125,6 +132,9 @@ public class AllyHomeActivity extends BaseShareActivity {
     @BindView(R.id.circle_news)
     View circleNews;
 
+    @BindView(R.id.layTitleRight)
+    LinearLayout layTitleRight;
+
     public Resources resources;
     public ProgressPopupWindow progress;
 
@@ -132,6 +142,8 @@ public class AllyHomeActivity extends BaseShareActivity {
 
     String currentTab = Constants.TAG_1;
     long exitTime = 0;
+    BMPopWindow bmPopWindow;
+    List<String> menus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,25 +192,26 @@ public class AllyHomeActivity extends BaseShareActivity {
     protected void initView() {
         super.initView();
 
+        menus= new ArrayList<>();
+        menus.add("新增客户资料");
+        menus.add("新增客户照片");
+
         goback = false;
         titleText.setText("业务客户");
         titleLeftImage.setVisibility(View.VISIBLE);
-        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_location);
-        //SystemTools.loadBackground(titleLeftImage, leftDraw);
         titleLeftImage.setImageResource(R.mipmap.ic_location);
 
         titleLeftText.setBackgroundResource(R.drawable.item_click_selector);
 
-        //Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
-        //SystemTools.loadBackground(titleRightImage,rightDraw);
-        titleRightImage.setBackgroundResource(R.drawable.title_left_back);
+        //titleRightImage.setBackgroundResource(R.drawable.title_left_back);
         titleRightImage.setImageResource(R.mipmap.ic_newadd);
-        int rightPx = DensityUtils.dip2px(this,1);
-        titleRightImage.setPadding( titleRightImage.getPaddingLeft(),titleRightImage.getPaddingTop() , rightPx , titleRightImage.getPaddingBottom() );
+        //int rightPx = DensityUtils.dip2px(this,1);
+        //titleRightImage.setPadding( titleRightImage.getPaddingLeft(),titleRightImage.getPaddingTop() , rightPx , titleRightImage.getPaddingBottom() );
 
-        rightPx = DensityUtils.dip2px(this,10);
-        titleRightText.setBackgroundResource(R.drawable.item_click_selector);
-        titleRightText.setPadding(titleRightText.getPaddingLeft(),titleRightText.getPaddingTop(), rightPx , titleRightText.getPaddingBottom());
+        layTitleRight.setBackgroundResource(R.drawable.item_click_selector);
+
+        int leftPx = DensityUtils.dip2px(this,5);
+        titleRightText.setPadding( leftPx , titleRightText.getPaddingTop() , titleRightText.getPaddingRight(),titleRightText.getPaddingBottom() );
         titleRightText.setText("新增");
 
         mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
@@ -331,19 +344,32 @@ public class AllyHomeActivity extends BaseShareActivity {
         richesTxt.setTextColor(resources.getColor(R.color.text_color_black));
     }
 
-    @OnClick({R.id.titleRightImage,R.id.titleRightText})
+    @OnClick(R.id.layTitleRight)
     void onRightClick() {
         if (currentTab.equals(Constants.TAG_1)) {
-            ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, SubmitCustomerInfoActivity.class);
-        } else if (currentTab.equals(Constants.TAG_2)) {
-            ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, AddnewsActivity.class);
+            //ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, SubmitCustomerInfoActivity.class);
+            popWindow();
         }
+//        else if (currentTab.equals(Constants.TAG_2)) {
+//            ActivityUtils.getInstance().showActivity(AllyHomeActivity.this, AddnewsActivity.class);
+//        }
     }
+
+    /***
+     * 弹出选择框
+     */
+    void popWindow(){
+        if(bmPopWindow==null){
+            bmPopWindow = new BMPopWindow(this, menus ,this);
+        }
+        bmPopWindow.show();
+    }
+
+
 
     public void onTabClicked(View view) {
         switch (view.getId()) {
             case R.id.homePage: {
-                //currentTab="业务客户";
                 currentTab = Constants.TAG_1;
                 titleText.setText("业务客户");
                 titleLeftImage.setVisibility(View.VISIBLE);
@@ -366,13 +392,12 @@ public class AllyHomeActivity extends BaseShareActivity {
             }
             break;
             case R.id.newsPage: {
-                //currentTab="资讯列表";
                 currentTab = Constants.TAG_2;
-
                 titleText.setText("资讯列表");
                 titleLeftImage.setVisibility(View.GONE);
                 titleLeftText.setVisibility(View.GONE);
-                //titleRightImage.setVisibility(View.VISIBLE);
+                titleRightImage.setVisibility(View.GONE);
+                titleRightText.setVisibility(View.GONE);
                 if (progress != null) progress.dismissView();
                 //设置选中状态
                 Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_homepage);
@@ -526,4 +551,12 @@ public class AllyHomeActivity extends BaseShareActivity {
         circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
     }
 
+    @Override
+    public void onClick(View view) {
+        if( ((TextView)view).getText().equals( "新增客户资料") ){
+            ActivityUtils.getInstance().showActivity(this,SubmitCustomerInfoActivity.class);
+        }else{
+            ActivityUtils.getInstance().showActivity(this,SubmitCustomerPictureActivity.class);
+        }
+    }
 }

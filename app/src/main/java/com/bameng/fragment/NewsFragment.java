@@ -45,7 +45,7 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -86,7 +86,7 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
     private void initSwitch() {
         GroupFrag groupFrag = new GroupFrag();
         StoreFrag storeFrag = new StoreFrag();
-        AllyFrag allyFrag = new AllyFrag();
+        //AllyFrag allyFrag = new AllyFrag();
 
         Bundle b = new Bundle();
         b.putInt("index", 0);
@@ -109,10 +109,10 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
             badgeList.add(false);
         }
 
-        b = new Bundle();
-        b.putInt("index", 3);
-        allyFrag.setArguments(b);
-        mFragmentList.add(allyFrag);
+        //b = new Bundle();
+        //b.putInt("index", 3);
+        //allyFrag.setArguments(b);
+        //mFragmentList.add(allyFrag);
         tabPagerAdapter = new TabPagerAdapter( getContext() , getChildFragmentManager(), mFragmentList);
         raidersViewPager.setOffscreenPageLimit(3);
         badgeList.add(false);
@@ -142,17 +142,17 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
 
     @Override
     public void onDestroyView() {
-        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().unregister(this);
         super.onDestroyView();
     }
 
     @Override
     public void onReshow() {
-        if( tabPagerAdapter.getItem( raidersViewPager.getCurrentItem()).getArguments().getInt("index") == 3 ){
-            EventBus.getDefault().post( new SetRightVisibleEvent( Constants.TAG_2 , true) );
-        }else{
-            EventBus.getDefault().post( new SetRightVisibleEvent( Constants.TAG_2 , false));
-        }
+//        if( tabPagerAdapter.getItem( raidersViewPager.getCurrentItem()).getArguments().getInt("index") == 3 ){
+//            EventBus.getDefault().post( new SetRightVisibleEvent( Constants.TAG_2 , true) );
+//        }else{
+//            EventBus.getDefault().post( new SetRightVisibleEvent( Constants.TAG_2 , false));
+//        }
     }
 
     @Override
@@ -170,16 +170,16 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
         return R.layout.fragment_news;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventUpdateBadge(BadgeEvent event ){
-       badgeList.set( badgeList.size()-1 , event.isShowNew());
-        setupTabItem();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEventUpdateBadge(BadgeEvent event ){
+//       badgeList.set( badgeList.size()-1 , event.isShowNew());
+//        setupTabItem();
+//    }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventUpdateBadge(BadgeNewEvent event){
-        badgeList.set( badgeList.size()-1 , event.isShowNew());
-        setupTabItem();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEventUpdateBadge(BadgeNewEvent event){
+//        badgeList.set( badgeList.size()-1 , event.isShowNew());
+//        setupTabItem();
+//    }
 
 }

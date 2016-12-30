@@ -47,6 +47,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.baidu.location.d.j.G;
 import static com.bameng.R.id.edtName;
 import static com.bameng.R.id.edtTitle;
 import static com.bameng.R.id.start;
@@ -70,25 +71,46 @@ public class AddnewsActivity extends BaseActivity {
 
     @BindView(R2.id.chooseObjectL)
     LinearLayout llChoose;
+    @BindView(R.id.layComment)
+    LinearLayout layComment;
 
     List<UserData> objects;
 
     ProgressDialog progressDialog;
+    //标记是否 留言
+    boolean comment=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addnews);
+        setContentView(getLayoutRes());
         ButterKnife.bind(this);
         initView();
-        //StartApi();
     }
+
+    public  int getLayoutRes(){
+        return R.layout.activity_addnews;
+    }
+
 
     @Override
     protected void initView() {
+
         titleText.setText("新增消息");
-        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+        String title = getIntent().getStringExtra("title");
+        if(title!=null && !title.isEmpty()){
+            titleText.setText(title);
+        }
+        String hintTitle = getIntent().getStringExtra("hintTitle");
+        if( hintTitle!=null && !hintTitle.isEmpty()){
+            etTitle.setHint(hintTitle);
+        }
+        String hintContent = getIntent().getStringExtra("hintContent");
+        if( hintContent!=null && !hintContent.isEmpty()){
+            etContent.setHint(hintContent);
+        }
+
+
         titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
         titleLeftImage.setImageResource(R.mipmap.ic_back);
 
@@ -96,6 +118,14 @@ public class AddnewsActivity extends BaseActivity {
             llChoose.setVisibility(View.VISIBLE);
         }else{
             llChoose.setVisibility(View.GONE);
+        }
+
+        comment = getIntent().getBooleanExtra("comment",false);
+        if(comment){
+            llChoose.setVisibility(View.GONE);
+            layComment.setVisibility(View.VISIBLE);
+        }else{
+            layComment.setVisibility(View.GONE);
         }
     }
 
@@ -114,6 +144,10 @@ public class AddnewsActivity extends BaseActivity {
             }
         }
 
+        if(comment){//如果是留言，则传递ids参数=-1
+            ids="-1";
+        }
+
         Map<String, String> map = new HashMap<>();
         map.put("version", BaseApplication.getAppVersion());
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -121,8 +155,7 @@ public class AddnewsActivity extends BaseActivity {
         map.put("title",  title );
         map.put("content", content );
         map.put("ids", ids );
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -150,6 +183,7 @@ public class AddnewsActivity extends BaseActivity {
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200 ) {
                         ToastUtils.showLongToast(response.body().getStatusText());
+                        AddnewsActivity.this.setResult(RESULT_OK);
                         AddnewsActivity.this.finish();
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());
@@ -163,7 +197,6 @@ public class AddnewsActivity extends BaseActivity {
             @Override
             public void onFailure(Call<PostModel> call, Throwable t) {
                 if(progressDialog!=null) progressDialog.dismiss();
-
                 ToastUtils.showLongToast("失败");
             }
         });
@@ -208,15 +241,15 @@ public class AddnewsActivity extends BaseActivity {
         String title = etTitle.getText().toString().trim();
         String content = etContent.getText().toString().trim();
         if(title.isEmpty()){
-            etTitle.setError("请输入资讯标题");
+            etTitle.setError("请输入标题");
             return;
         }
         if(content.isEmpty()){
-            etContent.setError("请输入资讯内容");
+            etContent.setError("请输入内容");
             return;
         }
 
-        if(BaseApplication.UserData().getUserIdentity() ==1 ) {
+        if( !comment && BaseApplication.UserData().getUserIdentity() ==1 ) {
             if (objects == null || objects.size() < 1) {
                 tvObject.setError("请选择发送对象");
                 return;

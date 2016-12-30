@@ -54,7 +54,8 @@ import retrofit2.Response;
  * 盟友 主页
  * Created by 47483 on 2016.11.02.
  */
-public class AllyHomeFrag extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
+public class AllyHomeFrag extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
 
     @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;

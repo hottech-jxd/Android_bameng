@@ -63,6 +63,7 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
+import static android.R.attr.description;
 import static android.R.attr.path;
 import static java.io.File.pathSeparator;
 import static java.lang.System.currentTimeMillis;
@@ -87,6 +88,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
     boolean needCapture=false;
     boolean isCapture=false;
     Runnable runnable=null;
+    String title="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +152,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
             }
         });
 
-        String title = getIntent().getStringExtra(Constants.INTENT_TITLE);
+        title = getIntent().getStringExtra(Constants.INTENT_TITLE);
         if(title!=null && !title.isEmpty()){
             titleText.setText(title);
         }
@@ -348,7 +350,9 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
                         super.onPageFinished(view, url);
 
                         if (titleText == null) return;
-                        titleText.setText(view.getTitle());
+                        if( title !=null && title.isEmpty()) {
+                            titleText.setText(view.getTitle());
+                        }
 
                     }
 
@@ -384,8 +388,9 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
                 if (title == null) {
                     return;
                 }
-
-                titleText.setText(title);
+                if( title !=null && title.isEmpty()) {
+                    titleText.setText(title);
+                }
             }
         });
 

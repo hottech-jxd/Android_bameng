@@ -33,7 +33,7 @@
             android:inputType="number"
             android:maxLength="5"/>
     </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -58,7 +58,7 @@
             android:maxLength="5"
             app:style="transparent"/>
     </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
@@ -84,7 +84,32 @@
             app:style="transparent"/>
     </LinearLayout>
 
-    <TextView
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"/>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="额外奖励"
+            android:layout_margin="10dp"/>
+        <com.huotu.android.library.libedittext.EditText
+            android:id="@+id/ewjl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            app:style="transparent"/>
+    </LinearLayout>
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>

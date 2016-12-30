@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.bameng.ui.base.BaseActivity;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.SystemTools;
+import com.bameng.widgets.BMPopWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ import butterknife.OnClick;
 /***
  * 客户信息界面
  */
-public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTabSelectedListener{
+public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTabSelectedListener , View.OnClickListener{
 
     @BindView(R2.id.titleText)
     TextView titleText;
@@ -43,10 +45,9 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
     private int currentIndex = 0;
     @BindView(R2.id.titleRightImage)
     ImageView titleRightImage;
-//    @BindView(R2.id.nodoneLabel)
-//    TextView nodoneLabel;
-//    @BindView(R2.id.doneLabel)
-//    TextView doneLabel;
+    @BindView(R.id.titleRightText)
+    TextView titleRightText;
+
     @BindView(R2.id.customViewPager)
     ViewPager customViewPager;
     @BindView(R2.id.tablayout)
@@ -54,8 +55,9 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
 
     public TabPagerAdapter tabPagerAdapter;
     private List<BaseFragment> mFragmentList = new ArrayList<>();
-    //public Resources resources;
     final int request_code_newadd = 108;
+    BMPopWindow bmPopWindow;
+    List<String> menus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +65,6 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
         setContentView(R.layout.activity_customer_info);
         ButterKnife.bind(this);
         initView();
-        //application = (BaseApplication) this.getApplication();
-        //resources = this.getResources();
-
-        //changeIndex(currentIndex);
         initSwitch();
     }
 
@@ -119,38 +117,20 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
     @Override
     protected void initView() {
         titleText.setText("客户信息");
-        //Drawable rightDraw = ContextCompat.getDrawable(this , R.mipmap.ic_newadd);
-        //Drawable leftDraw = ContextCompat.getDrawable( this , R.mipmap.ic_back);
-        //SystemTools.loadBackground(titleRightImage,rightDraw);
-        //SystemTools.loadBackground(titleLeftImage, leftDraw);
+
+        menus= new ArrayList<>();
+        menus.add("新增客户资料");
+        menus.add("新增客户照片");
 
         titleRightImage.setBackgroundResource(R.drawable.title_left_back);
         titleRightImage.setImageResource(R.mipmap.ic_newadd);
 
+        titleRightText.setText("新增");
+        titleRightText.setBackgroundResource(R.drawable.item_click_selector);
+
         titleLeftImage.setBackgroundResource(R.drawable.title_left_back);
         titleLeftImage.setImageResource(R.mipmap.ic_back);
     }
-
-//    private void changeIndex(int index) {
-//        if (index == 0) {
-//            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-//            Drawable drawable_normal = resources.getDrawable(R.color.white);
-//            SystemTools.loadBackground(nodoneLabel, drawable_press);
-//            SystemTools.loadBackground(doneLabel, drawable_normal);
-//            //nodoneLabel.setTextColor(resources.getColor(R.color.red));
-//            nodoneLabel.setTextColor(Color.parseColor("#d8ae76") );
-//            doneLabel.setTextColor(resources.getColor(R.color.black));
-//        } else if (index == 1) {
-//            Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
-//            Drawable drawable_normal = resources.getDrawable(R.color.white);
-//            SystemTools.loadBackground(nodoneLabel, drawable_normal);
-//            SystemTools.loadBackground(doneLabel, drawable_press);
-//            nodoneLabel.setTextColor(resources.getColor(R.color.black));
-//            //doneLabel.setTextColor(resources.getColor(R.color.red));
-//            doneLabel.setTextColor(Color.parseColor("#d8ae76"));
-//        }
-//    }
-
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -172,18 +152,6 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
 
     }
 
-//    @OnClick(R.id.nodoneLabel)
-//    void clickDoing() {
-//        customViewPager.setCurrentItem(0);
-//        changeIndex(customViewPager.getCurrentItem());
-//    }
-
-//    @OnClick(R.id.doneLabel)
-//    void clickDone() {
-//        customViewPager.setCurrentItem(1);
-//        changeIndex(customViewPager.getCurrentItem());
-//    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -191,9 +159,20 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
     }
 
 
-    @OnClick(R.id.titleRightImage)
+    @OnClick({R.id.titleRightImage,R.id.titleRightText})
     void clickRightImage(){
-        ActivityUtils.getInstance().showActivity(CustomerInfoActivity.this,SubmitCustomerInfoActivity.class);
+        //ActivityUtils.getInstance().showActivity(CustomerInfoActivity.this,SubmitCustomerInfoActivity.class);
+        popWindow();
+    }
+
+    /***
+     * 弹出选择框
+     */
+    void popWindow(){
+        if(bmPopWindow==null){
+            bmPopWindow = new BMPopWindow(this, menus ,this);
+        }
+        bmPopWindow.show();
     }
 
     @Override
@@ -206,5 +185,14 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode !=RESULT_OK ) return;
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        if( ((TextView)view).getText().equals( "新增客户资料") ){
+            ActivityUtils.getInstance().showActivity(CustomerInfoActivity.this,SubmitCustomerInfoActivity.class);
+        }else{
+            ActivityUtils.getInstance().showActivity(CustomerInfoActivity.this,SubmitCustomerPictureActivity.class);
+        }
     }
 }

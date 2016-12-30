@@ -16,111 +16,79 @@
         <include layout="@layout/title_index"/>
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#EEEEEE"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:layout_marginLeft="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="客户姓名"/>
-        <com.huotu.android.library.libedittext.EditText
-            android:id="@+id/customName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:imeOptions="actionNext"
-            app:style="transparent"/>
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="10dp"
-        android:padding="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="客户电话"/>
-        <com.huotu.android.library.libedittext.EditText
-            android:id="@+id/customMoblie"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:imeOptions="actionNext"
-            app:style="transparent"
-            />
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="100dp"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="5dp">
+        android:paddingTop="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="客户地址"/>
-        <com.huotu.android.library.libedittext.EditText
-            android:id="@+id/customAddress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:imeOptions="actionNext"
-            app:style="transparent"/>
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="10dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 备    注  "/>
+            android:text="备注"/>
         <com.huotu.android.library.libedittext.EditText
             android:id="@+id/remark"
+            android:gravity="top"
+            android:textSize="12sp"
             app:style="transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
             android:imeOptions="actionNext"/>
     </LinearLayout>
 
-    <!--<TextView-->
-        <!--android:layout_marginLeft="0dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1px"-->
-        <!--android:background="@color/line_gray"/>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:padding="0dp"
+        android:layout_marginLeft="0dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            android:layout_height="wrap_content"
+            android:background="#EEEEEE"
+            android:text="上传照片"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="0dp"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/layImage"
+            android:background="@color/white">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/ivPicture"
+                android:layout_width="80dp"
+                android:layout_height="80dp"/>
+            <ImageView
+                android:id="@+id/ivAddPic"
+                android:layout_marginLeft="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_add"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/laySend"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
     <View
         android:layout_marginLeft="0dp"
         android:layout_width="match_parent"
@@ -193,7 +161,7 @@
 
     </LinearLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:layout_marginLeft="0dp"
@@ -229,16 +197,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:paddingTop="5dp"
-            android:id="@+id/tvDes3"
-            android:text="3.客户上门0盟豆奖励"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:paddingTop="5dp"
+        android:id="@+id/tvDes3"
+        android:text="3.客户上门0盟豆奖励"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/tvDes4"
-            android:textSize="12sp"
             android:paddingTop="5dp"
+            android:id="@+id/tvDes4"
+            android:text=""
+            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

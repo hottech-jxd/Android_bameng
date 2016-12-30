@@ -24,12 +24,16 @@ import com.bameng.model.UserOutputsModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
 import com.bameng.ui.WebViewActivity;
+import com.bameng.ui.account.CommentActivity;
+import com.bameng.ui.account.CustomerActivity;
 import com.bameng.ui.account.MDouCountActivity;
+import com.bameng.ui.account.MessageActivity;
 import com.bameng.ui.account.MyAccountActivity;
 import com.bameng.ui.account.MyBeanActivity;
 import com.bameng.ui.account.ScoreActivity;
 import com.bameng.ui.account.SettingActivity;
 import com.bameng.ui.account.UserInfoActivity;
+import com.bameng.ui.account.WorkActivity;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.ui.business.MyCashCardActivity;
 import com.bameng.ui.business.OrderListActivity;
@@ -86,6 +90,11 @@ public class UserFragment extends BaseFragment
     LinearLayout laymycash;
     @BindView(R2.id.laymenus)
     LinearLayout laymenus;
+
+    LinearLayout layMessage;
+    LinearLayout layFeedback;
+    LinearLayout layWork;
+    LinearLayout layCustomer;
 
     UserData userData;
     ProgressDialog progressDialog;
@@ -144,6 +153,15 @@ public class UserFragment extends BaseFragment
         }else{
             laysign.setVisibility(View.GONE);
         }
+
+        layMessage =(LinearLayout)laymenus.findViewById(R.id.laymessage);
+        layMessage.setOnClickListener(this);
+
+        layFeedback = (LinearLayout)laymenus.findViewById(R.id.layfeedback);
+        layFeedback.setOnClickListener(this);
+
+        layWork = (LinearLayout)laymenus.findViewById(R.id.laywork);
+        layWork.setOnClickListener(this);
     }
 
     void initAlly(){
@@ -165,6 +183,14 @@ public class UserFragment extends BaseFragment
         }else{
             laysign.setVisibility(View.GONE);
         }
+
+        layMessage =(LinearLayout)laymenus.findViewById(R.id.laymessage);
+        layMessage.setOnClickListener(this);
+        layFeedback = (LinearLayout)laymenus.findViewById(R.id.layfeedback);
+        layFeedback.setOnClickListener(this);
+
+        layCustomer =(LinearLayout)laymenus.findViewById(R.id.laycustomer);
+        layCustomer.setOnClickListener(this);
     }
 
     public void initData(){
@@ -273,6 +299,17 @@ public class UserFragment extends BaseFragment
             case R.id.laymyorder:
                 ActivityUtils.getInstance().showActivity(getActivity(), OrderListActivity.class);
                 break;
+            case R.id.laymessage:
+                ActivityUtils.getInstance().showActivity(getActivity(), MessageActivity.class);
+                break;
+            case R.id.layfeedback:
+                ActivityUtils.getInstance().showActivity(getActivity(), CommentActivity.class);
+                break;
+            case R.id.laywork:
+                ActivityUtils.getInstance().showActivity(getActivity(), WorkActivity.class);
+                break;
+            case R.id.laycustomer:
+                ActivityUtils.getInstance().showActivity(getActivity(), CustomerActivity.class);
             default:
                 break;
         }

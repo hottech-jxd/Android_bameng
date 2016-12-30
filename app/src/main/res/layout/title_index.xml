@@ -28,42 +28,51 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/titleText"
             android:layout_toRightOf="@id/titleLeftImage"/>
 
         <TextView
             android:id="@+id/titleText"
-            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/titleLeftText"
+            android:layout_toLeftOf="@+id/layTitleRight"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black"
+            android:gravity="center"
             android:textSize="15sp"
             android:maxEms="10"
             android:maxLines="1"
             android:ellipsize="end"/>
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:id="@+id/layTitleRight"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/titleRightLeftImage"
             android:layout_width="@dimen/title_image_width"
             android:layout_height="@dimen/title_image_width"
             android:layout_toLeftOf="@+id/titleRightImage"
-            android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
-            />
-
+            android:layout_marginRight="0dp"
+            android:layout_centerVertical="true"/>
         <ImageView
             android:id="@+id/titleRightImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
             android:layout_toLeftOf="@+id/titleRightText"
             android:layout_marginRight="0dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
             android:layout_centerVertical="true"/>
-
         <TextView
             android:id="@+id/titleRightText"
             android:layout_width="wrap_content"
@@ -77,6 +86,8 @@
             android:paddingLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

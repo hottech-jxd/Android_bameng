@@ -29,6 +29,9 @@ import static android.R.attr.width;
 public abstract class PhoteActivity extends TakePhotoActivity {
     public BaseApplication application;
 
+    protected int cropHeight;
+    protected int cropWidth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
@@ -112,13 +115,15 @@ public abstract class PhoteActivity extends TakePhotoActivity {
 
     }
 
+    protected void setCropWidthHeigth(){
+        cropHeight = DensityUtils.getScreenH(this);
+        cropWidth = DensityUtils.getScreenW(this);
+    }
+
 
     protected CropOptions getCropOptions(){
-        int cropHeight = DensityUtils.getScreenH(this);
-        int cropWidth = DensityUtils.getScreenW(this);
+        setCropWidthHeigth();
 
-        //int height= Integer.parseInt(etCropHeight.getText().toString());
-        //int width= Integer.parseInt(etCropWidth.getText().toString());
         boolean withWonCrop= false;//rgCropTool.getCheckedRadioButtonId()==R.id.rbCropOwn? true:false;
 
         CropOptions.Builder builder=new CropOptions.Builder();
@@ -126,6 +131,9 @@ public abstract class PhoteActivity extends TakePhotoActivity {
         //if(rgCropSize.getCheckedRadioButtonId()==R.id.rbAspect){
         //    builder.setAspectX(cropWidth).setAspectY(cropHeight);
         //}else {
+
+        //builder.setAspectX(cropWidth).setAspectY(cropHeight);
+
             builder.setOutputX(cropWidth).setOutputY(cropHeight);
         //}
         builder.setWithOwnCrop(withWonCrop);

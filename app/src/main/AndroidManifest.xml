@@ -53,6 +53,7 @@
         <activity android:name=".ui.business.CustomerInfoActivity"/>
         <activity android:name=".ui.business.CustomerExamineActivity"/>
         <activity android:name=".ui.business.SubmitCustomerInfoActivity"/>
+        <activity android:name=".ui.business.SubmitCustomerPictureActivity"/>
         <activity android:name=".ui.business.CustomerDetailsActivity"/>
         <activity android:name=".ui.business.ExchangeExamineActivity"/>
         <activity android:name=".ui.business.RwordActivity"/>
@@ -125,6 +126,14 @@
             android:value="huotu_bameng"/>
 
         <activity android:name=".ui.base.BaseShareActivity">
+        </activity>
+        <activity android:name=".ui.account.MessageActivity">
+        </activity>
+        <activity android:name=".ui.account.CommentActivity">
+        </activity>
+        <activity android:name=".ui.account.WorkActivity">
+        </activity>
+        <activity android:name=".ui.account.CustomerActivity">
         </activity>
     </application>
 

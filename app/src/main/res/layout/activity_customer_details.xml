@@ -11,6 +11,39 @@
         <include layout="@layout/title_index"/>
     </RelativeLayout>
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layPicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="信息照片"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/ivPicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/laySecond"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,21 +104,25 @@
         <TextView
             android:id="@+id/address"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text=""
             />
     </LinearLayout>
-    <TextView
+
+        </LinearLayout>
+
+            <View
+                android:id="@+id/viewMengYou"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
     <LinearLayout
+        android:id="@+id/layMengyou"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -98,17 +135,18 @@
             android:text=""/>
     </LinearLayout>
 
-    <TextView
+    <View
+        android:id="@+id/viewStatus"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
     <LinearLayout
+        android:id="@+id/layStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -118,20 +156,20 @@
             android:id="@+id/status"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text=""
-            />
+            android:text="" />
     </LinearLayout>
-    <TextView
+    <View
+        android:id="@+id/viewRemark"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray"/>
     <LinearLayout
+        android:id="@+id/layRemark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:padding="10dp"
-        >
+        android:gravity="center_vertical">
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -140,21 +178,22 @@
         <TextView
             android:id="@+id/remark"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text=""
-            />
+            android:layout_height="wrap_content"
+            android:text="" />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_gray"/>
+
+     <View
+         android:id="@+id/viewInShop"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_gray"/>
     <LinearLayout
+        android:id="@+id/layInShop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:padding="10dp"
-        >
+        android:gravity="center_vertical">
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -167,5 +206,8 @@
             android:text="未进店"
             />
     </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     </LinearLayout>

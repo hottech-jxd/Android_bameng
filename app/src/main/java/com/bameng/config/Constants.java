@@ -43,10 +43,10 @@ public class Constants {
 	public static final int SWITCH_UI = 0x00000010;
 
 	//生产  url
-	//public final static String url="http://bmapi.mellkit.com";
+	public final static String url="http://bmapi.mellkit.com";
 
 	//test url
-	public final static String url= "http://bmapi.51flashmall.com";
+	//public final static String url= "http://bmapi.51flashmall.com";
 
 	//dev url
 	//public final static String url= "http://bmapi.fancat.cn";
@@ -195,4 +195,6 @@ public class Constants {
 	public static String SERVER_ERROR="服务器开小差了";
 
 	public static String MESSAGE_INFO="message_info";
+
+	public static int PAGESIZE=10;
 }

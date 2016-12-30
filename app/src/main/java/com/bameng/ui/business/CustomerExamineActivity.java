@@ -3,6 +3,7 @@ package com.bameng.ui.business;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
@@ -29,10 +30,14 @@ import com.bameng.ui.base.BaseActivity;
 import com.bameng.ui.login.PhoneLoginActivity;
 import com.bameng.utils.ActivityUtils;
 import com.bameng.utils.AuthParamUtils;
+import com.bameng.utils.DensityUtils;
 import com.bameng.utils.SystemTools;
 import com.bameng.utils.ToastUtils;
 import com.bameng.widgets.TipAlertDialog;
 import com.bameng.widgets.UserInfoView;
+import com.bameng.widgets.custom.FrescoControllerListener;
+import com.bameng.widgets.custom.FrescoDraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
@@ -51,7 +56,7 @@ import retrofit2.Response;
 /***
  * 订单审核
  */
-public class CustomerExamineActivity extends BaseActivity implements UserInfoView.OnUserInfoBackListener  {
+public class CustomerExamineActivity extends BaseActivity implements UserInfoView.OnUserInfoBackListener  , FrescoControllerListener.ImageCallback{
 
     @BindView(R2.id.titleLeftImage)
     ImageView titleLeftImage;
@@ -71,6 +76,10 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
     @BindView(R2.id.btnSubmit) Button btnSubmit;
     @BindView(R2.id.belongone) TextView belongone;
     @BindView(R.id.btnNewOrder) Button btnNewOrder;
+
+    @BindView(R.id.layPicture) LinearLayout layPicture;
+    @BindView(R.id.ivPicture)  SimpleDraweeView ivPicture;
+    @BindView(R.id.laySecond) LinearLayout laySecond;
 
     UserInfoView popWind;
     Bundle bundle;
@@ -96,9 +105,24 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
 
         bundle = this.getIntent().getExtras();
         customerModel= (CustomerModel) bundle.getSerializable("customerinfo");
-        name.setText(customerModel.getName());
-        moblie.setText(customerModel.getMobile());
-        address.setText(customerModel.getAddr());
+
+        if(customerModel.getIsSave()==1){
+            laySecond.setVisibility(View.GONE);
+            layPicture.setVisibility(View.VISIBLE);
+            //ivPicture.setImageURI(Uri.parse( customerModel.getDataImg() ) );
+            int width = DensityUtils.getScreenW(this);
+            int sw = DensityUtils.dip2px(this, 100);
+            width = width- sw;
+            FrescoDraweeController.loadImage(ivPicture , width, customerModel.getDataImg(),0, this );
+        }else {
+            laySecond.setVisibility(View.VISIBLE);
+            layPicture.setVisibility(View.GONE);
+
+            name.setText(customerModel.getName());
+            moblie.setText(customerModel.getMobile());
+            address.setText(customerModel.getAddr());
+        }
+
         shopStatus.setText( customerModel.getInShop() ==1 ? "已进店":"未进店" );
         belongone.setText( customerModel.getBelongOneName() );
 
@@ -278,5 +302,13 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         }else{
             btnSubmit.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void imageCallback(int position, int width, int height) {
+        if( ivPicture==null) return;
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width,height);
+        ivPicture.setLayoutParams(layoutParams);
     }
 }

@@ -58,6 +58,8 @@ public class RwordActivity extends BaseActivity {
     EditText orderReword;
     @BindView(R2.id.shopReword)
     EditText shopReword;
+    @BindView(R.id.ewjl)
+    EditText ewjl;
     ProgressDialog progressDialog;
 
     @Override
@@ -108,6 +110,7 @@ public class RwordActivity extends BaseActivity {
         map.put("creward",CustomReward.getText().toString());
         map.put("orderreward",orderReword.getText().toString());
         map.put("shopreward",shopReword.getText().toString());
+        map.put("extrareward",ewjl.getText().toString());
         String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
@@ -130,7 +133,6 @@ public class RwordActivity extends BaseActivity {
                     ActivityUtils.getInstance().skipActivity( RwordActivity.this , PhoneLoginActivity.class);
                     return;
                 }
-
 
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200 ) {
@@ -197,6 +199,7 @@ public class RwordActivity extends BaseActivity {
                     CustomReward.setText(String.valueOf(response.body().getData().getCustomerReward()));
                     orderReword.setText(String.valueOf(response.body().getData().getOrderReward()));
                     shopReword.setText(String.valueOf(response.body().getData().getShopReward()));
+                    ewjl.setText(response.body().getData().getExtraReward());
                 }
             }
 

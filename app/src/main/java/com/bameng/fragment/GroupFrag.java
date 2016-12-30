@@ -73,6 +73,9 @@ public class GroupFrag extends BaseFragment
 
     AdBannerWidget adBannerWidget;
 
+    Call<ArticleListOutput> articleListOutputCall=null;
+    Call<SlideListOutputModel> slideListOutputModelCall=null;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -138,13 +141,15 @@ public class GroupFrag extends BaseFragment
         map.put("identity","0");
         map.put("pageIndex",String.valueOf( idx ));
         map.put("pageSize",String.valueOf(PAGESIZE));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
-        Call<ArticleListOutput> call = apiService.list(token,map);
-        call.enqueue(new Callback<ArticleListOutput>() {
+        if(articleListOutputCall!=null && articleListOutputCall.isExecuted()){
+            articleListOutputCall.cancel();
+        }
+        articleListOutputCall = apiService.list(token,map);
+        articleListOutputCall.enqueue(new Callback<ArticleListOutput>() {
             @Override
             public void onResponse(Call<ArticleListOutput> call, Response<ArticleListOutput> response) {
                 swipeRefreshLayout.setRefreshing(false);
@@ -222,13 +227,15 @@ public class GroupFrag extends BaseFragment
         map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         map.put("os", "android");
         map.put("type","0");
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
-        Call<SlideListOutputModel> call = apiService.FocusPic(token,map);
-        call.enqueue(new Callback<SlideListOutputModel>() {
+        if( slideListOutputModelCall!=null && slideListOutputModelCall.isExecuted()){
+            slideListOutputModelCall.cancel();
+        }
+        slideListOutputModelCall = apiService.FocusPic(token,map);
+        slideListOutputModelCall.enqueue(new Callback<SlideListOutputModel>() {
             @Override
             public void onResponse(Call<SlideListOutputModel> call, Response<SlideListOutputModel> response) {
                 if(response.code()!=200){
@@ -299,5 +306,18 @@ public class GroupFrag extends BaseFragment
     @Override
     public String getPageTitle() {
         return "集团资讯";
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if(articleListOutputCall!=null && !articleListOutputCall.isCanceled()){
+            articleListOutputCall.cancel();
+        }
+        if(slideListOutputModelCall!=null && !slideListOutputModelCall.isCanceled()){
+            slideListOutputModelCall.cancel();
+        }
+
     }
 }

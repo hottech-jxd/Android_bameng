@@ -107,4 +107,109 @@
             android:background="@mipmap/icon_go" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/layfeedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_click_selector"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@mipmap/ic_ly" />
+        <TextView
+            android:id="@+id/tvfeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="我的留言" />
+
+        <ImageView
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_width"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/laymessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_click_selector"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@mipmap/ic_msg" />
+        <TextView
+            android:id="@+id/tvmsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="我的消息" />
+
+        <ImageView
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_width"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <LinearLayout
+        android:id="@+id/laywork"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_click_selector"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@mipmap/ic_customer" />
+        <TextView
+            android:id="@+id/tvwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="工作汇报" />
+
+        <ImageView
+            android:layout_width="@dimen/arrow_width"
+            android:layout_height="@dimen/arrow_width"
+            android:background="@mipmap/icon_go" />
+    </LinearLayout>
+
 </LinearLayout>

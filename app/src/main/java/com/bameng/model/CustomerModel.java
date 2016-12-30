@@ -65,6 +65,27 @@ public class CustomerModel implements Serializable {
     int  Status;
     boolean doing=false;
     boolean selected = false;
+    /***
+     * 1:客户图片，0：客户信息
+     */
+    int isSave=0;
+    /***
+     * 客户图片
+     */
+    String DataImg;
+
+//    /***
+//     * 是否在界面显示状态信息
+//     */
+//    boolean showStatus=true;
+//    /***
+//     * 是否在界面显示进店情况
+//     */
+//    boolean showInShop=true;
+//    /***
+//     * 是否在界面显示所属盟友信息
+//     */
+//    boolean showMengYou=true;
 
     public String getAddr() {
         return Addr;
@@ -201,4 +222,44 @@ public class CustomerModel implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public int getIsSave() {
+        return isSave;
+    }
+
+    public void setIsSave(int isSave) {
+        this.isSave = isSave;
+    }
+
+    public String getDataImg() {
+        return DataImg;
+    }
+
+    public void setDataImg(String dataImg) {
+        DataImg = dataImg;
+    }
+
+//    public boolean isShowStatus() {
+//        return showStatus;
+//    }
+//
+//    public void setShowStatus(boolean showStatus) {
+//        this.showStatus = showStatus;
+//    }
+//
+//    public boolean isShowInShop() {
+//        return showInShop;
+//    }
+//
+//    public void setShowInShop(boolean showInShop) {
+//        this.showInShop = showInShop;
+//    }
+//
+//    public boolean isShowMengYou() {
+//        return showMengYou;
+//    }
+//
+//    public void setShowMengYou(boolean showMengYou) {
+//        this.showMengYou = showMengYou;
+//    }
 }
