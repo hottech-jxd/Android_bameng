@@ -548,7 +548,13 @@ public class AllyHomeActivity extends BaseShareActivity implements  View.OnClick
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventBadge(BadgeNewEvent event){
-        circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
+//        int pushCount = BaseApplication.readMessagePushCount();
+//        int pullCount = BaseApplication.readMessagePullCount();
+//        int commentCount =BaseApplication.readCommentCount();
+//        boolean showRed  = (pushCount+pullCount+commentCount)>0;
+        boolean showRed = BaseApplication.readNewsMessage();
+        circleNews.setBackgroundResource( showRed ?R.drawable.circle_red:R.drawable.circle_white);
+        //circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
     }
 
     @Override

@@ -308,28 +308,59 @@ public class BaseApplication extends Application {
         return JSONUtil.getGson().fromJson(json, BaseData.class);
     }
 
-    public static void writeMessageInfo( int newsCount , boolean hasBusiness){
-        //PreferenceHelper.writeBoolean( single , Constants.MESSAGE_INFO , "hasNews",hasNews);
-        PreferenceHelper.writeInt(single, Constants.MESSAGE_INFO,"NewsCount", newsCount );
+    public static void writeMessageInfo( int commentCount , boolean hasBusiness , int messagePushCount , int messagePullCount ){
+
+        //PreferenceHelper.writeInt(single, Constants.MESSAGE_INFO,"NewsCount", commentCount );
+
+        PreferenceHelper.writeInt( single , Constants.MESSAGE_INFO , "commentCount", commentCount);
         PreferenceHelper.writeBoolean(single,Constants.MESSAGE_INFO,"hasBusiness",hasBusiness);
+
+        PreferenceHelper.writeInt( single , Constants.MESSAGE_INFO , "messagePushCount", messagePushCount);
+        PreferenceHelper.writeInt( single , Constants.MESSAGE_INFO , "messagePullCount",messagePullCount);
+    }
+
+    public static int readCommentCount(){
+        int count = PreferenceHelper.readInt(single , Constants.MESSAGE_INFO , "commentCount",0);
+        return count;
+    }
+
+    public static int readMessagePushCount(){
+        return PreferenceHelper.readInt(single,Constants.MESSAGE_INFO, "messagePushCount",0);
+    }
+    public static int readMessagePullCount(){
+        return PreferenceHelper.readInt(single,Constants.MESSAGE_INFO, "messagePullCount",0);
+    }
+
+    public static void writeCommentCount(int count){
+        PreferenceHelper.writeInt(single,Constants.MESSAGE_INFO,"commentCount",count);
+    }
+
+    public static void writeMessagePushCount(int count){
+        PreferenceHelper.writeInt( single,Constants.MESSAGE_INFO , "messagePushCount",count);
+    }
+    public static void writeMessagePullCount(int count){
+        PreferenceHelper.writeInt( single,Constants.MESSAGE_INFO , "messagePullCount",count);
     }
 
     public static boolean readNewsMessage(){
-        int count = readNewsCount();
-        return count>0;
+        int pushCount = BaseApplication.readMessagePushCount();
+        int pullCount = BaseApplication.readMessagePullCount();
+        int commentCount =BaseApplication.readCommentCount();
+        boolean showRed  = (pushCount+pullCount+commentCount)>0;
+        return showRed;
     }
 
     public static boolean readBusinessMessage(){
         return PreferenceHelper.readBoolean( single , Constants.MESSAGE_INFO , "hasBusiness",false);
     }
 
-    public static int readNewsCount(){
-        return PreferenceHelper.readInt(single,Constants.MESSAGE_INFO, "NewsCount");
-    }
+//    public static int readNewsCount(){
+//        return PreferenceHelper.readInt(single,Constants.MESSAGE_INFO, "NewsCount");
+//    }
 
-    public static void writeMessageCount(int count){
-        PreferenceHelper.writeInt( single , Constants.MESSAGE_INFO , "NewsCount" , count );
-    }
+//    public static void writeMessageCount(int count){
+//        PreferenceHelper.writeInt( single , Constants.MESSAGE_INFO , "NewsCount" , count );
+//    }
 
     public static void clearAllCookies(){
         CookieManager.getInstance().removeAllCookie();

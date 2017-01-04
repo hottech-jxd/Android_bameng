@@ -69,6 +69,9 @@ public class CustomerDetailsActivity extends BaseActivity implements FrescoContr
     @BindView(R.id.layInShop)
             LinearLayout layInShop;
 
+    @BindView(R.id.lbPicture)
+            TextView lbPicture;
+
     Bundle bundle;
     CustomerModel customerModel;
 
@@ -107,7 +110,8 @@ public class CustomerDetailsActivity extends BaseActivity implements FrescoContr
             laySecond.setVisibility(View.GONE);
             layPicture.setVisibility(View.VISIBLE);
             int width = DensityUtils.getScreenW(this);
-            int sw = DensityUtils.dip2px(this, 100);
+            int lwidth = lbPicture.getWidth();
+            int sw = DensityUtils.dip2px(this, 80);
             width = width- sw;
             FrescoDraweeController.loadImage(ivPicture , width, customerModel.getDataImg(),0, this );
         }else {

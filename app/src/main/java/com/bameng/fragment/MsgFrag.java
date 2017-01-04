@@ -1,5 +1,6 @@
 package com.bameng.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +15,7 @@ import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.adapter.MsgAdapter;
 import com.bameng.adapter.StoreAdapter;
+import com.bameng.biz.UnReadMessageUtil;
 import com.bameng.config.Constants;
 import com.bameng.model.ArticleListOutput;
 import com.bameng.model.BadgeNewEvent;
@@ -83,6 +85,7 @@ public class MsgFrag extends BaseFragment
             baseQuickAdapter.notifyItemChanged(position);
 
             Bundle bd = new Bundle();
+            //String deviceName = Build.MANUFACTURER;
             bd.putString(Constants.INTENT_URL, model.getArticleUrl());
             bd.putString(Constants.INTENT_TITLE, model.getArticleTitle());
             ActivityUtils.getInstance().showActivity( getActivity() , WebViewActivity.class , bd );
@@ -109,13 +112,36 @@ public class MsgFrag extends BaseFragment
      *  处理未读消息的红点显示
      */
     protected void setBadge(ListModel model){
-        if(model.getIsRead()==1) return;
-        int count = BaseApplication.readNewsCount();
-        count = count-1;
+//        if(model.getIsRead()==1) return;
+//        int count = BaseApplication.readNewsCount();
+//        count = count-1;
+//
+//        EventBus.getDefault().post( new BadgeNewEvent(count>0));
+//        if(count<1) count=0;
+//        BaseApplication.writeMessageCount(count);
 
-        EventBus.getDefault().post( new BadgeNewEvent(count>0));
-        if(count<1) count=0;
-        BaseApplication.writeMessageCount(count);
+        if(type== 1){
+            if(sendType==1){
+                int count = BaseApplication.readMessagePushCount();
+                count = count-1;
+                if(count<1) count=0;
+                BaseApplication.writeMessagePushCount(count);
+                EventBus.getDefault().post( new BadgeNewEvent( ));
+            }else if(sendType==0){
+                int count = BaseApplication.readMessagePullCount();
+                count = count-1;
+                if(count<1) count=0;
+                BaseApplication.writeMessagePullCount(count);
+                EventBus.getDefault().post( new BadgeNewEvent( ));
+            }
+        }else if(type==2){
+            int count = BaseApplication.readCommentCount();
+            count = count-1;
+            if(count<1) count=0;
+            BaseApplication.writeCommentCount(count);
+            EventBus.getDefault().post( new BadgeNewEvent( ));
+        }
+
     }
 
     @Override
@@ -152,6 +178,7 @@ public class MsgFrag extends BaseFragment
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(true);
+                updateBadge();
                 onRefresh();
             }
         });
@@ -204,7 +231,7 @@ public class MsgFrag extends BaseFragment
                         }
                         baseAdapter.setNewData(Articles);
 
-                        updateBadge();
+                        //updateBadge();
 
                     } else if (operateType == OperateTypeEnum.LOADMORE) {
 
@@ -220,7 +247,7 @@ public class MsgFrag extends BaseFragment
                         } else {
                             baseAdapter.addData(response.body().getData().getRows());
                             pageIndex = pageIndex + 1;
-                            updateBadge();
+                            //updateBadge();
                         }
 
                     }
@@ -287,16 +314,20 @@ public class MsgFrag extends BaseFragment
     }
 
     protected void updateBadge(){
-        List<ListModel> data = baseAdapter.getData();
-        if(data ==null) return;
-        boolean hasUnRead=false;
-        for(int i=0;i<data.size();i++){
-            if( data.get(i).getIsRead()==0){
-                hasUnRead=true;
-                break;
-            }
-        }
-        EventBus.getDefault().post(new BadgeNewEvent( hasUnRead ));
+//        List<ListModel> data = baseAdapter.getData();
+//        if(data ==null) return;
+//        boolean hasUnRead=false;
+//        for(int i=0;i<data.size();i++){
+//            if( data.get(i).getIsRead()==0){
+//                hasUnRead=true;
+//                break;
+//            }
+//        }
+
+        //EventBus.getDefault().post(new BadgeNewEvent( hasUnRead ));
+
+        UnReadMessageUtil.getUnReadMessage();
+
     }
 
 }

@@ -144,7 +144,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
         }
 
         if(tvPersons.getText().toString().isEmpty() && !sendShop ){
-            ToastUtils.showLongToast("请选择分享盟友或者发送盟店");
+            ToastUtils.showLongToast("请选择分享盟友或者发送门店");
             isok=false;
         }
         String ids = "";
@@ -198,6 +198,7 @@ public class SubmitCustomerInfoActivity extends BaseActivity {
                 if (response.body() != null) {
                     if (response.body().getStatus() == 200 ) {
                         EventBus.getDefault().post(new RefreshCustomerEvent(null,""));
+                        SubmitCustomerInfoActivity.this.setResult(RESULT_OK);
                         finish();
                     } else {
                         ToastUtils.showLongToast(response.body().getStatusText());

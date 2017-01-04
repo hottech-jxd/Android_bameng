@@ -647,7 +647,8 @@ public class HomeActivity extends BaseShareActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventBadge(BadgeNewEvent event){
-         circleNews.setBackgroundResource( event.isShowNew() ?R.drawable.circle_red:R.drawable.circle_white);
+        boolean showRed = BaseApplication.readNewsMessage();
+        circleNews.setBackgroundResource( showRed ?R.drawable.circle_red:R.drawable.circle_white);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventBadge(BadgeBusinessEvent event){

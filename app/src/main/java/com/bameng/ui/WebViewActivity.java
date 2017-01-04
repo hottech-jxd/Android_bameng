@@ -350,18 +350,14 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
                         super.onPageFinished(view, url);
 
                         if (titleText == null) return;
-                        if( title !=null && title.isEmpty()) {
+                        if( title ==null || title.isEmpty()) {
                             titleText.setText(view.getTitle());
                         }
 
                     }
 
                     @Override
-                    public void onReceivedError(
-                            WebView view, int errorCode, String description,
-                            String failingUrl
-                    )
-                    {
+                    public void onReceivedError(    WebView view, int errorCode, String description,  String failingUrl ) {
                         super.onReceivedError(view, errorCode, description, failingUrl);
                     }
 
@@ -388,7 +384,7 @@ public class WebViewActivity extends BaseActivity implements PlatformActionListe
                 if (title == null) {
                     return;
                 }
-                if( title !=null && title.isEmpty()) {
+                if( title ==null || title.isEmpty()) {
                     titleText.setText(title);
                 }
             }

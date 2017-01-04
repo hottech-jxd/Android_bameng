@@ -183,7 +183,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="发送盟店"/>
+            android:text="发送门店"/>
 
         <ImageView
             android:id="@+id/ivSelect"

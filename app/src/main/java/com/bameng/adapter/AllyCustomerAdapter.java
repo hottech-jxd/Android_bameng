@@ -19,6 +19,8 @@ public class AllyCustomerAdapter extends CustomerDetailAdapter {
         if(customerModel.getIsSave()==0) {
             baseViewHolder.setText(R.id.name, customerModel.getName());
             baseViewHolder.setText(R.id.moblie, customerModel.getMobile());
+            SimpleDraweeView iv = baseViewHolder.getView(R.id.img);
+            iv.setImageURI(Uri.parse( "res:///"+ R.mipmap.icon_username ) );
         }else{
             baseViewHolder.setText(R.id.name, "提交人:"+ customerModel.getBelongOneName() );
             baseViewHolder.setText(R.id.moblie,"提交信息:照片");

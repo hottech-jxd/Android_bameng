@@ -1,6 +1,7 @@
 package com.bameng.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
@@ -48,6 +49,8 @@ import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.bameng.ui.business.CustomerInfoActivity.REQUEST_CODE_REFRESH;
 
 /**
  * 未处理的客户信息
@@ -119,7 +122,7 @@ public class CustomNoDoneFrag extends BaseFragment
                 CustomerModel customerModel = (CustomerModel)adapter.getItem(position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("customerinfo", customerModel);
-                ActivityUtils.getInstance().showActivity( getActivity() , CustomerExamineActivity.class,bundle);
+                ActivityUtils.getInstance().showActivityForResult( getActivity() , REQUEST_CODE_REFRESH , CustomerExamineActivity.class,bundle);
             }
 
             @Override
@@ -153,7 +156,7 @@ public class CustomNoDoneFrag extends BaseFragment
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -337,5 +340,10 @@ public class CustomNoDoneFrag extends BaseFragment
     @Override
     public String getPageTitle() {
         return "未处理信息";
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

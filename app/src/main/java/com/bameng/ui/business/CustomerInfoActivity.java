@@ -20,6 +20,7 @@ import com.bameng.R2;
 import com.bameng.adapter.TabPagerAdapter;
 import com.bameng.fragment.CustomDoneFrag;
 import com.bameng.fragment.CustomNoDoneFrag;
+import com.bameng.fragment.MsgFrag;
 import com.bameng.ui.base.BaseActivity;
 import com.bameng.ui.base.BaseFragment;
 import com.bameng.utils.ActivityUtils;
@@ -37,7 +38,7 @@ import butterknife.OnClick;
  * 客户信息界面
  */
 public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTabSelectedListener , View.OnClickListener{
-
+   public  final static int REQUEST_CODE_REFRESH=100;
     @BindView(R2.id.titleText)
     TextView titleText;
     @BindView(R2.id.titleLeftImage)
@@ -184,15 +185,17 @@ public class CustomerInfoActivity extends BaseActivity implements TabLayout.OnTa
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode !=RESULT_OK ) return;
-
+        if(requestCode== REQUEST_CODE_REFRESH){
+            ((CustomNoDoneFrag)mFragmentList.get( customViewPager.getCurrentItem() )).loadData();
+        }
     }
 
     @Override
     public void onClick(View view) {
         if( ((TextView)view).getText().equals( "新增客户资料") ){
-            ActivityUtils.getInstance().showActivity(CustomerInfoActivity.this,SubmitCustomerInfoActivity.class);
+            ActivityUtils.getInstance().showActivityForResult(CustomerInfoActivity.this, REQUEST_CODE_REFRESH , SubmitCustomerInfoActivity.class);
         }else{
-            ActivityUtils.getInstance().showActivity(CustomerInfoActivity.this,SubmitCustomerPictureActivity.class);
+            ActivityUtils.getInstance().showActivityForResult(CustomerInfoActivity.this,  REQUEST_CODE_REFRESH , SubmitCustomerPictureActivity.class);
         }
     }
 }

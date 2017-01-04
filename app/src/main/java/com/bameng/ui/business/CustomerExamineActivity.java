@@ -197,8 +197,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         map.put("os", "android");
         map.put("cid", String.valueOf( customerModel.getID()  ) );
         map.put("status",  String.valueOf( status ));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -224,6 +223,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
 
 
                 if( response.body() !=null && response.body().getStatus() ==200 ){
+                    CustomerExamineActivity.this.setResult(RESULT_OK);
                     CustomerExamineActivity.this.finish();
                     EventBus.getDefault().post(new RefreshCustomerEvent( customerModel ,"DoneFrag"));
                 }else{
@@ -264,8 +264,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         map.put("os", "android");
         map.put("cid", String.valueOf( customerModel.getID()  ) );
         map.put("status",  String.valueOf( status ));
-        AuthParamUtils authParamUtils = new AuthParamUtils();
-        String sign = authParamUtils.getSign(map);
+        String sign = AuthParamUtils.getSign(map);
         map.put("sign", sign);
         ApiService apiService = ZRetrofitUtil.getApiService();
         String token = BaseApplication.readToken();
@@ -279,6 +278,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
                     return;
                 }
                 if( response.body() !=null && response.body().getStatus() ==200 ){
+                    CustomerExamineActivity.this.setResult(RESULT_OK);
                     CustomerExamineActivity.this.finish();
                     EventBus.getDefault().post(new RefreshCustomerEvent( customerModel ,"NoDoneFrag"));
                 }else{

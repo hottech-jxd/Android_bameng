@@ -5,6 +5,7 @@ import android.util.Log;
 import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.model.BadgeEvent;
+import com.bameng.model.BadgeNewEvent;
 import com.bameng.model.RemindOutputModel;
 import com.bameng.service.ApiService;
 import com.bameng.service.ZRetrofitUtil;
@@ -39,8 +40,14 @@ public class UnReadMessageUtil {
             @Override
             public void onResponse(Call<RemindOutputModel> call, Response<RemindOutputModel> response) {
                 if(response.code() ==200 && response.body()!=null && response.body().getStatus()==200){
-                    BaseApplication.writeMessageInfo( response.body().getData().getMessageCount() , response.body().getData().isBusinessRemind() );
-                    EventBus.getDefault().post( new BadgeEvent( response.body().getData().getMessageCount()>0 , response.body().getData().isBusinessRemind() ));
+                    BaseApplication.writeMessageInfo(
+                            response.body().getData().getMessageCount() ,
+                            response.body().getData().isBusinessRemind() ,
+                            response.body().getData().getMessagePushCount(),
+                            response.body().getData().getMessagePullCount());
+                    boolean hasMessage= (response.body().getData().getMessageCount()+ response.body().getData().getMessagePullCount()+ response.body().getData().getMessagePushCount()) > 0;
+                    EventBus.getDefault().post( new BadgeEvent(  hasMessage , response.body().getData().isBusinessRemind() ));
+                    EventBus.getDefault().post(new BadgeNewEvent());
                 }
             }
 

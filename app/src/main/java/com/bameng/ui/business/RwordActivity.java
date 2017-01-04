@@ -59,7 +59,7 @@ public class RwordActivity extends BaseActivity {
     @BindView(R2.id.shopReword)
     EditText shopReword;
     @BindView(R.id.ewjl)
-    EditText ewjl;
+    android.widget.EditText ewjl;
     ProgressDialog progressDialog;
 
     @Override

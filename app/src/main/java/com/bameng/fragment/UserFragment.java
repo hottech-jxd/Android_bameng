@@ -16,6 +16,8 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.config.Constants;
+import com.bameng.model.BadgeEvent;
+import com.bameng.model.BadgeNewEvent;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.RefreshUserDataEvent;
 import com.bameng.model.SignOutputModel;
@@ -96,6 +98,9 @@ public class UserFragment extends BaseFragment
     LinearLayout layWork;
     LinearLayout layCustomer;
 
+    View circleComment;
+    View circleMessage;
+
     UserData userData;
     ProgressDialog progressDialog;
 
@@ -162,6 +167,18 @@ public class UserFragment extends BaseFragment
 
         layWork = (LinearLayout)laymenus.findViewById(R.id.laywork);
         layWork.setOnClickListener(this);
+
+        circleComment=laymenus.findViewById(R.id.circle_comment);
+        circleMessage = laymenus.findViewById(R.id.circle_message);
+
+        setBadge();
+//        int commentcount = BaseApplication.readCommentCount();
+//        int pushcount = BaseApplication.readMessagePushCount();
+//        int pullcount = BaseApplication.readMessagePullCount();
+//        circleComment.setBackgroundResource(commentcount>0? R.drawable.circle_red:R.drawable.circle_white);
+//        circleComment.setVisibility( commentcount>0? View.VISIBLE:View.GONE );
+//        circleMessage.setBackgroundResource( (pushcount+pullcount)>0? R.drawable.circle_red: R.drawable.circle_white);
+//        circleMessage.setVisibility( (pushcount+ pullcount) >0 ? View.VISIBLE: View.GONE);
     }
 
     void initAlly(){
@@ -191,6 +208,17 @@ public class UserFragment extends BaseFragment
 
         layCustomer =(LinearLayout)laymenus.findViewById(R.id.laycustomer);
         layCustomer.setOnClickListener(this);
+
+        circleComment=laymenus.findViewById(R.id.circle_comment);
+        circleMessage = laymenus.findViewById(R.id.circle_message);
+//        int commentcount = BaseApplication.readCommentCount();
+//        int pushcount = BaseApplication.readMessagePushCount();
+//        int pullcount = BaseApplication.readMessagePullCount();
+//        circleComment.setBackgroundResource(commentcount>0? R.drawable.circle_red:R.drawable.circle_white);
+//        circleComment.setVisibility( commentcount>0? View.VISIBLE:View.GONE );
+//        circleMessage.setBackgroundResource( (pushcount+pullcount)>0? R.drawable.circle_red:R.drawable.circle_white);
+//        circleMessage.setVisibility( (pushcount+ pullcount) >0 ? View.VISIBLE: View.GONE);
+        setBadge();
     }
 
     public void initData(){
@@ -433,5 +461,27 @@ public class UserFragment extends BaseFragment
     public void onEventRefreshUserInfo(RefreshUserDataEvent event){
 
         initView();
+    }
+
+
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEventUpdateBadge(BadgeEvent event ){
+//       badgeList.set( badgeList.size()-1 , event.isShowNew());
+//        setupTabItem();
+//    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventUpdateBadge(BadgeNewEvent event){
+        setBadge();
+    }
+
+    void setBadge(){
+        int commentcount = BaseApplication.readCommentCount();
+        int pushcount = BaseApplication.readMessagePushCount();
+        int pullcount = BaseApplication.readMessagePullCount();
+        circleComment.setBackgroundResource(commentcount>0? R.drawable.circle_red:R.drawable.circle_white);
+        circleComment.setVisibility( commentcount>0? View.VISIBLE:View.GONE );
+        circleMessage.setBackgroundResource( (pushcount+pullcount)>0? R.drawable.circle_red: R.drawable.circle_white);
+        circleMessage.setVisibility( (pushcount+ pullcount) >0 ? View.VISIBLE: View.GONE);
     }
 }

@@ -124,10 +124,23 @@
         android:paddingRight="10dp"
         android:paddingLeft="10dp">
 
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:background="@mipmap/ic_ly" />
+
+        <View
+            android:id="@+id/circle_comment"
+            android:visibility="gone"
+            android:background="@drawable/circle_white"
+            android:layout_width="8dp"
+            android:layout_gravity="top|right"
+            android:layout_height="8dp" />
+        </FrameLayout>
+
         <TextView
             android:id="@+id/tvfeedback"
             android:layout_width="wrap_content"
@@ -159,10 +172,24 @@
         android:paddingRight="10dp"
         android:paddingLeft="10dp">
 
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:background="@mipmap/ic_msg" />
+            <View
+                android:id="@+id/circle_message"
+                android:visibility="gone"
+                android:background="@drawable/circle_white"
+                android:layout_width="8dp"
+                android:layout_gravity="top|right"
+                android:layout_height="8dp" />
+
+        </FrameLayout>
+
         <TextView
             android:id="@+id/tvmsg"
             android:layout_width="wrap_content"
@@ -170,6 +197,8 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="我的消息" />
+
+
 
         <ImageView
             android:layout_width="@dimen/arrow_width"

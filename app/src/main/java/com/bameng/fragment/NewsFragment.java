@@ -60,8 +60,8 @@ public class NewsFragment extends BaseFragment implements TabLayout.OnTabSelecte
     public void onResume() {
         super.onResume();
 
-        boolean hasNews = BaseApplication.readNewsMessage();
-        badgeList.set( badgeList.size()-1 , hasNews);
+        //boolean hasNews = BaseApplication.readNewsMessage();
+        //badgeList.set( badgeList.size()-1 , hasNews);
         setupTabItem();
     }
 

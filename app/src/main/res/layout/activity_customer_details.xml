@@ -27,7 +27,8 @@
         android:padding="10dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="100dp"
+            android:id="@+id/lbPicture"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="信息照片"/>
@@ -51,7 +52,7 @@
         android:gravity="center_vertical"
         android:padding="10dp">
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="客户姓名"/>
@@ -74,7 +75,7 @@
         android:padding="10dp"
         >
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="客户电话"/>
@@ -97,7 +98,7 @@
         android:padding="10dp"
         >
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="地址"/>
@@ -124,7 +125,7 @@
         android:gravity="center_vertical"
         android:padding="10dp">
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="所属盟友"/>
@@ -148,7 +149,7 @@
         android:gravity="center_vertical"
         android:padding="10dp">
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="审核状态"/>
@@ -171,7 +172,7 @@
         android:padding="10dp"
         android:gravity="center_vertical">
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="备注"/>

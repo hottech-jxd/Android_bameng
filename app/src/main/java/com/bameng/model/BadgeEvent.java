@@ -7,6 +7,7 @@ import android.hardware.camera2.params.BlackLevelPattern;
  */
 
 public class BadgeEvent {
+
     private boolean showNew=false;
     private boolean showBusiness = false;
 
