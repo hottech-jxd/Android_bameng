@@ -143,7 +143,7 @@ public class HomeFragment extends BaseFragment  implements  SwipeRefreshLayout.O
 
         List<SlideListModel> list = new ArrayList<>();
         SlideListModel item = new SlideListModel();
-        item.setPicUrl("res://"+ getContext().getPackageName() +"/" + R.mipmap.none);
+        item.setPicUrl("res:///" + R.mipmap.none);
         list.add(item);
         AdBannerConfig config =  new AdBannerConfig();
         config.setImages(list);

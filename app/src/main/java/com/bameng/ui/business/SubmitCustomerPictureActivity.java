@@ -134,7 +134,7 @@ public class SubmitCustomerPictureActivity extends PhoteActivity
         //layAddImage.setVisibility(View.VISIBLE);
         //layImage.setVisibility(View.GONE);
 
-        ivPicture.setImageURI( Uri.parse("res://"+ this.getPackageName()+"/"+ R.mipmap.ic_defaultpic));
+        ivPicture.setImageURI( Uri.parse("res:///"+ R.mipmap.ic_defaultpic));
 
         if( BaseApplication.UserData().getUserIdentity() == Constants.MENG_ZHU){
             layDesc.setVisibility(View.GONE);

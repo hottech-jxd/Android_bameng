@@ -310,7 +310,7 @@ public class MsgFrag extends BaseFragment
     public String getPageTitle() {
         type = getArguments().getInt("type");
         sendType = getArguments().getInt("sendtype");
-        return sendType==1?"发送消息":"接受消息";
+        return sendType==1?"发送消息":"接收消息";
     }
 
     protected void updateBadge(){

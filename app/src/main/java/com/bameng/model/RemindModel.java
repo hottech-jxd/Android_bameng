@@ -18,7 +18,7 @@ public class RemindModel {
      */
     private int messagePushCount;
     /***
-     * 我的消息 - 接受消息未读数量
+     * 我的消息 - 接收消息未读数量
      */
     private int messagePullCount;
 
