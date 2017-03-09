@@ -3,14 +3,17 @@ package com.bameng.ui.business;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bameng.BaseApplication;
+import com.bameng.BuildConfig;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.config.Constants;
@@ -340,14 +343,28 @@ public class SubmitCustomerPictureActivity extends PhoteActivity
     void selectPhotoByCamera(){
         File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
-        Uri imageUri = Uri.fromFile(file);
+
+        Uri imageUri;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(this , BuildConfig.APPLICATION_ID + ".fileprovider", file );
+        }else {
+            imageUri = Uri.fromFile(file);
+        }
+
         selectByCamera(imageUri);
     }
 
     void selectPhotoByFile(){
         File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
-        Uri imageUri = Uri.fromFile(file);
+
+        Uri imageUri;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(this , BuildConfig.APPLICATION_ID + ".fileprovider", file );
+        }else {
+            imageUri = Uri.fromFile(file);
+        }
+
         selectByFile(imageUri);
     }
 

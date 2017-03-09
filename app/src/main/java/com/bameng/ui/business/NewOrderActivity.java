@@ -7,10 +7,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bameng.BaseApplication;
+import com.bameng.BuildConfig;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.model.CustomerModel;
@@ -331,7 +334,13 @@ public class NewOrderActivity extends PhoteActivity
         File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
 
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
-        Uri imageUri = Uri.fromFile(file);
+
+        Uri imageUri;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(this , BuildConfig.APPLICATION_ID + ".fileprovider", file );
+        }else {
+            imageUri = Uri.fromFile(file);
+        }
 
         selectByCamera(imageUri);
     }
@@ -340,7 +349,14 @@ public class NewOrderActivity extends PhoteActivity
         File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
 
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
-        Uri imageUri = Uri.fromFile(file);
+
+        Uri imageUri;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(this , BuildConfig.APPLICATION_ID + ".fileprovider", file );
+        }else {
+            imageUri = Uri.fromFile(file);
+        }
+
         selectByFile(imageUri);
     }
 

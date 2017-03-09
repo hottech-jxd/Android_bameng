@@ -6,14 +6,17 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bameng.BaseApplication;
+import com.bameng.BuildConfig;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.model.OrderModel;
@@ -160,7 +163,13 @@ public class UploadDocumentsActivity
     void selectPhotoByCamera(){
         File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
-        Uri imageUri = Uri.fromFile(file);
+
+        Uri imageUri;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(this , BuildConfig.APPLICATION_ID + ".fileprovider", file );
+        }else {
+            imageUri = Uri.fromFile(file);
+        }
 
         selectByCamera(imageUri);
     }
@@ -169,7 +178,14 @@ public class UploadDocumentsActivity
         File file = new File( this.getExternalCacheDir(), "/temp/"+ System.currentTimeMillis() + ".jpg" );
 
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
-        Uri imageUri = Uri.fromFile(file);
+
+        Uri imageUri;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(this , BuildConfig.APPLICATION_ID + ".fileprovider", file );
+        }else {
+            imageUri = Uri.fromFile(file);
+        }
+
         selectByFile(imageUri);
     }
 

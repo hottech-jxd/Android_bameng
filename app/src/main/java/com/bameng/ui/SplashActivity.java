@@ -3,8 +3,10 @@ package com.bameng.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bameng.BaseApplication;
+import com.bameng.BuildConfig;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.config.Constants;
@@ -240,10 +243,19 @@ public class SplashActivity extends BaseActivity implements DownloadUtil.Progres
     }
 
     private void installApk(String path){
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(path)),	"application/vnd.android.package-archive");
-        startActivity(intent);
-        finish();
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Intent intent =  new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", new File( path));
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(path)), "application/vnd.android.package-archive");
+            startActivity(intent);
+            finish();
+        }
     }
 
 
