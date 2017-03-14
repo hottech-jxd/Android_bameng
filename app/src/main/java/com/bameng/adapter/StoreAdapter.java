@@ -36,8 +36,8 @@ public class StoreAdapter extends BaseQuickAdapter<ListModel , BaseViewHolder> {
     protected void convert(BaseViewHolder baseViewHolder, ListModel listModel ) {
         SimpleDraweeView imv = baseViewHolder.getView(R.id.image);
         if(listModel.isTop()) {
-            int wPx = DensityUtils.dip2px(this.mContext, 80);
-            int hPx = wPx;
+            int wPx = DensityUtils.dip2px(this.mContext, 160);
+            int hPx = DensityUtils.dip2px( this.mContext, 80 );//wPx;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(wPx,hPx);
             //layoutParams.gravity= Gravity.CENTER_VERTICAL;
             imv.setLayoutParams(layoutParams);
@@ -49,8 +49,8 @@ public class StoreAdapter extends BaseQuickAdapter<ListModel , BaseViewHolder> {
 
         }else{
 
-            int wPx = DensityUtils.dip2px(this.mContext, 70);
-            int hPx = wPx;
+            int wPx = DensityUtils.dip2px(this.mContext, 140);
+            int hPx = DensityUtils.dip2px(this.mContext, 70);;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(wPx,hPx);
             //layoutParams.gravity = Gravity.CENTER_VERTICAL;
             imv.setLayoutParams(layoutParams);
