@@ -382,6 +382,10 @@ public class SubmitCustomerPictureActivity extends PhoteActivity
         //Glide.with(this).load(new File(imagePath)).into(ivPicture);
         int wid = DensityUtils.dip2px(this, 80);
         FrescoDraweeController.loadImage( ivPicture , wid , "file://"+ imagePath , 0 , this );
+
+        //Glide.with(this).load(new File( imagePath )).into( ivPicture );
+
+
     }
 
 

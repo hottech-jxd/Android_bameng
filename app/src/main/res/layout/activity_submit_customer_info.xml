@@ -238,6 +238,7 @@
         <TextView
             android:id="@+id/tvDes4"
             android:textSize="12sp"
+            android:text=""
             android:paddingTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

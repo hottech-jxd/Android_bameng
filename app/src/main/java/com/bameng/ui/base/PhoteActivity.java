@@ -81,7 +81,7 @@ public abstract class PhoteActivity extends TakePhotoActivity {
 
     protected void selectByCamera(Uri imageUri){
         getConfig();
-        getCropOptions();
+        //getCropOptions();
 
         TakePhoto takePhoto = getTakePhoto();
         takePhoto.onPickFromCaptureWithCrop(imageUri,getCropOptions());
@@ -99,7 +99,7 @@ public abstract class PhoteActivity extends TakePhotoActivity {
         int height = DensityUtils.getScreenH(this);
 
         LubanOptions option=new LubanOptions.Builder()
-                .setGear(Luban.CUSTOM_GEAR)
+                //.setGear(Luban.CUSTOM_GEAR)
                 .setMaxHeight(height)
                 .setMaxWidth(width)
                 .setMaxSize(maxSize)

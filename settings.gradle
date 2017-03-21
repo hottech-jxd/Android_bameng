@@ -1,1 +1,1 @@
-include ':app', ':libcropper-1.0'
+include ':app'
