@@ -76,9 +76,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.umeng.analytics.a.p;
-import static com.umeng.analytics.social.e.t;
-
 /**
  * 盟友主页
  */

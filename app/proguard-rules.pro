@@ -49,6 +49,7 @@
 -dontwarn okhttp3.**
 -dontwarn javax.annotation.**
 -dontwarn com.android.volley.toolbox.**
+-dontwarn com.facebook.infer.**
 
 # --------------------------------------------------------------------------------------------------
 
@@ -149,3 +150,15 @@ public static final int *;
 -dontwarn **.R$*
 
 #---------------------------------------------------------------------------------------------------
+
+
+#---------------------------------------------BaseRecyclerViewAdapterHelper----------------
+-keep class com.chad.library.adapter.** {
+*;
+}
+-keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
+-keep public class * extends com.chad.library.adapter.base.BaseViewHolder
+-keepclassmembers public class * extends com.chad.library.adapter.base.BaseViewHolder {
+     <init>(android.view.View);
+}
+#----------------------------------------------------------------------------------------------------

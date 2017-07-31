@@ -41,8 +41,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static u.aly.av.n;
-
 /***
  * 盟友审核 界面
  */
