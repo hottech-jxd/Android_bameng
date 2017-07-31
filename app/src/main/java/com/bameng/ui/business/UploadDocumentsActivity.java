@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.view.View;
@@ -206,19 +208,26 @@ public class UploadDocumentsActivity
         showImg(result.getImages());
     }
 
-    private void showImg( ArrayList<TImage> images) {
-        ivPicture.setVisibility(View.VISIBLE);
-        ivAddPic.setVisibility(View.GONE);
-        tvAddPic.setVisibility(View.GONE);
-        //ivPicture.setImageBitmap(currentBitmap);
+    private void showImg(final ArrayList<TImage> images) {
 
-        imagePath = images.get(0).getPath();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                ivPicture.setVisibility(View.VISIBLE);
+                ivAddPic.setVisibility(View.GONE);
+                tvAddPic.setVisibility(View.GONE);
+                //ivPicture.setImageBitmap(currentBitmap);
 
-        int wid = DensityUtils.getScreenW(this);
-        int swid = DensityUtils.dip2px(this,20);
-        //Glide.with(this).load(new File(images.get(0).getPath())).into(ivPicture);
-        FrescoDraweeController.loadImage( ivPicture , wid-swid , "file://"+ imagePath , 0 , this );
+                imagePath = images.get(0).getCompressPath();//.getPath();
 
+                int wid = DensityUtils.getScreenW(UploadDocumentsActivity.this);
+                int swid = DensityUtils.dip2px(UploadDocumentsActivity.this, 20);
+                //Glide.with(this).load(new File(images.get(0).getPath())).into(ivPicture);
+                FrescoDraweeController.loadImage(ivPicture, wid - swid, "file://" + imagePath, 0, UploadDocumentsActivity.this);
+
+            }
+
+        });
     }
 
 //    public void getPhotoByFile(){

@@ -353,7 +353,7 @@ public class UserInfoActivity extends PhoteActivity
         //hasImage=true;
         //showImg(result.getImages());
 
-        String imagePath = result.getImages().get(0).getPath();
+        String imagePath = result.getImages().get(0).getCompressPath();//.getPath();
         cropBitmap = Util.readBitmapByPath( imagePath );
         commitPhoto();
     }

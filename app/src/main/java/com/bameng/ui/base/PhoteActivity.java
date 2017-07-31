@@ -81,11 +81,28 @@ public abstract class PhoteActivity extends TakePhotoActivity {
 
     protected void selectByCamera(Uri imageUri){
         getConfig();
-        //getCropOptions();
+
+        getCropOptions();
 
         TakePhoto takePhoto = getTakePhoto();
         takePhoto.onPickFromCaptureWithCrop(imageUri,getCropOptions());
     }
+
+//    protected void getOwnCompressConfig(){
+//
+//        int width = DensityUtils.getScreenW(this);
+//        int height = DensityUtils.getScreenH(this);
+//        boolean showProgressBar=true;
+//
+//        CompressConfig config=new CompressConfig.Builder()
+//                .setMaxSize(102400)
+//                .setMaxPixel(width>=height? width:height)
+//                .enableReserveRaw(false)
+//                .create();
+//
+//        TakePhoto takePhoto = getTakePhoto();
+//        takePhoto.onEnableCompress(config,showProgressBar);
+//    }
 
 
     protected void getConfig(){
@@ -124,7 +141,7 @@ public abstract class PhoteActivity extends TakePhotoActivity {
     protected CropOptions getCropOptions(){
         setCropWidthHeigth();
 
-        boolean withWonCrop= false;//rgCropTool.getCheckedRadioButtonId()==R.id.rbCropOwn? true:false;
+        boolean withWonCrop= true;//rgCropTool.getCheckedRadioButtonId()==R.id.rbCropOwn? true:false;
 
         CropOptions.Builder builder=new CropOptions.Builder();
 

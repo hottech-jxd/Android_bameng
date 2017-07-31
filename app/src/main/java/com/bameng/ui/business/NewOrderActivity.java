@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
@@ -379,30 +380,17 @@ public class NewOrderActivity extends PhoteActivity
     }
 
 
-    private void showImg( ArrayList<TImage> images) {
+    private void showImg(final ArrayList<TImage> images) {
 
-        layAddImage.setVisibility(View.GONE);
-        layImage.setVisibility(View.VISIBLE);
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                layAddImage.setVisibility(View.GONE);
+                layImage.setVisibility(View.VISIBLE);
+                Glide.with(NewOrderActivity.this).load(new File(images.get(0).getCompressPath())).into(ivImage);//.getPath())).into(ivImage);
 
-
-        Glide.with(this).load(new File(images.get(0).getPath())).into(ivImage);
-
-//            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.llImages);
-//            for (int i = 0, j = images.size(); i < j - 1; i += 2) {
-//                View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
-//                ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
-//                ImageView imageView2 = (ImageView) view.findViewById(R.id.imgShow2);
-//                Glide.with(this).load(new File(images.get(i).getPath())).into(imageView1);
-//                Glide.with(this).load(new File(images.get(i + 1).getPath())).into(imageView2);
-//                linearLayout.addView(view);
-//            }
-//            if (images.size() % 2 == 1) {
-//                View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
-//                ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
-//                Glide.with(this).load(new File(images.get(images.size() - 1).getPath())).into(imageView1);
-//                linearLayout.addView(view);
-//            }
-
+            }
+        });
     }
 
 //    public void getPhotoByCamera(){

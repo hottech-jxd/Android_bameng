@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.FileProvider;
 import android.view.View;
@@ -377,14 +379,18 @@ public class SubmitCustomerPictureActivity extends PhoteActivity
         showImg(result.getImages());
     }
 
-    private void showImg( ArrayList<TImage> images) {
-        imagePath = images.get(0).getPath();
-        //Glide.with(this).load(new File(imagePath)).into(ivPicture);
-        int wid = DensityUtils.dip2px(this, 80);
-        FrescoDraweeController.loadImage( ivPicture , wid , "file://"+ imagePath , 0 , this );
+    private void showImg(final ArrayList<TImage> images) {
 
-        //Glide.with(this).load(new File( imagePath )).into( ivPicture );
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                imagePath = images.get(0).getCompressPath();//.getPath();
+                //Glide.with(this).load(new File(imagePath)).into(ivPicture);
+                int wid = DensityUtils.dip2px( SubmitCustomerPictureActivity.this , 80);
+                FrescoDraweeController.loadImage( ivPicture , wid , "file://"+ imagePath , 0 , SubmitCustomerPictureActivity.this );
 
+            }
+        });
 
     }
 
