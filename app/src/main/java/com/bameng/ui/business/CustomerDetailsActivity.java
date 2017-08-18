@@ -133,6 +133,12 @@ public class CustomerDetailsActivity extends BaseActivity implements FrescoContr
             status.setText("已同意");
         }else if(customerModel.getStatus() == 2){
             status.setText("已拒绝");
+        }else if(customerModel.getStatus() == 3){
+            status.setText("未生成订单");
+        }else if(customerModel.getStatus()==4){
+            status.setText("已生成订单");
+        }else if(customerModel.getStatus()==5){
+            status.setText("已失效");
         }
 
         if(!showStatus){

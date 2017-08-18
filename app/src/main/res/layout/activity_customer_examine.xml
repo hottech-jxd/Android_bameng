@@ -136,17 +136,17 @@
         android:layout_height="1px"
         android:background="@color/line_gray"/>
     <LinearLayout
+        android:id="@+id/layStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="审核状态"/>
+            android:text="状态"/>
         <TextView
             android:id="@+id/status"
             android:layout_width="match_parent"
@@ -188,6 +188,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:id="@+id/llShopStatus"
+        android:visibility="gone"
         android:padding="10dp">
         <TextView
             android:layout_width="100dp"
@@ -216,6 +217,41 @@
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llOrderStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="状态"/>
+        <TextView
+            android:background="@color/line_gray"
+            android:layout_width="1dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/orderStatus"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:text="已失效"/>
+        <TextView
+            android:background="@mipmap/ic_downarrow"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
 
     <View
         android:layout_width="match_parent"
@@ -268,7 +304,7 @@
 
     <Button
         android:id="@+id/btnNewOrder"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
@@ -276,6 +312,20 @@
         android:visibility="gone"
         android:textSize="16sp"
         android:text="新增订单"
+        android:background="@drawable/btn_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnCustomerRecord"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:textSize="16sp"
+        android:text="客户维护"
         android:background="@drawable/btn_red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

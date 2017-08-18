@@ -20,6 +20,7 @@ import com.bameng.BaseApplication;
 import com.bameng.R;
 import com.bameng.R2;
 import com.bameng.config.Constants;
+import com.bameng.model.BaseModel;
 import com.bameng.model.CloseEvent;
 import com.bameng.model.CustomerModel;
 import com.bameng.model.PostModel;
@@ -53,6 +54,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.baidu.location.d.j.G;
+import static com.baidu.location.d.j.V;
+
 /***
  * 订单审核
  */
@@ -66,6 +70,7 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
     @BindView(R2.id.moblie)
     TextView moblie;
     @BindView(R2.id.address) TextView address;
+    @BindView(R.id.layStatus) LinearLayout layStatus;
     @BindView(R2.id.status) TextView status;
     @BindView(R2.id.remark) TextView remark;
     @BindView(R2.id.layBtn) LinearLayout laybtn;
@@ -76,6 +81,9 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
     @BindView(R2.id.btnSubmit) Button btnSubmit;
     @BindView(R2.id.belongone) TextView belongone;
     @BindView(R.id.btnNewOrder) Button btnNewOrder;
+    @BindView(R.id.btnCustomerRecord) Button btnCustomerRecord;
+    @BindView(R.id.llOrderStatus) LinearLayout llOrderStatus;
+    @BindView(R.id.orderStatus) TextView orderStatus;
 
     @BindView(R.id.layPicture) LinearLayout layPicture;
     @BindView(R.id.ivPicture)  SimpleDraweeView ivPicture;
@@ -126,31 +134,74 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         shopStatus.setText( customerModel.getInShop() ==1 ? "已进店":"未进店" );
         belongone.setText( customerModel.getBelongOneName() );
 
-        if (customerModel.getStatus()==0){
+        if (customerModel.getStatus()==0){//未审核
             laybtn.setVisibility(View.VISIBLE);
-            layShopStatus.setVisibility(View.GONE);
+            layStatus.setVisibility(View.VISIBLE);
+            llOrderStatus.setVisibility(View.GONE);
+            btnCustomerRecord.setVisibility(View.GONE);
+            //layShopStatus.setVisibility(View.GONE);
             btnSubmit.setVisibility(View.GONE);
             btnNewOrder.setVisibility(View.GONE);
             status.setText("未审核");
-        }else if (customerModel.getStatus()==1){
+            orderStatus.setText("");
+        }else if (customerModel.getStatus()==1){//已同意
             laybtn.setVisibility(View.GONE);
-            layShopStatus.setVisibility(View.VISIBLE);
-            if(customerModel.getInShop() == 1){
-                btnSubmit.setVisibility(View.GONE);
-                btnNewOrder.setVisibility(View.VISIBLE);
-                layShopStatus.setEnabled(false);
-            }else{
-                layShopStatus.setEnabled(true);
-                btnSubmit.setVisibility(View.GONE);
-            }
+            //layShopStatus.setVisibility(View.VISIBLE);
+            //if(customerModel.getInShop() == 1){
+            //    btnSubmit.setVisibility(View.GONE);
+             //   btnNewOrder.setVisibility(View.VISIBLE);
+             //   layShopStatus.setEnabled(false);
+            //}else{
+                //layShopStatus.setEnabled(true);
+             //   btnSubmit.setVisibility(View.GONE);
+            //}
+
+            layStatus.setVisibility(View.GONE);
+            btnSubmit.setVisibility(View.GONE);
+            btnNewOrder.setVisibility(View.VISIBLE);
+            llOrderStatus.setVisibility(View.VISIBLE);
+            btnCustomerRecord.setVisibility(View.VISIBLE);
+
             status.setText("已同意");
-        }else {
+            orderStatus.setText("");
+        }else if(customerModel.getStatus()==2){//已拒绝
             laybtn.setVisibility(View.GONE);
-            layShopStatus.setVisibility(View.GONE);
+            layStatus.setVisibility(View.VISIBLE);
+            //layShopStatus.setVisibility(View.GONE);
             btnSubmit.setVisibility(View.GONE);
             btnNewOrder.setVisibility(View.GONE);
+            llOrderStatus.setVisibility(View.GONE);
+            btnCustomerRecord.setVisibility(View.GONE);
             status.setText("已拒绝");
+            orderStatus.setText("");
+        }else if(customerModel.getStatus() == 3) {//未生成订单
+            laybtn.setVisibility(View.GONE);
+            layStatus.setVisibility(View.GONE);
+            llOrderStatus.setVisibility(View.VISIBLE);
+            btnNewOrder.setVisibility(View.VISIBLE);
+            btnCustomerRecord.setVisibility(View.VISIBLE);
+            status.setText( getString(R.string.noOrder));
+            orderStatus.setText( getString(R.string.noOrder ));
+        }else if(customerModel.getStatus()==4){//已生成订单
+            laybtn.setVisibility(View.GONE);
+            layStatus.setVisibility(View.VISIBLE);
+            llOrderStatus.setVisibility(View.GONE);
+            btnNewOrder.setVisibility(View.GONE);
+            btnCustomerRecord.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.GONE);
+            status.setText("已生成订单");
+            orderStatus.setText("");
+        } else if(customerModel.getStatus()==5){//已失效
+            laybtn.setVisibility(View.GONE);
+            layStatus.setVisibility(View.GONE);
+            btnSubmit.setVisibility(View.GONE);
+            btnNewOrder.setVisibility(View.GONE);
+            llOrderStatus.setVisibility(View.VISIBLE);
+            btnCustomerRecord.setVisibility(View.VISIBLE);
+            status.setText( getString( R.string.orderInvalid));
+            orderStatus.setText( getString(R.string.orderInvalid) );
         }
+
         remark.setText(TextUtils.isEmpty(customerModel.getRemark())? "无":customerModel.getRemark() );
         popWind = new UserInfoView(this);
         popWind.setOnUserInfoBackListener(this);
@@ -165,9 +216,11 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         return false;
     }
 
-    @OnClick({R.id.llShopStatus, R.id.tvAgree , R.id.tvReject ,R.id.btnSubmit,R.id.btnNewOrder })
+    @OnClick({R.id.llShopStatus, R.id.tvAgree , R.id.tvReject ,R.id.btnSubmit,R.id.btnNewOrder , R.id.llOrderStatus,R.id.btnCustomerRecord})
     public void OnClick(View view){
-        if(view.getId() == R.id.llShopStatus){
+        if(view.getId()== R.id.llOrderStatus){
+            popWind.show(UserInfoView.Type.CustomerOrderStatus , orderStatus.getText().toString());
+        }else if(view.getId() == R.id.llShopStatus){
             popWind.show(UserInfoView.Type.ShopStatus , shopStatus.getText().toString() );
         }else if(view.getId() == R.id.tvAgree){
             //audit(customerModel , 1 );
@@ -175,13 +228,74 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
         }else if(view.getId() == R.id.tvReject){
             auditTip( "确定要拒绝申请吗？", customerModel , 2 );
         }else if( view.getId() == R.id.btnSubmit){
-            int status = shopStatus.getText().toString().equals("未进店")? 0:1;
-            updateShop(customerModel, status);
+            //int status = shopStatus.getText().toString().equals("未进店")? 0:1;
+            //updateShop(customerModel, status);
+            updateStatus(customerModel);
         }else if(view.getId() == R.id.btnNewOrder){
             Intent intent=new Intent(CustomerExamineActivity.this, NewOrderActivity.class);
             intent.putExtra("customer", customerModel );
             ActivityUtils.getInstance().skipActivity(this, intent);
+        }else if(view.getId()==R.id.btnCustomerRecord){
+            Intent intent = new Intent( CustomerExamineActivity.this , CustomerRecordActivity.class);
+            intent.putExtra("customer", customerModel);
+            ActivityUtils.getInstance().showActivity(this, intent);
         }
+    }
+
+    protected void updateStatus(final CustomerModel customerModel  ){
+        if( progressDialog == null){
+            progressDialog = new ProgressDialog(this);
+        }
+        progressDialog.setMessage("");
+        progressDialog.show();
+
+        int status = orderStatus.getText().toString().equals( getString(R.string.orderInvalid) ) ? 1:2;
+
+        Map<String, String> map = new HashMap<>();
+        map.put("version", BaseApplication.getAppVersion());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        map.put("os", "android");
+        map.put("cid", String.valueOf( customerModel.getID()  ) );
+        map.put("status",  String.valueOf( status ));
+        String sign = AuthParamUtils.getSign(map);
+        map.put("sign", sign);
+        ApiService apiService = ZRetrofitUtil.getApiService();
+        String token = BaseApplication.readToken();
+        Call<BaseModel> call = apiService.updateStatus(token, map);
+        call.enqueue(new Callback<BaseModel>() {
+            @Override
+            public void onResponse(Call<BaseModel> call, Response<BaseModel> response) {
+                if(progressDialog !=null) progressDialog.dismiss();
+                if( response.code() != 200){
+                    ToastUtils.showLongToast( response.message() );
+                    return;
+                }
+                if(response.body()==null){
+                    ToastUtils.showLongToast("服务器开小差了");
+                    return;
+                }
+                if (response.body().getStatus() == Constants.STATUS_70035) {
+                    ToastUtils.showLongToast(response.body().getStatusText());
+                    EventBus.getDefault().post(new CloseEvent());
+                    ActivityUtils.getInstance().skipActivity(CustomerExamineActivity.this, PhoneLoginActivity.class);
+                    return;
+                }
+                if( response.body() !=null && response.body().getStatus() ==200 ){
+                    CustomerExamineActivity.this.setResult(RESULT_OK);
+                    CustomerExamineActivity.this.finish();
+                    EventBus.getDefault().post(new RefreshCustomerEvent( customerModel ,"DoneFrag"));
+                }else{
+                    ToastUtils.showLongToast( response.body() !=null ?  response.body().getStatusText() : "失败");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel> call, Throwable t) {
+                if(progressDialog !=null )progressDialog.dismiss();
+                ToastUtils.showLongToast("请求失败");
+            }
+        });
     }
 
     protected void updateShop(final CustomerModel customerModel , int status ){
@@ -296,12 +410,29 @@ public class CustomerExamineActivity extends BaseActivity implements UserInfoVie
 
     @Override
     public void onUserInfoBack(UserInfoView.Type type , String value ) {
-        shopStatus.setText( value );
-        if( value.equals( "未进店" )){
-            btnSubmit.setVisibility(View.GONE);
-        }else{
-            btnSubmit.setVisibility(View.VISIBLE);
+        if( type == UserInfoView.Type.ShopStatus ) {
+            shopStatus.setText(value);
+            if (value.equals("未进店")) {
+                btnSubmit.setVisibility(View.GONE);
+            } else {
+                btnSubmit.setVisibility(View.VISIBLE);
+            }
+        }else if( type== UserInfoView.Type.CustomerOrderStatus){
+            if( customerModel !=null && customerModel.getStatusName().equals( value )   ){
+                btnSubmit.setVisibility(View.GONE);
+            }else{
+                btnSubmit.setVisibility(View.VISIBLE);
+            }
+            orderStatus.setText( value );
+
+            if( value.equals(getString(R.string.orderInvalid)) ){
+                btnNewOrder.setVisibility(View.GONE);
+            }else{
+                btnNewOrder.setVisibility(View.VISIBLE);
+            }
+
         }
+
     }
 
     @Override

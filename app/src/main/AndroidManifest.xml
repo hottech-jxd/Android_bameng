@@ -135,8 +135,8 @@
         </activity>
         <activity android:name=".ui.account.CustomerActivity">
         </activity>
-
-
+        <activity android:name=".ui.business.CustomerRecordActivity">
+        </activity>
     </application>
 
 </manifest>

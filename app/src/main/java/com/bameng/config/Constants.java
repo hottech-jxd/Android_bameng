@@ -49,7 +49,7 @@ public class Constants {
 	//public final static String url= "http://bmapi.51flashmall.com";
 
 	//dev url
-	//public final static String url= "http://bmapi.fancat.cn";
+	//public final static String url= "http://192.168.1.210:8084";//public final static String url= "http://bmapi.fancat.cn";
 	//test miyao
 	public final static String APP_SECRET="BAMEENG20161021";
 	// url

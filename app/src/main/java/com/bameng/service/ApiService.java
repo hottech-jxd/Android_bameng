@@ -13,6 +13,7 @@ import com.bameng.model.ConvertBeanTotalOutputModel;
 import com.bameng.model.ConvertFlowModel;
 import com.bameng.model.ConvertFlowOutputModel;
 import com.bameng.model.CustomListOutput;
+import com.bameng.model.CustomerRecordOutputModel;
 import com.bameng.model.CustomerResourceModel;
 import com.bameng.model.GetRewardOutput;
 import com.bameng.model.InitOutputsModel;
@@ -401,4 +402,33 @@ public interface ApiService {
     @POST("order/update")
     Call<PostModel> orderUpdate(@Header("Authorization") String token , @FieldMap Map<String,String> params);
 
+    /***
+     * 客户动态列表
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("Customer/assertList")
+    Call<CustomerRecordOutputModel> assertList(@Header("Authorization") String token , @FieldMap Map<String,String> params );
+
+    /**
+     * 新增客户动态
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("Customer/addAssert")
+    Call<BaseModel> addAssert(@Header("Authorization") String token , @FieldMap Map<String,String> params );
+
+    /**
+     * 修改客户状态
+     * @param token
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("Customer/updateStatus")
+    Call<BaseModel> updateStatus(@Header("Authorization") String token , @FieldMap Map<String,String> params);
 }

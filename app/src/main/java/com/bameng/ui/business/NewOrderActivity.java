@@ -80,10 +80,16 @@ public class NewOrderActivity extends PhoteActivity
     ImageView titleLeftImage;
     @BindView(R2.id.tvname)
     EditText etName;
+    @BindView(R.id.tvname2)
+    TextView etName2;
     @BindView(R2.id.tvphone)
     EditText etPhone;
+    @BindView(R.id.tvphone2)
+    TextView etPhone2;
     @BindView(R2.id.tvaddress)
     EditText etAddress;
+    @BindView(R.id.tvaddress2)
+    TextView etAddress2;
     @BindView(R2.id.tvremarks)
     EditText etRemarks;
     @BindView(R2.id.tvcash)
@@ -104,6 +110,7 @@ public class NewOrderActivity extends PhoteActivity
     private Bitmap currentBitmap;
     boolean hasImage=false;
     ProgressDialog progressDialog;
+    CustomerModel customerModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,13 +131,22 @@ public class NewOrderActivity extends PhoteActivity
         layAddImage.setVisibility(View.VISIBLE);
         layImage.setVisibility(View.GONE);
 
-        CustomerModel customerModel;
+        //CustomerModel customerModel;
         if(getIntent().hasExtra("customer")){
             customerModel = (CustomerModel) getIntent().getSerializableExtra("customer");
-            if(customerModel!=null){
-                etName.setText( customerModel.getName() );
+            if(customerModel !=null && customerModel.getIsSave() == 0 ){
+                etName.setText( customerModel.getName());
+                etName.setVisibility(View.GONE);
+                etName2.setText(customerModel.getName());
+                etName2.setVisibility(View.VISIBLE);
                 etPhone.setText(customerModel.getMobile());
+                etPhone.setVisibility(View.GONE);
+                etPhone2.setText(customerModel.getMobile());
+                etPhone2.setVisibility(View.VISIBLE);
                 etAddress.setText(customerModel.getAddr());
+                etAddress.setVisibility(View.GONE);
+                etAddress2.setText(customerModel.getAddr());
+                etAddress2.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -156,6 +172,7 @@ public class NewOrderActivity extends PhoteActivity
         String address = etAddress.getText().toString().trim();
         String remarks = etRemarks.getText().toString().trim();
         String cash = etCash.getText().toString().trim();
+        String cid = String.valueOf( customerModel==null? 0: customerModel.getID() );
 
         boolean isok=true;
         if(address.isEmpty()){
@@ -189,6 +206,7 @@ public class NewOrderActivity extends PhoteActivity
         map.put("address",address);
         map.put("memo",remarks);
         map.put("cashNo",cash);
+        map.put("cid", cid );
 
         String sign = AuthParamUtils.getSign(map);
 
@@ -213,6 +231,9 @@ public class NewOrderActivity extends PhoteActivity
 
         requestBody=RequestBody.create(MediaType.parse("text/plain"), cash );
         requestBodyMap.put("cashNo",requestBody);
+
+        requestBody=RequestBody.create(MediaType.parse("text/plain"), cid );
+        requestBodyMap.put("cid",requestBody);
 
         requestBody=RequestBody.create(MediaType.parse("text/plain"), sign);
         requestBodyMap.put("sign",requestBody);

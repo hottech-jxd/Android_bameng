@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="0dp"
+              android:background="@drawable/rect_border_gray">
+
+    <LinearLayout
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <com.huotu.android.library.libedittext.EditText
+        app:style="transparent"
+        android:gravity="left|top"
+        android:background="@android:color/white"
+        android:padding="4dp"
+        android:hint="请输入信息"
+        android:id="@+id/pop_input"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+    </LinearLayout>
+    <View
+        android:background="@android:color/darker_gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        />
+
+    <LinearLayout
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/btnOk"
+            android:text="确定"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"/>
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/btnCancel"
+            android:text="取消"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

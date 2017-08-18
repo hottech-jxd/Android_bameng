@@ -126,6 +126,7 @@
                 android:text="@string/home_exchange"/>
         </LinearLayout>
         <LinearLayout
+            android:visibility="gone"
             android:background="@drawable/item_click_selector"
             android:id="@+id/layReward"
             android:layout_weight="1"

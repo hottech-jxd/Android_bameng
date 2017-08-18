@@ -152,7 +152,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="审核状态"/>
+            android:text="状态"/>
         <TextView
             android:id="@+id/status"
             android:layout_width="match_parent"
@@ -194,6 +194,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:visibility="gone"
         android:gravity="center_vertical">
         <TextView
             android:layout_width="100dp"

@@ -60,7 +60,7 @@ public class CustomerModel implements Serializable {
      */
     String ShopName;
     /***
-     * 0 审核中，1已同意 2已拒绝
+     * 0 审核中，1已同意  2已拒绝 ，3未生成订单  4已生成订单，5已失效
      */
     int  Status;
     boolean doing=false;
@@ -73,6 +73,10 @@ public class CustomerModel implements Serializable {
      * 客户图片
      */
     String DataImg;
+    /**
+     * 用于提醒客户维护已过期，请及时维护客户信息,如果值为1，则信息自动置顶并标红
+     */
+    int isTip=0;
 
 //    /***
 //     * 是否在界面显示状态信息
@@ -262,4 +266,29 @@ public class CustomerModel implements Serializable {
 //    public void setShowMengYou(boolean showMengYou) {
 //        this.showMengYou = showMengYou;
 //    }
+
+
+    public int getIsTip() {
+        return isTip;
+    }
+
+    public void setIsTip(int isTip) {
+        this.isTip = isTip;
+    }
+
+    public String getStatusName(){
+        if( this.Status==1){
+            return  "已同意";
+        }else if( this.Status==2){
+            return "已拒绝";
+        }else if(this.Status == 3){
+            return "未生成订单";
+        }else  if( this.Status == 4){
+            return  "已生成订单";
+        }else if(this.Status==5){
+            return "已失效";
+        }else{
+            return "";
+        }
+    }
 }

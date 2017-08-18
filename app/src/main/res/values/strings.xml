@@ -36,6 +36,9 @@
     <string name="deal">已成交</string>
     <string name="backorder">退单</string>
 
+    <string name="orderInvalid">已失效</string>
+    <string name="noOrder">未生成订单</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

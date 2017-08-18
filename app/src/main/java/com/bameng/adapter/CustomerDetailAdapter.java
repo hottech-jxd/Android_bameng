@@ -56,7 +56,22 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
             baseViewHolder.setText(status , "已拒绝");
             baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext  , R.color.red ));
             baseViewHolder.setVisible(R.id.lay_btn ,false );
-        }else {
+        }else if(customerModel.getStatus() == 3){
+            baseViewHolder.setVisible(R.id.status, true);
+            baseViewHolder.setText(status, "未生成订单");
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor(mContext,R.color.red));
+            baseViewHolder.setVisible(R.id.lay_btn,false);
+        }else if(customerModel.getStatus()==4){
+            baseViewHolder.setVisible(R.id.status, true);
+            baseViewHolder.setText(status, "已生成订单");
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor(mContext,R.color.red));
+            baseViewHolder.setVisible(R.id.lay_btn,false);
+        }else if(customerModel.getStatus()==5){
+            baseViewHolder.setVisible(R.id.status, true);
+            baseViewHolder.setText(status, "已失效");
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor(mContext,R.color.red));
+            baseViewHolder.setVisible(R.id.lay_btn,false);
+        } else {
             baseViewHolder.setVisible(R.id.status,false);
             baseViewHolder.setText(status , "未审核");
             baseViewHolder.setTextColor(R.id.status , ContextCompat.getColor( mContext  , R.color.red ));
@@ -69,5 +84,12 @@ public class CustomerDetailAdapter extends BaseQuickAdapter<CustomerModel,BaseVi
         baseViewHolder.addOnClickListener(R.id.btnAgree);
         baseViewHolder.addOnClickListener(R.id.btnReject);
 
+        if( customerModel.getIsTip() ==1 ){
+            baseViewHolder.setTextColor( R.id.name , ContextCompat.getColor(mContext , R.color.red) );
+            baseViewHolder.setTextColor(R.id.moblie,ContextCompat.getColor(mContext,R.color.red));
+        }else{
+            baseViewHolder.setTextColor( R.id.name , ContextCompat.getColor(mContext , R.color.grey) );
+            baseViewHolder.setTextColor(R.id.moblie,ContextCompat.getColor(mContext,R.color.grey));
+        }
     }
 }

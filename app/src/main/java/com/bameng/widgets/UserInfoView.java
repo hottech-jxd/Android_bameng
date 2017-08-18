@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public class UserInfoView {
 	public enum Type{
-		Name, Realname,Sex,ShopStatus,OrderStatus
+		Name, Realname,Sex,ShopStatus,OrderStatus,CustomerOrderStatus
 	}
 	public HashMap<Type, String> titleNames = new HashMap<Type, String>();
 	public interface OnUserInfoBackListener{
@@ -45,6 +45,7 @@ public class UserInfoView {
 	private LinearLayout laysex;
 	private LinearLayout layShopStatus;
 	private LinearLayout layOrderStatus;
+	private LinearLayout layCustomerOrderStatus;
 	private EditText edtName;
 	TextView noInShop;
 	TextView inShop;
@@ -54,6 +55,8 @@ public class UserInfoView {
 	TextView man;
 	TextView woman;
 	TextView nowei;
+	TextView orderInvalid;
+	TextView noOrder;
 
 	public UserInfoView(Context context){
 		this.mContext = context;
@@ -230,6 +233,25 @@ public class UserInfoView {
 			}
 		});
 
+		mainView.findViewById(R.id.orderInvalid).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(listener!=null){
+					listener.onUserInfoBack( Type.CustomerOrderStatus , context.getString(R.string.orderInvalid));
+				}
+				dialog.dismiss();
+			}
+		});
+
+		mainView.findViewById(R.id.noOrder).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(listener!=null){
+					listener.onUserInfoBack( Type.CustomerOrderStatus, context.getString(R.string.noOrder));
+				}
+				dialog.dismiss();
+			}
+		});
 
 		layMain = (RelativeLayout) mainView.findViewById(R.id.layMain);
 		layedt  = (LinearLayout) mainView.findViewById(R.id.layedt);
@@ -241,6 +263,9 @@ public class UserInfoView {
 		noDeal = (TextView) mainView.findViewById(R.id.noDeal);
 		deal = (TextView) mainView.findViewById(R.id.deal);
 		backorder = (TextView)mainView.findViewById(R.id.backorder);
+		layCustomerOrderStatus = (LinearLayout)mainView.findViewById(R.id.layCustomerOrderStatus);
+		orderInvalid = (TextView)mainView.findViewById(R.id.orderInvalid);
+		noOrder = (TextView)mainView.findViewById(R.id.noOrder);
 
 		man=(TextView)mainView.findViewById(R.id.sex_male);
 		woman = (TextView) mainView.findViewById(R.id.sex_female);
@@ -256,6 +281,7 @@ public class UserInfoView {
 		laysex.setVisibility(type == Type.Sex ? View.VISIBLE:View.GONE);
 		layShopStatus.setVisibility(type == Type.ShopStatus? View.VISIBLE:View.GONE);
 		layOrderStatus.setVisibility(type == Type.OrderStatus? View.VISIBLE:View.GONE);
+		layCustomerOrderStatus.setVisibility(type==Type.CustomerOrderStatus?View.VISIBLE:View.GONE);
 
 		dialog.show();
 			if (type == Type.Sex){
@@ -272,7 +298,11 @@ public class UserInfoView {
 				noDeal.setTextColor(selectIds.equals( mContext.getString(R.string.noDeal )) ? Color.parseColor("#ff8888") : Color.parseColor("#000000"));
 				backorder.setTextColor(selectIds.equals( mContext.getString(R.string.backorder )) ? Color.parseColor("#ff8888") : Color.parseColor("#000000"));
 				return;
-			} else {
+			}else if( type==Type.CustomerOrderStatus){
+				orderInvalid.setTextColor(selectIds.equals( mContext.getString(R.string.orderInvalid ) ) ? Color.parseColor("#ff8888") : Color.parseColor("#000000"));
+				noOrder.setTextColor(selectIds.equals( mContext.getString(R.string.noOrder)) ? Color.parseColor("#ff8888") : Color.parseColor("#000000"));
+				return;
+			}else {
 				edtName.requestFocus();
 				edtName.requestFocusFromTouch();
 

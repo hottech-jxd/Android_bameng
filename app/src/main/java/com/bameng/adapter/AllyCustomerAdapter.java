@@ -39,14 +39,23 @@ public class AllyCustomerAdapter extends CustomerDetailAdapter {
         }else if (customerModel.getStatus()==2){
             baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor( mContext , R.color.red ));
             baseViewHolder.setText(R.id.status , "已拒绝");
+        }else if(customerModel.getStatus() == 3){
+            baseViewHolder.setVisible(R.id.status, true);
+            baseViewHolder.setText(R.id.status , "未生成订单");
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor(mContext,R.color.red));
+        }else if(customerModel.getStatus()==4){
+            baseViewHolder.setVisible(R.id.status, true);
+            baseViewHolder.setText(R.id.status, "已生成订单");
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor(mContext,R.color.red));
+        }else if(customerModel.getStatus()==5){
+            baseViewHolder.setVisible(R.id.status, true);
+            baseViewHolder.setText(R.id.status , "已失效");
+            baseViewHolder.setTextColor(R.id.status, ContextCompat.getColor(mContext,R.color.red));
         }else {
             baseViewHolder.setTextColor(R.id.status,ContextCompat.getColor(mContext,R.color.black));
             baseViewHolder.setText(R.id.status , "未审核");
         }
-
         //baseViewHolder.addOnClickListener(R.id.llItem);
-
-
 
     }
 

@@ -306,11 +306,11 @@ public class SubmitCustomerPictureActivity extends PhoteActivity
                 }
 
                 if (response.body().getStatus() == 200 && response.body().getData() != null) {
-                    tvDes1.setText( String.format( "1.每条成功提交的信息可获得%d盟豆奖励" , response.body().getData().getCustomerReward()));
+                    tvDes1.setText( String.format( "1.每条成功提交的信息可获得%d盟豆奖励,%d积分" , response.body().getData().getCustomerReward() , response.body().getData().getScoreConfig().getSubmitCustomerToAllyScore() ));
                     tvDes2.setText(String.format( "2.每笔成交的订单可获得%d盟豆奖励", response.body().getData().getOrderReward()));
-                    tvDes3.setText(String.format( "3.客户上门%d盟豆奖励", response.body().getData().getShopReward()));
+                    //tvDes3.setText(String.format( "3.客户上门%d盟豆奖励", response.body().getData().getShopReward()));
                     if( null != response.body().getData().getExtraReward() && !response.body().getData().getExtraReward().isEmpty() ){
-                        tvDes4.setText( "4.额外奖励:"+response.body().getData().getExtraReward() );
+                        tvDes4.setText( "3.额外奖励:"+response.body().getData().getExtraReward() );
                     }
                 }
             }

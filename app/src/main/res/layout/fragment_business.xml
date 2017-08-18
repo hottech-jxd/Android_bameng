@@ -141,6 +141,7 @@
         android:layout_height="1px"
         android:background="@color/line_gray"/>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/layReward"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

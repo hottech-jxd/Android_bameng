@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <LinearLayout
+            android:id="@+id/customerRecord_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/title_index"/>
+        </LinearLayout>
+
+    <com.bameng.widgets.BmSwipeRefreshLayout
+        android:layout_below="@id/customerRecord_toolbar"
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/customerRecord_toolbar"
+        android:id="@+id/recycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    </com.bameng.widgets.BmSwipeRefreshLayout>
+</RelativeLayout>

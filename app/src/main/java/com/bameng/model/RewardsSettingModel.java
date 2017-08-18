@@ -16,6 +16,8 @@ public class RewardsSettingModel {
     int UserId;
     String ExtraReward;
 
+    ScoreConfig scoreConfig;
+
     public String getCreateTime() {
         return CreateTime;
     }
@@ -78,5 +80,13 @@ public class RewardsSettingModel {
 
     public void setExtraReward(String extraReward) {
         ExtraReward = extraReward;
+    }
+
+    public ScoreConfig getScoreConfig() {
+        return scoreConfig;
+    }
+
+    public void setScoreConfig(ScoreConfig scoreConfig) {
+        this.scoreConfig = scoreConfig;
     }
 }

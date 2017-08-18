@@ -211,7 +211,7 @@ public class AllyHomeActivity extends BaseShareActivity implements  View.OnClick
         titleRightText.setPadding( leftPx , titleRightText.getPaddingTop() , titleRightText.getPaddingRight(),titleRightText.getPaddingBottom() );
         titleRightText.setText("新增");
 
-        mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
+        //mFragManager.setCurrentFrag(FragManager.FragType.ALLYHOME);
         initTab();
 
         requestBaiduLocation();
@@ -326,19 +326,24 @@ public class AllyHomeActivity extends BaseShareActivity implements  View.OnClick
 
 
     private void initTab() {
-        //currentTab="业务客户";
-        currentTab = Constants.TAG_1;
-
-        Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
-        SystemTools.loadBackground(homeImg, oneBuyDraw);
-        homeTxt.setTextColor(resources.getColor(R.color.chocolate));
-        //重置其他
-        Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
-        SystemTools.loadBackground(newsImg, newestDraw);
-        newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
-        Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_riches);
-        SystemTools.loadBackground(richesImg, listDraw);
-        richesTxt.setTextColor(resources.getColor(R.color.text_color_black));
+//        currentTab = Constants.TAG_1;
+//        Drawable oneBuyDraw = ContextCompat.getDrawable(this, R.mipmap.ic_on_homepage);
+//        SystemTools.loadBackground(homeImg, oneBuyDraw);
+//        homeTxt.setTextColor(resources.getColor(R.color.chocolate));
+//        //重置其他
+//        Drawable newestDraw = ContextCompat.getDrawable(this, R.mipmap.ic_zx);
+//        SystemTools.loadBackground(newsImg, newestDraw);
+//        newsTxt.setTextColor(resources.getColor(R.color.text_color_black));
+//        Drawable listDraw = ContextCompat.getDrawable(this, R.mipmap.ic_riches);
+//        SystemTools.loadBackground(richesImg, listDraw);
+//        richesTxt.setTextColor(resources.getColor(R.color.text_color_black));
+//
+         this.mHandler.post(new Runnable() {
+             @Override
+             public void run() {
+                 newsPage.performClick();
+             }
+         });
     }
 
     @OnClick(R.id.layTitleRight)
